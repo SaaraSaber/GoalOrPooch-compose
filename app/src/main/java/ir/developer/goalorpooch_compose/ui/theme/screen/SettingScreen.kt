@@ -16,9 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +32,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
+import ir.developer.goalorpooch_compose.Utils
 import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -45,12 +46,11 @@ import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
 import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
-import ir.developer.goalorpooch_compose.ui.theme.TitleSize
 import ir.kaaveh.sdpcompose.sdp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingScreen() {
+fun SettingScreen(navController: NavController) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -64,38 +64,7 @@ fun SettingScreen() {
                         contentScale = ContentScale.Crop
                     )
             ) {
-                Row(
-                    modifier = Modifier
-                        .padding(top = PaddingRound(), start = PaddingRound(), end = PaddingRound())
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        modifier = Modifier.weight(10f),
-                        text = "تنظیمات بازی",
-                        textAlign = TextAlign.Start,
-                        fontSize = TitleSize(),
-                        fontFamily = FontPeydaBold,
-                        color = Color.White
-                    )
-                    IconButton(
-                        modifier = Modifier.weight(1f),
-                        onClick = { }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.back),
-                            contentDescription = "back",
-                            tint = Color.White
-                        )
-                    }
-                }
-
-                HorizontalDivider(
-                    modifier = Modifier.padding(
-                        top = PaddingTop(),
-                        start = PaddingRound(),
-                        end = PaddingRound()
-                    )
-                )
+                AppBar(title = "تنظیمات بازی")
 
                 Text(
                     modifier = Modifier.padding(
@@ -129,7 +98,7 @@ fun SettingScreen() {
                     border = BorderStroke(1.dp, Color.White),
                     shape = RoundedCornerShape(100f),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { }) {
+                    onClick = { navController.navigate(Utils.STARTER_SCREEN) }) {
                     Text(
                         text = "مرحله بعد",
                         fontSize = FontSizeButton(),
@@ -169,13 +138,14 @@ fun ItemListSettings(text: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            modifier = Modifier.weight(10f),
             text = text,
             textAlign = TextAlign.Start,
             fontSize = DescriptionSize(),
             fontFamily = FontPeydaMedium,
             color = Color.White
         )
+        Spacer(modifier = Modifier.weight(1f))
+
         ButtonIncreaseAndDecrease(R.drawable.increase)
         Text(
             modifier = Modifier
@@ -215,6 +185,7 @@ fun ButtonIncreaseAndDecrease(image: Int) {
 
 @Preview
 @Composable
-fun SettingScreenPreview() {
-    SettingScreen()
+private fun SettingScreenPreview() {
+    val navController = rememberNavController()
+    SettingScreen(navController)
 }

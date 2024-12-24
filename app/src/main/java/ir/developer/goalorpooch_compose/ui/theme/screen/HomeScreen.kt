@@ -29,7 +29,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
+import ir.developer.goalorpooch_compose.Utils
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontSizeButton
@@ -42,7 +45,7 @@ import ir.developer.goalorpooch_compose.ui.theme.WidthButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -100,7 +103,8 @@ fun HomeScreen() {
                 border = BorderStroke(1.dp, Color.White),
                 shape = RoundedCornerShape(100f),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { }) {
+                onClick = { navController.navigate(Utils.SETTING_SCREEN) }
+            ) {
                 Text(
                     text = "شروع",
                     fontSize = FontSizeButton(),
@@ -216,5 +220,6 @@ fun HomeScreen() {
 @Preview
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen()
+    val navController = rememberNavController()
+    HomeScreen(navController = navController)
 }

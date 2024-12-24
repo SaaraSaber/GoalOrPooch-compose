@@ -17,7 +17,7 @@ fun PaddingTopMedium() = 15.sdp
 fun PaddingRound() = 8.sdp
 
 @Composable
-fun FontSizeButton() = 20.ssp
+fun FontSizeButton() = 18.ssp
 
 @Composable
 fun TitleSize() = 20.ssp
@@ -26,7 +26,7 @@ fun TitleSize() = 20.ssp
 fun DescriptionSize() = 14.ssp
 
 @Composable
-fun HeightButton() = 55.sdp
+fun HeightButton() = 45.sdp
 
 @Composable
 fun WidthButton() = 200.sdp
