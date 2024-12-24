@@ -1,6 +1,7 @@
 package ir.developer.goalorpooch_compose.ui.theme
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -15,6 +16,9 @@ fun PaddingTopMedium() = 15.sdp
 
 @Composable
 fun PaddingRound() = 8.sdp
+
+@Composable
+fun roundedCorner() = 10.dp
 
 @Composable
 fun FontSizeButton() = 18.ssp
