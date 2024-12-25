@@ -13,6 +13,7 @@ import ir.developer.goalorpooch_compose.Utils.SETTING_SCREEN
 import ir.developer.goalorpooch_compose.Utils.STARTER_SCREEN
 import ir.developer.goalorpooch_compose.ui.theme.screen.DeterminingGameStarter
 import ir.developer.goalorpooch_compose.ui.theme.screen.HomeScreen
+import ir.developer.goalorpooch_compose.ui.theme.screen.SelectCardScreen
 import ir.developer.goalorpooch_compose.ui.theme.screen.SettingScreen
 
 @Composable
@@ -39,7 +40,14 @@ fun navigation() {
                         durationMillis = 600
                     )
                 )
-            })
+            },
+            exitTransition = {
+                ExitTransition.None
+            },
+            popEnterTransition = {
+                EnterTransition.None
+            }
+        )
         {
             SettingScreen(navController)
         }
@@ -52,9 +60,19 @@ fun navigation() {
                         durationMillis = 600
                     )
                 )
-            })
+            },
+            exitTransition = {
+                ExitTransition.None
+            },
+            popEnterTransition = {
+                EnterTransition.None
+            }
+        )
         {
             DeterminingGameStarter(navController)
+        }
+        composable(Utils.SELECT_CARD_SCREEN) {
+            SelectCardScreen(navController)
         }
     })
 }
