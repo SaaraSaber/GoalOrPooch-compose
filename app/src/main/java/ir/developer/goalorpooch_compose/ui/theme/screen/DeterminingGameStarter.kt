@@ -54,6 +54,8 @@ import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
+import ir.developer.goalorpooch_compose.ui.theme.SizePicLarge
+import ir.developer.goalorpooch_compose.ui.theme.SizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.TitleSize
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
@@ -152,7 +154,8 @@ fun ItemGameStarter(
                     start = PaddingTopMedium(),
                     end = PaddingRound(),
                     bottom = PaddingTopMedium()
-                ),
+                )
+                .size(SizePicMedium()),
             painter = painterResource(id = image),
             contentDescription = "pic_team_one",
         )
@@ -207,7 +210,7 @@ fun BottomSheetContent(onCardSelection: () -> Unit, onDismiss: () -> Unit) {
         Image(
             modifier = Modifier
                 .padding(start = PaddingRound(), end = PaddingRound())
-                .size(70.sdp),
+                .size(SizePicLarge()),
             painter = painterResource(id = R.drawable.pic_team_one),
             contentDescription = null
         )

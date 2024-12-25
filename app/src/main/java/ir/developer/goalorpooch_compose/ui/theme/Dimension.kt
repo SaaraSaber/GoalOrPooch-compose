@@ -34,3 +34,9 @@ fun HeightButton() = 45.sdp
 
 @Composable
 fun WidthButton() = 200.sdp
+@Composable
+fun SizePicSmall() = 30.sdp
+@Composable
+fun SizePicMedium() = 40.sdp
+@Composable
+fun SizePicLarge() = 70.sdp
