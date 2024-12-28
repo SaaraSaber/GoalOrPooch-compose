@@ -1,4 +1,4 @@
-package ir.developer.goalorpooch_compose.ui.theme.screen
+package ir.developer.goalorpooch_compose.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

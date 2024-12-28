@@ -1,6 +1,6 @@
 [versions]
-agp = "8.2.0-alpha12"
-kotlin = "1.9.10"
+agp = "8.7.3"
+kotlin = "2.0.20"
 core-ktx = "1.15.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.2.1"
@@ -44,4 +44,5 @@ sdp-compose = { module = "com.github.Kaaveh:sdp-compose", version.ref = "sdpComp
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 

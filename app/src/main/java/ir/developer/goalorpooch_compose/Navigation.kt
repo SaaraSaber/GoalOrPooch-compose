@@ -11,13 +11,13 @@ import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.Utils.HOME_SCREEN
 import ir.developer.goalorpooch_compose.Utils.SETTING_SCREEN
 import ir.developer.goalorpooch_compose.Utils.STARTER_SCREEN
-import ir.developer.goalorpooch_compose.ui.theme.screen.DeterminingGameStarter
-import ir.developer.goalorpooch_compose.ui.theme.screen.HomeScreen
-import ir.developer.goalorpooch_compose.ui.theme.screen.SelectCardScreen
-import ir.developer.goalorpooch_compose.ui.theme.screen.SettingScreen
+import ir.developer.goalorpooch_compose.ui.screen.DeterminingGameStarter
+import ir.developer.goalorpooch_compose.ui.screen.HomeScreen
+import ir.developer.goalorpooch_compose.ui.screen.SelectCardScreen
+import ir.developer.goalorpooch_compose.ui.screen.SettingScreen
 
 @Composable
-fun navigation() {
+fun Navigation(sharedViewModel: SharedViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = HOME_SCREEN, builder = {
         composable(
@@ -72,7 +72,7 @@ fun navigation() {
             DeterminingGameStarter(navController)
         }
         composable(Utils.SELECT_CARD_SCREEN) {
-            SelectCardScreen(navController)
+            SelectCardScreen(navController, sharedViewModel)
         }
     })
 }

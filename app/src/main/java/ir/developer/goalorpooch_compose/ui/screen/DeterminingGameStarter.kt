@@ -1,4 +1,4 @@
-package ir.developer.goalorpooch_compose.ui.theme.screen
+package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke

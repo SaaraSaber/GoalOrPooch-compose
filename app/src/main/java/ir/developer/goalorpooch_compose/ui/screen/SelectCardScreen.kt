@@ -1,6 +1,7 @@
-package ir.developer.goalorpooch_compose.ui.theme.screen
+package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -34,12 +36,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
+import ir.developer.goalorpooch_compose.SharedViewModel
 import ir.developer.goalorpooch_compose.Utils
 import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
@@ -57,7 +58,10 @@ import ir.kaaveh.sdpcompose.sdp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SelectCardScreen(navController: NavController) {
+fun SelectCardScreen(
+    navController: NavController,
+    sharedViewModel: SharedViewModel
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -108,85 +112,10 @@ fun SelectCardScreen(navController: NavController) {
                     textAlign = TextAlign.Justify
                 )
 
-                val cards = listOf(
-                    CardModel(
-                        1,
-                        "Card 1",
-                        "Description 1",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = false
-                    ),
-                    CardModel(
-                        2,
-                        "Card 2",
-                        "Description 2",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = true
-                    ),
-                    CardModel(
-                        2,
-                        "Card 2",
-                        "Description 2",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = true
-                    ),
-                    CardModel(
-                        2,
-                        "Card 2",
-                        "Description 2",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = true
-                    ),
-                    CardModel(
-                        2,
-                        "Card 2",
-                        "Description 2",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = true
-                    ),
-                    CardModel(
-                        2,
-                        "Card 2",
-                        "Description 2",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = true
-                    ),
-                    CardModel(
-                        2,
-                        "Card 2",
-                        "Description 2",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = true
-                    ),
-                    CardModel(
-                        2,
-                        "Card 2",
-                        "Description 2",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = true
-                    ),
-                    CardModel(
-                        2,
-                        "Card 2",
-                        "Description 2",
-                        R.drawable.card_team_one,
-                        isSelect = false,
-                        disable = true
-                    ),
-                    // کارت‌های بیشتر...
-                )
+                val cards = sharedViewModel.getAllCards()
+                Log.i("SelectCardScreen", "SelectCardScreen: ${cards}")
 
-                CardGrid(cards) {
-
-                }
+//                CardGrid(cards) {}
 
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -219,7 +148,7 @@ fun SelectCardScreen(navController: NavController) {
 }
 
 @Composable
-fun CardGrid(cards: List<CardModel>, onCardClick: (CardModel) -> Unit) {
+fun CardGrid(cards: State<List<CardModel>>, onCardClick: (CardModel) -> Unit) {
     LazyVerticalGrid(
         modifier = Modifier
             .padding(
@@ -232,8 +161,8 @@ fun CardGrid(cards: List<CardModel>, onCardClick: (CardModel) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(5.sdp),
         horizontalArrangement = Arrangement.spacedBy(5.sdp)
     ) {
-        items(cards.size) { index ->
-            val card = cards[index]
+        items(cards.value.size) { index ->
+            val card = cards.value[index]
             CardItem(card = card, onCardClick = onCardClick)
         }
     }
@@ -246,12 +175,12 @@ fun CardItem(card: CardModel, onCardClick: (CardModel) -> Unit) {
             .fillMaxWidth()
             .clickable(enabled = !card.disable) { onCardClick(card) },
         colors = CardDefaults.cardColors(
-            containerColor =  Color.Transparent
+            containerColor = Color.Transparent
         )
     ) {
         Box(contentAlignment = Alignment.Center) {
             Image(
-                painter = painterResource(card.image),
+                painter = painterResource(card.imageTeamOne),
                 contentDescription = card.description,
                 modifier = Modifier.fillMaxSize()
             )
@@ -259,9 +188,9 @@ fun CardItem(card: CardModel, onCardClick: (CardModel) -> Unit) {
     }
 }
 
-@Preview
-@Composable
-fun SelectCardScreenPreview() {
-    val navController = rememberNavController()
-    SelectCardScreen(navController = navController)
-}
+//@Preview
+//@Composable
+//fun SelectCardScreenPreview() {
+//    val navController = rememberNavController()
+//    SelectCardScreen(navController = navController)
+//}
