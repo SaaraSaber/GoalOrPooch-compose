@@ -1,20 +1,24 @@
 [versions]
 agp = "8.2.0-alpha12"
 kotlin = "1.9.10"
-core-ktx = "1.9.0"
+core-ktx = "1.15.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.2.1"
 espresso-core = "3.6.1"
 lifecycle-runtime-ktx = "2.8.7"
 activity-compose = "1.9.3"
-compose-bom = "2024.11.00"
-navigation = "2.8.4"
+compose-bom = "2024.12.01"
+navigation = "2.8.5"
 daggerHilt = "2.51.1"
+roomRuntime = "2.6.1"
 sdpCompose = "1.1.0"
 
 
 
 [libraries]
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
