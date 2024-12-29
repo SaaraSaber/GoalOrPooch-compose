@@ -26,6 +26,8 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,6 +48,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.Utils
+import ir.developer.goalorpooch_compose.model.ItemStarterModel
 import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
@@ -59,6 +62,7 @@ import ir.developer.goalorpooch_compose.ui.theme.SizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.TitleSize
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -93,15 +97,33 @@ fun DeterminingGameStarter(navController: NavController) {
                     textAlign = TextAlign.Justify
                 )
 
-                val items = listOf(
-                    R.drawable.pic_team_one to "تیم اول بازی رو شروع می کند.",
-                    R.drawable.pic_team_two to "تیم دوم بازی رو شروع می کند.",
-                    R.drawable.pic_random_box to "انتخاب تصادفی آغازکننده"
+                val items = remember { mutableStateListOf<ItemStarterModel>() }
+                items.add(
+                    ItemStarterModel(
+                        id = 0,
+                        image = R.drawable.pic_team_one,
+                        text = "تیم اول بازی رو شروع می کند."
+                    )
                 )
-                items.forEach { (image, text) ->
+                items.add(
+                    ItemStarterModel(
+                        id = 1,
+                        image = R.drawable.pic_team_two,
+                        text = "تیم دوم بازی رو شروع می کند."
+                    )
+                )
+                items.add(
+                    ItemStarterModel(
+                        id = 2,
+                        image = R.drawable.pic_random_box,
+                        text = "انتخاب تصادفی آغازکننده"
+                    )
+                )
+                items.forEachIndexed { _, item ->
                     ItemGameStarter(
-                        image = image,
-                        text = text,
+                        image = item.image,
+                        text = item.text,
+                        idItem = item.id,
                         paddingValues = innerPadding,
                         navController = navController
                     )
@@ -111,14 +133,14 @@ fun DeterminingGameStarter(navController: NavController) {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemGameStarter(
     image: Int,
-    text: String,
+    idItem: Int,
     paddingValues: PaddingValues,
-    navController: NavController
+    navController: NavController,
+    text: String
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -181,8 +203,10 @@ fun ItemGameStarter(
                 tonalElevation = 16.sdp
             ) {
                 // Sheet content
-
                 BottomSheetContent(
+                    image = image,
+                    text = text,
+                    idItem = idItem,
                     onCardSelection = {
                         scope.launch {
                             sheetState.hide()
@@ -201,31 +225,87 @@ fun ItemGameStarter(
 }
 
 @Composable
-fun BottomSheetContent(onCardSelection: () -> Unit, onDismiss: () -> Unit) {
+fun BottomSheetContent(
+    image: Int,
+    text: String,
+    idItem: Int,
+    onDismiss: () -> Unit,
+    onCardSelection: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            modifier = Modifier
-                .padding(start = PaddingRound(), end = PaddingRound())
-                .size(SizePicLarge()),
-            painter = painterResource(id = R.drawable.pic_team_one),
-            contentDescription = null
-        )
-        Text(
-            modifier = Modifier.padding(
-                top = PaddingTopMedium(),
-                start = PaddingRound(),
-                end = PaddingRound()
-            ),
-            text = "تیم اول بازی را شروع میکند.",
-            fontSize = TitleSize(),
-            fontFamily = FontPeydaMedium,
-            color = Color.White,
-            textAlign = TextAlign.Justify
-        )
+        if (idItem == 2) {
+            var randomItem by remember { mutableIntStateOf(-1) }
+            randomItem = Random.nextInt(0, 2)
+
+            Utils.STARTER_GAME = randomItem
+
+            if (randomItem == 0) {
+                Image(
+                    modifier = Modifier
+                        .padding(start = PaddingRound(), end = PaddingRound())
+                        .size(SizePicLarge()),
+                    painter = painterResource(id = R.drawable.pic_team_one),
+                    contentDescription = null
+                )
+                Text(
+                    modifier = Modifier.padding(
+                        top = PaddingTopMedium(),
+                        start = PaddingRound(),
+                        end = PaddingRound()
+                    ),
+                    text = "تیم اول بازی رو شروع می کند.",
+                    fontSize = TitleSize(),
+                    fontFamily = FontPeydaMedium,
+                    color = Color.White,
+                    textAlign = TextAlign.Justify
+                )
+            } else {
+                Image(
+                    modifier = Modifier
+                        .padding(start = PaddingRound(), end = PaddingRound())
+                        .size(SizePicLarge()),
+                    painter = painterResource(id = R.drawable.pic_team_two),
+                    contentDescription = null
+                )
+                Text(
+                    modifier = Modifier.padding(
+                        top = PaddingTopMedium(),
+                        start = PaddingRound(),
+                        end = PaddingRound()
+                    ),
+                    text = "تیم دوم بازی رو شروع می کند.",
+                    fontSize = TitleSize(),
+                    fontFamily = FontPeydaMedium,
+                    color = Color.White,
+                    textAlign = TextAlign.Justify
+                )
+            }
+        } else {
+            Utils.STARTER_GAME = idItem
+            Image(
+                modifier = Modifier
+                    .padding(start = PaddingRound(), end = PaddingRound())
+                    .size(SizePicLarge()),
+                painter = painterResource(id = image),
+                contentDescription = null
+            )
+            Text(
+                modifier = Modifier.padding(
+                    top = PaddingTopMedium(),
+                    start = PaddingRound(),
+                    end = PaddingRound()
+                ),
+                text = text,
+                fontSize = TitleSize(),
+                fontFamily = FontPeydaMedium,
+                color = Color.White,
+                textAlign = TextAlign.Justify
+            )
+        }
         Row(modifier = Modifier.padding(top = PaddingTopLarge())) {
             Button(
                 modifier = Modifier
