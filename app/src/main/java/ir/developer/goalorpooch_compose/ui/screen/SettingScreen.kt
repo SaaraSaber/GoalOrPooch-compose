@@ -2,6 +2,7 @@ package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -21,6 +23,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -114,72 +118,164 @@ fun SettingScreen(navController: NavController) {
 
 @Composable
 fun ListSettings() {
-    Column(
-        modifier = Modifier.padding(
-            top = PaddingTopMedium(), start = PaddingRound(), end = PaddingRound()
-        )
-    ) {
+    val counters = remember { mutableStateListOf(6, 10, 30, 60, 5) }
 
-        ItemListSettings("تعداد بازیکنان")
-        ItemListSettings("امتیاز پیروزی")
-        ItemListSettings("زمان گرفتن گل")
-        ItemListSettings("زمان گرفتن شاه گل")
-        ItemListSettings("تعداد کارت های بازی")
+    Column(
+        modifier = Modifier
+            .padding(
+                top = PaddingTopMedium(), start = PaddingRound(), end = PaddingRound()
+            )
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.sdp)
+    ) {
+        val labels = listOf(
+            "تعداد بازیکنان",
+            "امتیاز پیروزی",
+            "زمان گرفتن گل",
+            "زمان گرفتن شاه گل",
+            "تعداد کارت های بازی"
+        )
+        labels.forEachIndexed { index, label ->
+            CounterRow(
+                label = label,
+                count = counters[index],
+                onIncrement = {
+                    when (index) {
+                        0 -> {
+                            counters[index] += 2
+                            Utils.COUNT_PLAYER = counters[index]
+                        }
+
+                        1 -> {
+                            counters[index]++
+                            Utils.VICTORY_POINTS = counters[index]
+                        }
+
+                        2 -> {
+                            counters[index] += 5
+                            Utils.TIME_TO_GET_GOAL = counters[index]
+                        }
+
+                        3 -> {
+                            counters[index] += 5
+                            Utils.TIME_TO_GET_SHAH_GOAL = counters[index]
+                        }
+
+                        4 -> {
+                            counters[index]++
+                            Utils.THE_NUMBER_OF_PLAYING_CARDS = counters[index]
+                        }
+
+                        else -> {}
+                    }
+                },
+                onDecrement = {
+                    when (index) {
+                        0 -> {
+                            if (counters[index] > 0) {
+                                counters[index] -= 2
+                                Utils.COUNT_PLAYER = counters[index]
+                            }
+                        }
+
+                        1 -> {
+                            if (counters[index] > 0) {
+                                counters[index]--
+                                Utils.VICTORY_POINTS = counters[index]
+                            }
+                        }
+
+                        2 -> {
+                            if (counters[index] > 0) {
+                                counters[index] -= 5
+                                Utils.TIME_TO_GET_GOAL = counters[index]
+                            }
+                        }
+
+                        3 -> {
+                            if (counters[index] > 0) counters[index] -= 5
+                            Utils.TIME_TO_GET_SHAH_GOAL = counters[index]
+                        }
+
+                        4 -> {
+                            if (counters[index] > 0) counters[index]--
+                            Utils.THE_NUMBER_OF_PLAYING_CARDS = counters[index]
+                        }
+
+                        else -> {}
+                    }
+//                    if (counters[index] > 0) counters[index]-- // جلوگیری از مقادیر منفی
+                }
+            )
+        }
 
     }
 }
 
 @Composable
-fun ItemListSettings(text: String) {
+fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = PaddingTopMedium()),
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = text,
+            text = label,
             textAlign = TextAlign.Start,
             fontSize = DescriptionSize(),
             fontFamily = FontPeydaMedium,
             color = Color.White
         )
-        Spacer(modifier = Modifier.weight(1f))
-
-        ButtonIncreaseAndDecrease(R.drawable.increase)
-        Text(
-            modifier = Modifier
-                .padding(start = 8.sdp, end = 8.sdp)
-                .align(Alignment.Bottom),
-            text = "6",
-            textAlign = TextAlign.Center,
-            fontSize = DescriptionSize(),
-            fontFamily = FontPeydaMedium,
-            color = Color.White
-        )
-        ButtonIncreaseAndDecrease(R.drawable.decrease)
-    }
-}
-
-@Composable
-fun ButtonIncreaseAndDecrease(image: Int) {
-    ElevatedButton(
-        modifier = Modifier.size(25.sdp),
-        colors = ButtonColors(
-            containerColor = FenceGreen,
-            contentColor = Color.White,
-            disabledContainerColor = HihadaBrown,
-            disabledContentColor = HihadaBrown
-        ),
-        shape = CircleShape,
-        contentPadding = PaddingValues(4.dp),
-        onClick = { }) {
-        Icon(
-            painter = painterResource(id = image),
-            contentDescription = null,
-            tint = Color.White
-        )
-
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ElevatedButton(
+                modifier = Modifier.size(25.sdp),
+                colors = ButtonColors(
+                    containerColor = FenceGreen,
+                    contentColor = Color.White,
+                    disabledContainerColor = HihadaBrown,
+                    disabledContentColor = HihadaBrown
+                ),
+                shape = CircleShape,
+                contentPadding = PaddingValues(4.dp),
+                onClick = { onIncrement() }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.increase),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+            Text(
+                modifier = Modifier
+                    .padding(start = 8.sdp, end = 8.sdp)
+                    .align(Alignment.Bottom)
+                    .width(40.sdp),
+                text = count.toString(),
+                textAlign = TextAlign.Center,
+                fontSize = DescriptionSize(),
+                fontFamily = FontPeydaMedium,
+                color = Color.White
+            )
+            ElevatedButton(
+                modifier = Modifier.size(25.sdp),
+                colors = ButtonColors(
+                    containerColor = FenceGreen,
+                    contentColor = Color.White,
+                    disabledContainerColor = HihadaBrown,
+                    disabledContentColor = HihadaBrown
+                ),
+                shape = CircleShape,
+                contentPadding = PaddingValues(4.dp),
+                onClick = { onDecrement() }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.decrease),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+        }
     }
 }
 
