@@ -59,6 +59,7 @@ import ir.kaaveh.sdpcompose.sdp
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SelectCardScreen(
+    idItemSelected: Int,
     navController: NavController,
     sharedViewModel: SharedViewModel
 ) {
@@ -86,12 +87,12 @@ fun SelectCardScreen(
                 ) {
                     Image(
                         modifier = Modifier.size(SizePicMedium()),
-                        painter = painterResource(id = R.drawable.pic_team_one),
+                        painter = painterResource(id = if (idItemSelected == 0) R.drawable.pic_team_one else R.drawable.pic_team_two),
                         contentDescription = "pic_team_one"
                     )
                     Text(
                         modifier = Modifier.padding(start = PaddingRound()),
-                        text = "تیم اول",
+                        text = if (idItemSelected == 0) "تیم اول" else "تیم دوم",
                         fontSize = DescriptionSize(),
                         fontFamily = FontPeydaMedium,
                         color = Color.White,
@@ -105,7 +106,7 @@ fun SelectCardScreen(
                         start = PaddingRound(),
                         end = PaddingRound()
                     ),
-                    text = "تیم اول بازی کارت های خود را انتخاب کند .شما باید 5 کارت از کارت های زیر را انتخاب کنید.",
+                    text = if (idItemSelected == 0) "تیم اول بازی کارت های خود را انتخاب کند .شما باید 5 کارت از کارت های زیر را انتخاب کنید." else "تیم دوم بازی کارت های خود را انتخاب کند .شما باید 5 کارت از کارت های زیر را انتخاب کنید.",
                     fontSize = DescriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
@@ -192,5 +193,5 @@ fun CardItem(card: CardModel, onCardClick: (CardModel) -> Unit) {
 //@Composable
 //fun SelectCardScreenPreview() {
 //    val navController = rememberNavController()
-//    SelectCardScreen(navController = navController)
+//    SelectCardScreen(navController = navController, sharedViewModel = sharedViewModel)
 //}

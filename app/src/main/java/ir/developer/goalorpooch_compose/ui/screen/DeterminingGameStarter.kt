@@ -147,10 +147,10 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
         ) {
             BottomSheetContent(item, onDismiss = {
                 scope.launch { sheetState.hide() }.invokeOnCompletion { showBottomSheet = false }
-            }, onCardSelection = {
+            }, onCardSelection = { idItem ->
                 scope.launch {
                     sheetState.hide()
-                    navController.navigate(Utils.SELECT_CARD_SCREEN)
+                    navController.navigate("${Utils.SELECT_CARD_SCREEN}/${idItem}")
                 }.invokeOnCompletion { showBottomSheet = false }
             })
         }
@@ -161,7 +161,7 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
 fun BottomSheetContent(
     item: ItemStarterModel,
     onDismiss: () -> Unit,
-    onCardSelection: () -> Unit
+    onCardSelection: (Int) -> Unit
 ) {
     val randomIndex = if (item.id == 2) Random.nextInt(0, 2) else item.id
     Utils.STARTER_GAME = randomIndex
@@ -202,7 +202,7 @@ fun BottomSheetContent(
                     containerColor = Color.White,
                     contentColor = FenceGreen
                 ),
-                onClick = onCardSelection
+                onClick = { onCardSelection(randomIndex) }
             ) {
                 Text(
                     text = "انتخاب کارت",

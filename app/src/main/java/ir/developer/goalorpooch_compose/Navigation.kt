@@ -5,9 +5,11 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import ir.developer.goalorpooch_compose.Utils.HOME_SCREEN
 import ir.developer.goalorpooch_compose.Utils.SETTING_SCREEN
 import ir.developer.goalorpooch_compose.Utils.STARTER_SCREEN
@@ -71,8 +73,18 @@ fun Navigation(sharedViewModel: SharedViewModel) {
         {
             DeterminingGameStarter(navController)
         }
-        composable(Utils.SELECT_CARD_SCREEN) {
-            SelectCardScreen(navController, sharedViewModel)
+        composable(route = Utils.SELECT_CARD_SCREEN + "/{idItem}",
+            arguments = listOf(
+                navArgument("idItem") {
+                    type = NavType.IntType
+                }
+            )
+        ) { entry ->
+            SelectCardScreen(
+                idItemSelected = entry.arguments?.getInt("idItem")!!,
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
     })
 }
