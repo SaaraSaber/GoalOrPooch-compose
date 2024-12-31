@@ -19,6 +19,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -26,12 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
+import ir.developer.goalorpooch_compose.SharedViewModel
 import ir.developer.goalorpooch_compose.Utils
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -45,7 +47,24 @@ import ir.developer.goalorpooch_compose.ui.theme.WidthButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+    if (Utils.FINISH_GAME) {
+        LaunchedEffect(Unit) {
+            sharedViewModel.getAllCardsTeamOne()
+        }
+        val cards by sharedViewModel.allCardsTeamOne.collectAsState(initial = emptyList())
+        cards.forEach {
+            if (it.isSelect) {
+                sharedViewModel.updateCardTeamOne(
+                    it.id,
+                    it.name,
+                    it.description,
+                    isSelect = false,
+                    disable = false
+                )
+            }
+        }
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -217,9 +236,9 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
-@Preview
-@Composable
-private fun HomeScreenPreview() {
-    val navController = rememberNavController()
-    HomeScreen(navController = navController)
-}
+//@Preview
+//@Composable
+//private fun HomeScreenPreview() {
+//    val navController = rememberNavController()
+//    HomeScreen(navController = navController)
+//}

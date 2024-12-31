@@ -17,6 +17,7 @@ import ir.developer.goalorpooch_compose.ui.screen.DeterminingGameStarter
 import ir.developer.goalorpooch_compose.ui.screen.HomeScreen
 import ir.developer.goalorpooch_compose.ui.screen.SelectCardScreen
 import ir.developer.goalorpooch_compose.ui.screen.SettingScreen
+import ir.developer.goalorpooch_compose.ui.screen.ShowCardsScreen
 
 @Composable
 fun Navigation(sharedViewModel: SharedViewModel) {
@@ -31,7 +32,7 @@ fun Navigation(sharedViewModel: SharedViewModel) {
                 EnterTransition.None
             }
         ) {
-            HomeScreen(navController)
+            HomeScreen(navController,sharedViewModel)
         }
         composable(
             route = SETTING_SCREEN,
@@ -82,6 +83,13 @@ fun Navigation(sharedViewModel: SharedViewModel) {
         ) { entry ->
             SelectCardScreen(
                 idItemSelected = entry.arguments?.getInt("idItem")!!,
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
+        }
+
+        composable(route = Utils.SHOW_SELECTED_CARD_SCREEN) {
+            ShowCardsScreen(
                 navController = navController,
                 sharedViewModel = sharedViewModel
             )
