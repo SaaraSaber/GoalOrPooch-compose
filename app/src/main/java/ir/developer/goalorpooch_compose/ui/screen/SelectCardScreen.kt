@@ -3,6 +3,7 @@ package ir.developer.goalorpooch_compose.ui.screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,23 +16,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -41,13 +38,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.SharedViewModel
 import ir.developer.goalorpooch_compose.Utils
-import ir.developer.goalorpooch_compose.model.CardModelTeamOne
 import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -65,16 +62,12 @@ import ir.kaaveh.sdpcompose.sdp
 @Composable
 fun SelectCardScreen(
     idItemSelected: Int,
-    navController: NavController,
-    sharedViewModel: SharedViewModel
+    navController: NavController
 ) {
-    var selectedCount by remember { mutableIntStateOf(0) }
-    val maxSelection = Utils.THE_NUMBER_OF_PLAYING_CARDS
+    val remainingCount = remember { mutableIntStateOf(Utils.THE_NUMBER_OF_PLAYING_CARDS) }
+//    val maxSelection = Utils.THE_NUMBER_OF_PLAYING_CARDS
 
-    LaunchedEffect(Unit) {
-        sharedViewModel.getAllCardsTeamOne() // فراخوانی تابع برای دریافت داده‌ها
-    }
-    val cards by sharedViewModel.allCardsTeamOne.collectAsState(initial = emptyList()) // دریافت داده‌ها به صورت State
+    val selectedState = remember { mutableStateListOf(*Array(8) { false }) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -125,19 +118,32 @@ fun SelectCardScreen(
                     textAlign = TextAlign.Justify
                 )
 
-                CardGrid(cards = cards, onCardClick = { card ->
-                    if (selectedCount < maxSelection && !card.disable) {
-                        card.disable = true
-                        selectedCount++
-                        sharedViewModel.updateCardTeamOne(
-                            card.id,
-                            card.name,
-                            card.description,
-                            isSelect = true,
-                            disable = true
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .padding(
+                            top = PaddingTopMedium(),
+                            start = PaddingRound(),
+                            end = PaddingRound()
+                        )
+                        .fillMaxWidth(),
+                    columns = GridCells.Fixed(3),
+                    verticalArrangement = Arrangement.spacedBy(5.sdp),
+                    horizontalArrangement = Arrangement.spacedBy(5.sdp)
+                ) {
+                    items(8) { index ->
+                        CardItem(isSelected = selectedState[index],
+                            onCardClick = {
+                                if (!selectedState[index] && remainingCount.intValue > 0) {
+                                    selectedState[index] = true
+                                    remainingCount.value -= 1
+                                } else if (selectedState[index]) {
+                                    selectedState[index] = false
+                                    remainingCount.value += 1
+                                }
+                            }
                         )
                     }
-                })
+                }
 
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -147,7 +153,7 @@ fun SelectCardScreen(
                         .fillMaxWidth()
                         .height(HeightButton())
                         .align(Alignment.CenterHorizontally)
-                        .alpha(if (selectedCount != maxSelection) 0.8f else 1f),
+                        .alpha(if (remainingCount.intValue != 0) 0.8f else 1f),
                     colors = ButtonColors(
                         containerColor = FenceGreen,
                         contentColor = Color.White,
@@ -157,10 +163,10 @@ fun SelectCardScreen(
                     border = BorderStroke(1.dp, Color.White),
                     shape = RoundedCornerShape(100f),
                     contentPadding = PaddingValues(0.dp),
-                    enabled = selectedCount == maxSelection,
+                    enabled = remainingCount.intValue == 0,
                     onClick = { navController.navigate(Utils.SHOW_SELECTED_CARD_SCREEN) }) {
                     Text(
-                        text = "تایید($selectedCount)",
+                        text = "تایید(${remainingCount.intValue})",
                         color = Color.White,
                         fontSize = FontSizeButton(),
                         fontFamily = FontPeydaBold
@@ -172,51 +178,27 @@ fun SelectCardScreen(
 }
 
 @Composable
-fun CardGrid(cards: List<CardModelTeamOne>, onCardClick: (CardModelTeamOne) -> Unit) {
-    LazyVerticalGrid(
+fun CardItem(isSelected: Boolean, onCardClick: () -> Unit) {
+    Box(
         modifier = Modifier
-            .padding(
-                top = PaddingTopMedium(),
-                start = PaddingRound(),
-                end = PaddingRound()
-            )
-            .fillMaxWidth(),
-        columns = GridCells.Fixed(3),
-        verticalArrangement = Arrangement.spacedBy(5.sdp),
-        horizontalArrangement = Arrangement.spacedBy(5.sdp)
+            .clickable { onCardClick() }
+            .background(Color.Transparent),
+        contentAlignment = Alignment.Center
     ) {
-        items(cards.size) { index ->
-            val card = cards[index] // دریافت مدل کارت با استفاده از ایندکس
-            CardItem(card = card, onCardClick = onCardClick)
-        }
-    }
-}
-
-@Composable
-fun CardItem(card: CardModelTeamOne, onCardClick: (CardModelTeamOne) -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(enabled = !card.disable) { onCardClick(card) }
-            .alpha(if (card.disable) 0.3f else 1f),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
+        Image(
+            painter = painterResource(id = R.drawable.card_team_one),
+            contentDescription = null,
+            modifier = Modifier
+                .width(80.sdp)
+                .alpha(if (isSelected) 0.3f else 1f),
+            contentScale = ContentScale.Crop
         )
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            Image(
-                painter = painterResource(card.imageTeamOne),
-                contentDescription = card.description,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
     }
 }
 
-
-//@Preview
-//@Composable
-//fun SelectCardScreenPreview() {
-//    val navController = rememberNavController()
-//    SelectCardScreen(navController = navController, sharedViewModel = sharedViewModel)
-//}
+@Preview
+@Composable
+private fun SelectCardScreenPreview() {
+    val navController = rememberNavController()
+    SelectCardScreen(idItemSelected = 1, navController = navController)
+}

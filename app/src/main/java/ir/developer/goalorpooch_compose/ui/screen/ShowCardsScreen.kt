@@ -61,9 +61,10 @@ fun ShowCardsScreen(
     sharedViewModel: SharedViewModel
 ) {
     LaunchedEffect(Unit) {
-        sharedViewModel.getCardsSelectTeamOne(true)
+        sharedViewModel.getAllCardsTeamOne()
     }
-    val cards by sharedViewModel.allCardSelectTeamOne.collectAsState(initial = emptyList())
+    val cards by sharedViewModel.allCardsTeamOne.collectAsState(initial = emptyList())
+    val randomItem = cards.shuffled().take(Utils.THE_NUMBER_OF_PLAYING_CARDS)
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -104,8 +105,8 @@ fun ShowCardsScreen(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(5.sdp),
                 ) {
-                    items(cards.size) { index ->
-                        val card = cards[index]
+                    items(randomItem.size) { index ->
+                        val card = randomItem[index]
                         ItemSelectedCard(card = card)
                     }
                 }
