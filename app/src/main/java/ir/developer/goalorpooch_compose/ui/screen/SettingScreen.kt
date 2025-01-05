@@ -38,16 +38,16 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
+import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
-import ir.developer.goalorpooch_compose.ui.theme.FontSizeButton
-import ir.developer.goalorpooch_compose.ui.theme.HeightButton
+import ir.developer.goalorpooch_compose.ui.theme.fontSizeButton
+import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
-import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
+import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
@@ -75,12 +75,12 @@ fun SettingScreen(navController: NavController,sharedViewModel: SharedViewModel)
 
                 Text(
                     modifier = Modifier.padding(
-                        top = PaddingTop(),
-                        start = PaddingRound(),
-                        end = PaddingRound()
+                        top = paddingTop(),
+                        start = paddingRound(),
+                        end = paddingRound()
                     ),
                     text = "در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.",
-                    fontSize = DescriptionSize(),
+                    fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
                     textAlign = TextAlign.Justify
@@ -92,9 +92,9 @@ fun SettingScreen(navController: NavController,sharedViewModel: SharedViewModel)
 
                 Button(
                     modifier = Modifier
-                        .padding(PaddingRound())
+                        .padding(paddingRound())
                         .fillMaxWidth()
-                        .height(HeightButton())
+                        .height(heightButton())
                         .align(Alignment.CenterHorizontally),
                     colors = ButtonColors(
                         containerColor = FenceGreen,
@@ -108,7 +108,7 @@ fun SettingScreen(navController: NavController,sharedViewModel: SharedViewModel)
                     onClick = { navController.navigate(Utils.STARTER_SCREEN) }) {
                     Text(
                         text = "مرحله بعد",
-                        fontSize = FontSizeButton(),
+                        fontSize = fontSizeButton(),
                         fontFamily = FontPeydaBold
                     )
                 }
@@ -126,7 +126,7 @@ fun ListSettings() {
     Column(
         modifier = Modifier
             .padding(
-                top = PaddingTopMedium(), start = PaddingRound(), end = PaddingRound()
+                top = paddingTopMedium(), start = paddingRound(), end = paddingRound()
             )
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.sdp)
@@ -225,7 +225,7 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
         Text(
             text = label,
             textAlign = TextAlign.Start,
-            fontSize = DescriptionSize(),
+            fontSize = descriptionSize(),
             fontFamily = FontPeydaMedium,
             color = Color.White
         )
@@ -257,7 +257,7 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
                     .width(40.sdp),
                 text = count.toString(),
                 textAlign = TextAlign.Center,
-                fontSize = DescriptionSize(),
+                fontSize = descriptionSize(),
                 fontFamily = FontPeydaMedium,
                 color = Color.White
             )

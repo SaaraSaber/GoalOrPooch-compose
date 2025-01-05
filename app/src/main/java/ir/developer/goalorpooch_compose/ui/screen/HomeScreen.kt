@@ -33,13 +33,13 @@ import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
-import ir.developer.goalorpooch_compose.ui.theme.FontSizeButton
-import ir.developer.goalorpooch_compose.ui.theme.HeightButton
+import ir.developer.goalorpooch_compose.ui.theme.fontSizeButton
+import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
-import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTopLarge
-import ir.developer.goalorpooch_compose.ui.theme.WidthButton
+import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
+import ir.developer.goalorpooch_compose.ui.theme.widthButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -58,7 +58,7 @@ fun HomeScreen(navController: NavController) {
         ) {
             Button(
                 modifier = Modifier
-                    .padding(PaddingRound())
+                    .padding(paddingRound())
                     .size(40.dp),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
@@ -78,7 +78,7 @@ fun HomeScreen(navController: NavController) {
 
             Image(
                 modifier = Modifier
-                    .padding(PaddingTopLarge())
+                    .padding(paddingTopLarge())
                     .size(140.dp)
                     .align(Alignment.CenterHorizontally),
                 painter = painterResource(id = R.drawable.logo), contentDescription = "logo"
@@ -88,8 +88,8 @@ fun HomeScreen(navController: NavController) {
 
             Button(
                 modifier = Modifier
-                    .width(WidthButton())
-                    .height(HeightButton())
+                    .width(widthButton())
+                    .height(heightButton())
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
@@ -104,15 +104,15 @@ fun HomeScreen(navController: NavController) {
             ) {
                 Text(
                     text = "شروع",
-                    fontSize = FontSizeButton(),
+                    fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
             }
             Button(
                 modifier = Modifier
-                    .padding(top = PaddingTop())
-                    .width(WidthButton())
-                    .height(HeightButton())
+                    .padding(top = paddingTop())
+                    .width(widthButton())
+                    .height(heightButton())
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
@@ -126,15 +126,15 @@ fun HomeScreen(navController: NavController) {
                 onClick = { }) {
                 Text(
                     text = "راهنما",
-                    fontSize = FontSizeButton(),
+                    fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
             }
             Button(
                 modifier = Modifier
-                    .padding(top = PaddingTop())
-                    .width(WidthButton())
-                    .height(HeightButton())
+                    .padding(top = paddingTop())
+                    .width(widthButton())
+                    .height(heightButton())
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
@@ -148,15 +148,15 @@ fun HomeScreen(navController: NavController) {
                 onClick = { }) {
                 Text(
                     text = "درباره ما",
-                    fontSize = FontSizeButton(),
+                    fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
             }
             Button(
                 modifier = Modifier
-                    .padding(top = PaddingTop())
-                    .width(WidthButton())
-                    .height(HeightButton())
+                    .padding(top = paddingTop())
+                    .width(widthButton())
+                    .height(heightButton())
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
@@ -170,15 +170,15 @@ fun HomeScreen(navController: NavController) {
                 onClick = { }) {
                 Text(
                     text = "برنامه ها",
-                    fontSize = FontSizeButton(),
+                    fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
             }
             Button(
                 modifier = Modifier
                     .padding(top = 5.dp)
-                    .width(WidthButton())
-                    .height(HeightButton())
+                    .width(widthButton())
+                    .height(heightButton())
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
@@ -192,14 +192,14 @@ fun HomeScreen(navController: NavController) {
                 onClick = { }) {
                 Text(
                     text = "خروج",
-                    fontSize = FontSizeButton(),
+                    fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 modifier = Modifier
-                    .padding(bottom = PaddingRound())
+                    .padding(bottom = paddingRound())
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,

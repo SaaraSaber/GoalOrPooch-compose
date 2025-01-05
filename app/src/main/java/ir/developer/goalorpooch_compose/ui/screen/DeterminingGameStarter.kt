@@ -46,17 +46,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.ItemStarterModel
-import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
+import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
-import ir.developer.goalorpooch_compose.ui.theme.HeightButton
-import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTopLarge
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
-import ir.developer.goalorpooch_compose.ui.theme.SizePicLarge
-import ir.developer.goalorpooch_compose.ui.theme.SizePicMedium
-import ir.developer.goalorpooch_compose.ui.theme.TitleSize
+import ir.developer.goalorpooch_compose.ui.theme.heightButton
+import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
+import ir.developer.goalorpooch_compose.ui.theme.sizePicLarge
+import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
+import ir.developer.goalorpooch_compose.ui.theme.titleSize
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
@@ -85,13 +85,13 @@ fun DeterminingGameStarter(navController: NavController) {
 
                 Text(
                     modifier = Modifier.padding(
-                        end = PaddingRound(),
-                        start = PaddingRound(),
-                        top = PaddingTop(),
+                        end = paddingRound(),
+                        start = paddingRound(),
+                        top = paddingTop(),
                         bottom = 30.sdp
                     ),
                     text = "به دو تیم تقسیم شوید و سپس تیم آغاز کننده بازی را مشخص کنید.",
-                    fontSize = DescriptionSize(),
+                    fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
                     textAlign = TextAlign.Justify
@@ -114,7 +114,7 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
 
     Row(
         modifier = Modifier
-            .padding(end = PaddingRound(), start = PaddingRound(), top = PaddingTop())
+            .padding(end = paddingRound(), start = paddingRound(), top = paddingTop())
             .border(1.sdp, Color.White, RoundedCornerShape(8.dp))
             .clip(RoundedCornerShape(8.dp))
             .fillMaxWidth()
@@ -124,15 +124,15 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
     ) {
         Image(
             modifier = Modifier
-                .padding(PaddingTopMedium())
-                .size(SizePicMedium()),
+                .padding(paddingTopMedium())
+                .size(sizePicMedium()),
             painter = painterResource(id = item.image),
             contentDescription = null
         )
 
         Text(
             text = item.text,
-            fontSize = DescriptionSize(),
+            fontSize = descriptionSize(),
             fontFamily = FontPeydaMedium,
             color = Color.White,
             textAlign = TextAlign.Justify
@@ -181,26 +181,26 @@ fun BottomSheetContent(
 
         Image(
             modifier = Modifier
-                .padding(PaddingRound())
-                .size(SizePicLarge()),
+                .padding(paddingRound())
+                .size(sizePicLarge()),
             painter = painterResource(id = selectedImage),
             contentDescription = null
         )
 
         Text(
-            modifier = Modifier.padding(PaddingTopMedium()),
+            modifier = Modifier.padding(paddingTopMedium()),
             text = selectedText,
-            fontSize = TitleSize(),
+            fontSize = titleSize(),
             fontFamily = FontPeydaMedium,
             color = Color.White,
             textAlign = TextAlign.Justify
         )
 
-        Row(modifier = Modifier.padding(top = PaddingTopLarge(), bottom = PaddingRound())) {
+        Row(modifier = Modifier.padding(top = paddingTopLarge(), bottom = paddingRound())) {
             Button(
                 modifier = Modifier
-                    .padding(start = PaddingRound(), end = 5.sdp)
-                    .height(HeightButton())
+                    .padding(start = paddingRound(), end = 5.sdp)
+                    .height(heightButton())
                     .weight(1f),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
@@ -210,7 +210,7 @@ fun BottomSheetContent(
             ) {
                 Text(
                     text = "انتخاب کارت",
-                    fontSize = DescriptionSize(),
+                    fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = FenceGreen
                 )
@@ -218,15 +218,15 @@ fun BottomSheetContent(
 
             OutlinedButton(
                 modifier = Modifier
-                    .padding(end = PaddingRound(), start = 5.sdp)
-                    .height(HeightButton())
+                    .padding(end = paddingRound(), start = 5.sdp)
+                    .height(heightButton())
                     .weight(1f),
                 border = BorderStroke(1.sdp, Color.White),
                 onClick = onDismiss
             ) {
                 Text(
                     text = "انصراف",
-                    fontSize = DescriptionSize(),
+                    fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White
                 )

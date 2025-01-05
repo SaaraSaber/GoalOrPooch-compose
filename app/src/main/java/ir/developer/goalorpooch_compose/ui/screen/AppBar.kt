@@ -18,9 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
-import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
-import ir.developer.goalorpooch_compose.ui.theme.TitleSize
+import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.titleSize
 
 @Composable
 fun AppBar(title:String) {
@@ -29,14 +29,14 @@ fun AppBar(title:String) {
     ) {
     Row(
         modifier = Modifier
-            .padding(top = PaddingRound(), start = PaddingRound(), end = PaddingRound())
+            .padding(top = paddingRound(), start = paddingRound(), end = paddingRound())
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
             textAlign = TextAlign.Start,
-            fontSize = TitleSize(),
+            fontSize = titleSize(),
             fontFamily = FontPeydaBold,
             color = Color.White
         )
@@ -55,9 +55,9 @@ fun AppBar(title:String) {
 
     HorizontalDivider(
         modifier = Modifier.padding(
-            top = PaddingTop(),
-            start = PaddingRound(),
-            end = PaddingRound()
+            top = paddingTop(),
+            start = paddingRound(),
+            end = paddingRound()
         )
     )
     }

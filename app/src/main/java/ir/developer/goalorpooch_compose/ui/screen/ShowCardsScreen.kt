@@ -35,19 +35,20 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.CardModel
-import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
-import ir.developer.goalorpooch_compose.ui.theme.FontSizeButton
-import ir.developer.goalorpooch_compose.ui.theme.HeightButton
 import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
-import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
-import ir.developer.goalorpooch_compose.ui.theme.SizePicMedium
-import ir.developer.goalorpooch_compose.ui.theme.SizePicSmall
+import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
+import ir.developer.goalorpooch_compose.ui.theme.fontSizeButton
+import ir.developer.goalorpooch_compose.ui.theme.heightButton
+import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
+import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
+import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
+import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 
@@ -85,24 +86,24 @@ fun ShowCardsScreen(
                 AppBar(title = "نمایش کارت ها")
                 Image(
                     modifier = Modifier
-                        .padding(PaddingTop())
-                        .size(SizePicMedium()),
+                        .padding(paddingTop())
+                        .size(sizePicMedium()),
                     painter = painterResource(id = if (idItemSelected == 0) R.drawable.pic_team_one else R.drawable.pic_team_two),
                     contentDescription = "pic"
                 )
                 Text(
                     text = if (idItemSelected == 0) "تیم اول" else "تیم دوم",
                     color = Color.White,
-                    fontSize = DescriptionSize(),
+                    fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium
                 )
 
                 LazyColumn(
                     modifier = Modifier
                         .padding(
-                            top = PaddingTopMedium(),
-                            start = PaddingRound(),
-                            end = PaddingRound()
+                            top = paddingTopMedium(),
+                            start = paddingRound(),
+                            end = paddingRound()
                         )
                         .fillMaxWidth()
                         .weight(1f),
@@ -118,9 +119,9 @@ fun ShowCardsScreen(
                 }
                 Button(
                     modifier = Modifier
-                        .padding(PaddingRound())
+                        .padding(paddingRound())
                         .fillMaxWidth()
-                        .height(HeightButton())
+                        .height(heightButton())
                         .align(Alignment.CenterHorizontally),
                     colors = ButtonColors(
                         containerColor = FenceGreen,
@@ -131,10 +132,17 @@ fun ShowCardsScreen(
                     border = BorderStroke(1.sdp, Color.White),
                     shape = RoundedCornerShape(100f),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { navController.navigate("${Utils.SELECT_CARD_SCREEN}/$nextHowSeeCards") }) {
+                    onClick = {
+                        if (ManegeGame.team_one_has_card && ManegeGame.team_two_has_card) {
+//                            navController.navigate("${Utils.SELECT_CARD_SCREEN}/$nextHowSeeCards")
+                        } else {
+                            navController.navigate("${Utils.SELECT_CARD_SCREEN}/$nextHowSeeCards")
+                        }
+                    }
+                ) {
                     Text(
-                        text = "مرحله بعد",
-                        fontSize = FontSizeButton(),
+                        text = if (ManegeGame.team_one_has_card && ManegeGame.team_two_has_card) "شروع بازی" else "مرحله بعد",
+                        fontSize = fontSizeButton(),
                         fontFamily = FontPeydaBold
                     )
                 }
@@ -157,20 +165,20 @@ fun ItemSelectedCard(card: CardModel, isLastItem: Boolean, modifier: Modifier = 
             ) {
                 Image(
                     modifier = Modifier
-                        .width(SizePicSmall()),
+                        .width(sizePicSmall()),
                     painter = painterResource(id = card.image),
                     contentDescription = "image"
                 )
                 Text(
                     text = card.name,
                     color = Color.White,
-                    fontSize = DescriptionSize(),
+                    fontSize = descriptionSize(),
                     fontFamily = FontPeydaBold
                 )
             }
             Text(
                 text = card.description, color = Color.White,
-                fontSize = DescriptionSize(),
+                fontSize = descriptionSize(),
                 fontFamily = FontPeydaMedium,
                 textAlign = TextAlign.Justify
 
@@ -178,7 +186,12 @@ fun ItemSelectedCard(card: CardModel, isLastItem: Boolean, modifier: Modifier = 
             if (!isLastItem) {
                 HorizontalDivider(
                     modifier = modifier
-                        .padding(top = PaddingTopMedium(), bottom = PaddingTop(), end = 50.sdp, start = 50.sdp),
+                        .padding(
+                            top = paddingTopMedium(),
+                            bottom = paddingTop(),
+                            end = 50.sdp,
+                            start = 50.sdp
+                        ),
                     thickness = DividerDefaults.Thickness
                 )
             }

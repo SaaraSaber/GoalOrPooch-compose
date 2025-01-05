@@ -47,17 +47,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
+import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
-import ir.developer.goalorpooch_compose.ui.theme.FontSizeButton
-import ir.developer.goalorpooch_compose.ui.theme.HeightButton
+import ir.developer.goalorpooch_compose.ui.theme.fontSizeButton
+import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
-import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
-import ir.developer.goalorpooch_compose.ui.theme.SizePicMedium
+import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
+import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
 import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
@@ -93,21 +93,21 @@ fun SelectCardScreen(
                 AppBar(title = "توزیع کارت ها")
                 Row(
                     modifier = Modifier.padding(
-                        top = PaddingTop(),
-                        start = PaddingRound(),
-                        end = PaddingRound()
+                        top = paddingTop(),
+                        start = paddingRound(),
+                        end = paddingRound()
                     ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        modifier = Modifier.size(SizePicMedium()),
+                        modifier = Modifier.size(sizePicMedium()),
                         painter = painterResource(id = if (idItemSelected == 0) R.drawable.pic_team_one else R.drawable.pic_team_two),
                         contentDescription = "pic_team_one"
                     )
                     Text(
-                        modifier = Modifier.padding(start = PaddingRound()),
+                        modifier = Modifier.padding(start = paddingRound()),
                         text = if (idItemSelected == 0) "تیم اول" else "تیم دوم",
-                        fontSize = DescriptionSize(),
+                        fontSize = descriptionSize(),
                         fontFamily = FontPeydaMedium,
                         color = Color.White,
                         textAlign = TextAlign.Justify
@@ -115,12 +115,12 @@ fun SelectCardScreen(
                 }
                 Text(
                     modifier = Modifier.padding(
-                        top = PaddingTop(),
-                        start = PaddingRound(),
-                        end = PaddingRound()
+                        top = paddingTop(),
+                        start = paddingRound(),
+                        end = paddingRound()
                     ),
                     text = if (idItemSelected == 0) "تیم اول بازی کارت های خود را انتخاب کند .شما باید 5 کارت از کارت های زیر را انتخاب کنید." else "تیم دوم بازی کارت های خود را انتخاب کند .شما باید 5 کارت از کارت های زیر را انتخاب کنید.",
-                    fontSize = DescriptionSize(),
+                    fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
                     textAlign = TextAlign.Justify
@@ -129,9 +129,9 @@ fun SelectCardScreen(
                 LazyVerticalGrid(
                     modifier = Modifier
                         .padding(
-                            top = PaddingTopMedium(),
-                            start = PaddingRound(),
-                            end = PaddingRound()
+                            top = paddingTopMedium(),
+                            start = paddingRound(),
+                            end = paddingRound()
                         )
                         .fillMaxWidth()
                         .weight(1f),
@@ -156,9 +156,9 @@ fun SelectCardScreen(
 
                 Button(
                     modifier = Modifier
-                        .padding(PaddingRound())
+                        .padding(paddingRound())
                         .fillMaxWidth()
-                        .height(HeightButton())
+                        .height(heightButton())
                         .align(Alignment.CenterHorizontally)
                         .alpha(if (remainingCount.intValue != 0) 0.7f else 1f),
                     colors = ButtonColors(
@@ -175,7 +175,7 @@ fun SelectCardScreen(
                     Text(
                         text = "تایید(${remainingCount.intValue})",
                         color = Color.White,
-                        fontSize = FontSizeButton(),
+                        fontSize = fontSizeButton(),
                         fontFamily = FontPeydaBold
                     )
                 }
