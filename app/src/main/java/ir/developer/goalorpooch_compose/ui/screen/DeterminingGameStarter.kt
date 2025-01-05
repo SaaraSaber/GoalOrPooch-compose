@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,12 +45,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.Utils
 import ir.developer.goalorpooch_compose.model.ItemStarterModel
 import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
-import ir.developer.goalorpooch_compose.ui.theme.FontSizeButton
+import ir.developer.goalorpooch_compose.ui.theme.HeightButton
 import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTopLarge
@@ -57,6 +57,7 @@ import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.SizePicLarge
 import ir.developer.goalorpooch_compose.ui.theme.SizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.TitleSize
+import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -145,14 +146,16 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
             shape = RoundedCornerShape(16.dp),
             containerColor = FenceGreen
         ) {
-            BottomSheetContent(item, onDismiss = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion { showBottomSheet = false }
-            }, onCardSelection = { idItem ->
-                scope.launch {
-                    sheetState.hide()
-                    navController.navigate("${Utils.SELECT_CARD_SCREEN}/${idItem}")
-                }.invokeOnCompletion { showBottomSheet = false }
-            })
+            BottomSheetContent(
+                item, onDismiss = {
+                    scope.launch { sheetState.hide() }
+                        .invokeOnCompletion { showBottomSheet = false }
+                }, onCardSelection = { idItem ->
+                    scope.launch {
+                        sheetState.hide()
+                        navController.navigate("${Utils.SELECT_CARD_SCREEN}/${idItem}")
+                    }.invokeOnCompletion { showBottomSheet = false }
+                })
         }
     }
 }
@@ -193,11 +196,12 @@ fun BottomSheetContent(
             textAlign = TextAlign.Justify
         )
 
-        Row(modifier = Modifier.padding(top = PaddingTopLarge())) {
+        Row(modifier = Modifier.padding(top = PaddingTopLarge(), bottom = PaddingRound())) {
             Button(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(PaddingRound()),
+                    .padding(start = PaddingRound(), end = 5.sdp)
+                    .height(HeightButton())
+                    .weight(1f),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = FenceGreen
@@ -206,7 +210,7 @@ fun BottomSheetContent(
             ) {
                 Text(
                     text = "انتخاب کارت",
-                    fontSize = FontSizeButton(),
+                    fontSize = DescriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = FenceGreen
                 )
@@ -214,14 +218,15 @@ fun BottomSheetContent(
 
             OutlinedButton(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(PaddingRound()),
+                    .padding(end = PaddingRound(), start = 5.sdp)
+                    .height(HeightButton())
+                    .weight(1f),
                 border = BorderStroke(1.sdp, Color.White),
                 onClick = onDismiss
             ) {
                 Text(
                     text = "انصراف",
-                    fontSize = FontSizeButton(),
+                    fontSize = DescriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White
                 )

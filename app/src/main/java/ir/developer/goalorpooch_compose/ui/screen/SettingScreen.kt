@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,13 +34,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.Utils
 import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -50,11 +48,16 @@ import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
 import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
+import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
+import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingScreen(navController: NavController) {
+fun SettingScreen(navController: NavController,sharedViewModel: SharedViewModel) {
+    LaunchedEffect(Unit) {
+        sharedViewModel.getAllCards()
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -279,9 +282,9 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
     }
 }
 
-@Preview
-@Composable
-private fun SettingScreenPreview() {
-    val navController = rememberNavController()
-    SettingScreen(navController)
-}
+//@Preview
+//@Composable
+//private fun SettingScreenPreview() {
+//    val navController = rememberNavController()
+//    SettingScreen(navController)
+//}

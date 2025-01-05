@@ -15,7 +15,7 @@ fun PaddingTopLarge() = 30.sdp
 fun PaddingTopMedium() = 15.sdp
 
 @Composable
-fun PaddingRound() = 8.sdp
+fun PaddingRound() = 12.sdp
 
 @Composable
 fun roundedCorner() = 10.dp

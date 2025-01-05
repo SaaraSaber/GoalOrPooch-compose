@@ -5,14 +5,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ir.developer.goalorpooch_compose.R
 
-@Entity(tableName = "cardTeamTwo")
-data class CardModelTeamTwo(
+@Entity(tableName = "card")
+data class CardModel(
     @PrimaryKey
     val id: Int,
     val name: String,
     val description: String,
     @DrawableRes
-    val imageTeamTwo: Int = R.drawable.card_team_two,
+    val image: Int = R.drawable.card,
     val isSelect: Boolean,
     var disable: Boolean
 )

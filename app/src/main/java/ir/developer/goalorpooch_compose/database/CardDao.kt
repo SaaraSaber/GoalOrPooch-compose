@@ -5,31 +5,18 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import ir.developer.goalorpooch_compose.model.CardModelTeamOne
-import ir.developer.goalorpooch_compose.model.CardModelTeamTwo
+import ir.developer.goalorpooch_compose.model.CardModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CardDao {
 
-    @Query("SELECT * FROM cardTeamOne")
-    fun getCardsTeamOne(): Flow<List<CardModelTeamOne>>
-
-    @Query("SELECT * FROM cardTeamTwo")
-    fun getCardsTeamTwo(): Flow<List<CardModelTeamTwo>>
-
-    @Query("SELECT * FROM cardTeamOne WHERE isSelect=:isSelect")
-    fun getCardSelectedTeemOne(isSelect :Boolean): Flow<List<CardModelTeamOne>>
+    @Query("SELECT * FROM card")
+    fun getCards(): Flow<List<CardModel>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addCardTeamOne(cardModelTeamOne: CardModelTeamOne)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addCardTeamTwo(cardModelTeamTwo: CardModelTeamTwo)
+    suspend fun addCard(cardModel: CardModel)
 
     @Update
-    suspend fun updateCardTeamOne(cardModelTeamOne: CardModelTeamOne)
-
-    @Update
-    suspend fun updateCardTeamTwo(cardModelTeamTwo: CardModelTeamTwo)
+    suspend fun updateCard(cardModel: CardModel)
 }

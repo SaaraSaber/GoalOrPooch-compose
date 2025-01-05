@@ -19,9 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -33,8 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.SharedViewModel
-import ir.developer.goalorpooch_compose.Utils
+import ir.developer.goalorpooch_compose.util.Utils
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontSizeButton
@@ -47,24 +43,7 @@ import ir.developer.goalorpooch_compose.ui.theme.WidthButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
-    if (Utils.FINISH_GAME) {
-        LaunchedEffect(Unit) {
-            sharedViewModel.getAllCardsTeamOne()
-        }
-        val cards by sharedViewModel.allCardsTeamOne.collectAsState(initial = emptyList())
-        cards.forEach {
-            if (it.isSelect) {
-                sharedViewModel.updateCardTeamOne(
-                    it.id,
-                    it.name,
-                    it.description,
-                    isSelect = false,
-                    disable = false
-                )
-            }
-        }
-    }
+fun HomeScreen(navController: NavController) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -77,7 +56,6 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     contentScale = ContentScale.Crop
                 )
         ) {
-
             Button(
                 modifier = Modifier
                     .padding(PaddingRound())
@@ -232,9 +210,9 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
             )
 
         }
-
     }
 }
+
 
 //@Preview
 //@Composable

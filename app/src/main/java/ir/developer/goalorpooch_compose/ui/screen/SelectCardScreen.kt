@@ -1,6 +1,8 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,13 +12,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -33,7 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -44,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.Utils
 import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -56,6 +58,8 @@ import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.SizePicMedium
+import ir.developer.goalorpooch_compose.util.ManegeGame
+import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -65,9 +69,13 @@ fun SelectCardScreen(
     navController: NavController
 ) {
     val remainingCount = remember { mutableIntStateOf(Utils.THE_NUMBER_OF_PLAYING_CARDS) }
-//    val maxSelection = Utils.THE_NUMBER_OF_PLAYING_CARDS
-
     val selectedState = remember { mutableStateListOf(*Array(8) { false }) }
+
+    if (idItemSelected == 0) {
+        ManegeGame.team_one_has_card = true
+    } else {
+        ManegeGame.team_two_has_card = true
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -125,10 +133,11 @@ fun SelectCardScreen(
                             start = PaddingRound(),
                             end = PaddingRound()
                         )
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .weight(1f),
                     columns = GridCells.Fixed(3),
-                    verticalArrangement = Arrangement.spacedBy(5.sdp),
-                    horizontalArrangement = Arrangement.spacedBy(5.sdp)
+                    verticalArrangement = Arrangement.spacedBy(10.sdp),
+                    horizontalArrangement = Arrangement.spacedBy(10.sdp)
                 ) {
                     items(8) { index ->
                         CardItem(isSelected = selectedState[index],
@@ -145,15 +154,13 @@ fun SelectCardScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
-
                 Button(
                     modifier = Modifier
                         .padding(PaddingRound())
                         .fillMaxWidth()
                         .height(HeightButton())
                         .align(Alignment.CenterHorizontally)
-                        .alpha(if (remainingCount.intValue != 0) 0.8f else 1f),
+                        .alpha(if (remainingCount.intValue != 0) 0.7f else 1f),
                     colors = ButtonColors(
                         containerColor = FenceGreen,
                         contentColor = Color.White,
@@ -164,7 +171,7 @@ fun SelectCardScreen(
                     shape = RoundedCornerShape(100f),
                     contentPadding = PaddingValues(0.dp),
                     enabled = remainingCount.intValue == 0,
-                    onClick = { navController.navigate(Utils.SHOW_SELECTED_CARD_SCREEN) }) {
+                    onClick = { navController.navigate("${Utils.SHOW_SELECTED_CARD_SCREEN}/${idItemSelected}") }) {
                     Text(
                         text = "تایید(${remainingCount.intValue})",
                         color = Color.White,
@@ -179,19 +186,33 @@ fun SelectCardScreen(
 
 @Composable
 fun CardItem(isSelected: Boolean, onCardClick: () -> Unit) {
+    val rotation by animateFloatAsState(
+        targetValue = if (isSelected) 180f else 0f,
+        animationSpec = tween(durationMillis = 500), label = ""
+    )
+    val alpha by animateFloatAsState(
+        targetValue = if (isSelected) 0.5f else 1f,
+        animationSpec = tween(durationMillis = 500), label = ""
+    )
+
     Box(
         modifier = Modifier
             .clickable { onCardClick() }
-            .background(Color.Transparent),
+            .background(Color.Transparent)
+            .graphicsLayer(
+                rotationY = rotation,
+                alpha = alpha
+            )
+            .shadow(0.dp),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.card_team_one),
+            painter = painterResource(id = R.drawable.card),
             contentDescription = null,
             modifier = Modifier
-                .width(80.sdp)
-                .alpha(if (isSelected) 0.3f else 1f),
-            contentScale = ContentScale.Crop
+                .fillMaxWidth()
+                .alpha(if (isSelected) 0.4f else 1f),
+            contentScale = ContentScale.FillWidth
         )
     }
 }

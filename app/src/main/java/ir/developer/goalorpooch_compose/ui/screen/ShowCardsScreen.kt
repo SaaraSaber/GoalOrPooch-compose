@@ -22,9 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -37,9 +34,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.SharedViewModel
-import ir.developer.goalorpooch_compose.Utils
-import ir.developer.goalorpooch_compose.model.CardModelTeamOne
+import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.ui.theme.DescriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -49,22 +44,29 @@ import ir.developer.goalorpooch_compose.ui.theme.HeightButton
 import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
 import ir.developer.goalorpooch_compose.ui.theme.PaddingRound
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTop
-import ir.developer.goalorpooch_compose.ui.theme.PaddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.PaddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.SizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.SizePicSmall
+import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
+import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun ShowCardsScreen(
-    navController: NavController,
-    sharedViewModel: SharedViewModel
+    idItemSelected: Int,
+    sharedViewModel: SharedViewModel,
+    navController: NavController
 ) {
-    LaunchedEffect(Unit) {
-        sharedViewModel.getAllCardsTeamOne()
+    val nextHowSeeCards: Int = if (idItemSelected == 0) {
+        1
+    } else {
+        0
     }
-    val cards by sharedViewModel.allCardsTeamOne.collectAsState(initial = emptyList())
-    val randomItem = cards.shuffled().take(Utils.THE_NUMBER_OF_PLAYING_CARDS)
+    val randomItem: List<CardModel> = if (idItemSelected == 0) {
+        sharedViewModel.randomCardsTeam1()
+    } else {
+        sharedViewModel.randomCardsTeam2()
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -85,11 +87,11 @@ fun ShowCardsScreen(
                     modifier = Modifier
                         .padding(PaddingTop())
                         .size(SizePicMedium()),
-                    painter = painterResource(id = R.drawable.pic_team_two),
-                    contentDescription = "pic_team_one"
+                    painter = painterResource(id = if (idItemSelected == 0) R.drawable.pic_team_one else R.drawable.pic_team_two),
+                    contentDescription = "pic"
                 )
                 Text(
-                    text = "تیم دوم",
+                    text = if (idItemSelected == 0) "تیم اول" else "تیم دوم",
                     color = Color.White,
                     fontSize = DescriptionSize(),
                     fontFamily = FontPeydaMedium
@@ -102,12 +104,16 @@ fun ShowCardsScreen(
                             start = PaddingRound(),
                             end = PaddingRound()
                         )
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .weight(1f),
                     verticalArrangement = Arrangement.spacedBy(5.sdp),
                 ) {
                     items(randomItem.size) { index ->
                         val card = randomItem[index]
-                        ItemSelectedCard(card = card)
+                        ItemSelectedCard(
+                            card = card,
+                            isLastItem = index == randomItem.size - 1
+                        )
                     }
                 }
                 Button(
@@ -125,7 +131,7 @@ fun ShowCardsScreen(
                     border = BorderStroke(1.sdp, Color.White),
                     shape = RoundedCornerShape(100f),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = { navController.navigate(Utils.STARTER_SCREEN) }) {
+                    onClick = { navController.navigate("${Utils.SELECT_CARD_SCREEN}/$nextHowSeeCards") }) {
                     Text(
                         text = "مرحله بعد",
                         fontSize = FontSizeButton(),
@@ -138,7 +144,7 @@ fun ShowCardsScreen(
 }
 
 @Composable
-fun ItemSelectedCard(card: CardModelTeamOne, modifier: Modifier = Modifier) {
+fun ItemSelectedCard(card: CardModel, isLastItem: Boolean, modifier: Modifier = Modifier) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = modifier.fillMaxWidth(),
@@ -152,8 +158,8 @@ fun ItemSelectedCard(card: CardModelTeamOne, modifier: Modifier = Modifier) {
                 Image(
                     modifier = Modifier
                         .width(SizePicSmall()),
-                    painter = painterResource(id = card.imageTeamOne),
-                    contentDescription = "pic_team_one"
+                    painter = painterResource(id = card.image),
+                    contentDescription = "image"
                 )
                 Text(
                     text = card.name,
@@ -169,11 +175,13 @@ fun ItemSelectedCard(card: CardModelTeamOne, modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Justify
 
             )
-            HorizontalDivider(
-                modifier = modifier
-                    .padding(top = PaddingTopLarge(), end = 50.sdp, start = 50.sdp),
-                thickness = DividerDefaults.Thickness
-            )
+            if (!isLastItem) {
+                HorizontalDivider(
+                    modifier = modifier
+                        .padding(top = PaddingTopMedium(), bottom = PaddingTop(), end = 50.sdp, start = 50.sdp),
+                    thickness = DividerDefaults.Thickness
+                )
+            }
         }
     }
 }

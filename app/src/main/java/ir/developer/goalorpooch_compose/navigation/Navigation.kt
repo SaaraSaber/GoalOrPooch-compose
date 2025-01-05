@@ -1,4 +1,4 @@
-package ir.developer.goalorpooch_compose
+package ir.developer.goalorpooch_compose.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -10,14 +10,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import ir.developer.goalorpooch_compose.Utils.HOME_SCREEN
-import ir.developer.goalorpooch_compose.Utils.SETTING_SCREEN
-import ir.developer.goalorpooch_compose.Utils.STARTER_SCREEN
 import ir.developer.goalorpooch_compose.ui.screen.DeterminingGameStarter
 import ir.developer.goalorpooch_compose.ui.screen.HomeScreen
 import ir.developer.goalorpooch_compose.ui.screen.SelectCardScreen
 import ir.developer.goalorpooch_compose.ui.screen.SettingScreen
 import ir.developer.goalorpooch_compose.ui.screen.ShowCardsScreen
+import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
+import ir.developer.goalorpooch_compose.util.Utils
+import ir.developer.goalorpooch_compose.util.Utils.HOME_SCREEN
+import ir.developer.goalorpooch_compose.util.Utils.SETTING_SCREEN
+import ir.developer.goalorpooch_compose.util.Utils.STARTER_SCREEN
 
 @Composable
 fun Navigation(sharedViewModel: SharedViewModel) {
@@ -32,7 +34,7 @@ fun Navigation(sharedViewModel: SharedViewModel) {
                 EnterTransition.None
             }
         ) {
-            HomeScreen(navController,sharedViewModel)
+            HomeScreen(navController)
         }
         composable(
             route = SETTING_SCREEN,
@@ -52,7 +54,7 @@ fun Navigation(sharedViewModel: SharedViewModel) {
             }
         )
         {
-            SettingScreen(navController)
+            SettingScreen(navController, sharedViewModel)
         }
         composable(
             route = STARTER_SCREEN,
@@ -88,8 +90,15 @@ fun Navigation(sharedViewModel: SharedViewModel) {
             )
         }
 
-        composable(route = Utils.SHOW_SELECTED_CARD_SCREEN) {
+        composable(route = Utils.SHOW_SELECTED_CARD_SCREEN + "/{idItem}",
+            arguments = listOf(
+                navArgument("idItem") {
+                    type = NavType.IntType
+                }
+            )
+        ) { entry ->
             ShowCardsScreen(
+                idItemSelected = entry.arguments?.getInt("idItem")!!,
                 navController = navController,
                 sharedViewModel = sharedViewModel
             )
