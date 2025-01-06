@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import ir.developer.goalorpooch_compose.R
@@ -66,5 +67,5 @@ fun AppBar(title:String) {
 @Preview
 @Composable
 private fun AppBarPreview() {
-    AppBar("تنظیمات بازی")
+    AppBar(stringResource(R.string.guide))
 }

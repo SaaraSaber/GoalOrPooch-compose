@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import ir.developer.goalorpooch_compose.R
@@ -49,7 +50,7 @@ fun GameGuideScreen(modifier: Modifier = Modifier, sharedViewModel: SharedViewMo
                         contentScale = ContentScale.Crop
                     )
             ) {
-                AppBar("راهنما")
+                AppBar(stringResource(R.string.guide))
 
                 LazyColumn(
                     modifier = modifier

@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -90,7 +91,7 @@ fun SelectCardScreen(
                         contentScale = ContentScale.Crop
                     )
             ) {
-                AppBar(title = "توزیع کارت ها")
+                AppBar(title = stringResource(R.string.distribution_of_cards))
                 Row(
                     modifier = Modifier.padding(
                         top = paddingTop(),
@@ -101,12 +102,18 @@ fun SelectCardScreen(
                 ) {
                     Image(
                         modifier = Modifier.size(sizePicMedium()),
-                        painter = painterResource(id = if (idItemSelected == 0) R.drawable.pic_team_one else R.drawable.pic_team_two),
+                        painter = painterResource(id = if (idItemSelected == 0)
+                            R.drawable.pic_team_one
+                        else
+                            R.drawable.pic_team_two),
                         contentDescription = "pic_team_one"
                     )
                     Text(
                         modifier = Modifier.padding(start = paddingRound()),
-                        text = if (idItemSelected == 0) "تیم اول" else "تیم دوم",
+                        text = if (idItemSelected == 0)
+                            stringResource(R.string.team_one)
+                        else
+                            stringResource(R.string.team_two),
                         fontSize = descriptionSize(),
                         fontFamily = FontPeydaMedium,
                         color = Color.White,
@@ -119,7 +126,10 @@ fun SelectCardScreen(
                         start = paddingRound(),
                         end = paddingRound()
                     ),
-                    text = if (idItemSelected == 0) "تیم اول بازی کارت های خود را انتخاب کند .شما باید 5 کارت از کارت های زیر را انتخاب کنید." else "تیم دوم بازی کارت های خود را انتخاب کند .شما باید 5 کارت از کارت های زیر را انتخاب کنید.",
+                    text = if (idItemSelected == 0)
+                        "تیم اول بازی کارت های خود را انتخاب کند .شما باید ${Utils.THE_NUMBER_OF_PLAYING_CARDS} کارت از کارت های زیر را انتخاب کنید."
+                    else
+                        "تیم دوم بازی کارت های خود را انتخاب کند .شما باید ${Utils.THE_NUMBER_OF_PLAYING_CARDS} کارت از کارت های زیر را انتخاب کنید.",
                     fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
@@ -173,7 +183,7 @@ fun SelectCardScreen(
                     enabled = remainingCount.intValue == 0,
                     onClick = { navController.navigate("${Utils.SHOW_SELECTED_CARD_SCREEN}/${idItemSelected}") }) {
                     Text(
-                        text = "تایید(${remainingCount.intValue})",
+                        text = stringResource(R.string.btn_ok, remainingCount.intValue),
                         color = Color.White,
                         fontSize = fontSizeButton(),
                         fontFamily = FontPeydaBold

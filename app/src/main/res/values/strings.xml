@@ -1,3 +1,47 @@
 <resources>
     <string name="app_name">گل یا پوچ</string>
+    <string name="version_app">version 1.0.0</string>
+
+<!--    items list game guide-->
+    <string name="title_one">نحوه بازی</string>
+    <string name="description_one">مسابقه گل یا پوچ یک بازی گروهی است که دو تیم نفس‌گیر به مصاف هم می‌روند. در هر دوره بازی گل یا پوچ دو تیم ۳ نفره روبروی هم قرار می‌گیرند و بازی گل یا پوچ را با قوانین مخصوص این مسابقه انجام می‌دهند.
+قوانین بازی هم ساده و راحت است. هر بار که گل دست یک تیم باشد تیم مقابل باید با سه خالی بازی گل را حدس بزند. اگر گل را حدس بزند می‌تواند بازی کند و اگر حدس نزند یک امتیاز به تیمی داده می‌شود که گل را حفظ کرده است. اما اگر تیم مقابل که می‌خواهد حدس بزند یک ضرب گل را بگیرد و هیچ دستی را پوچ نکند ۲ امتیاز می‌گیرد.</string>
+<!--    <string name=""></string>-->
+<!--    <string name=""></string>-->
+<!--    <string name=""></string>-->
+<!--    <string name=""></string>-->
+<!--    <string name=""></string>-->
+<!--    <string name=""></string>-->
+
+<!--    text btn-->
+    <string name="btn_ok">تایید( %1$d )</string>
+    <string name="choose_card">انتخاب کارت</string>
+    <string name="cansel">انصراف</string>
+    <string name="start">شروع</string>
+    <string name="about_us">درباره ما</string>
+    <string name="apps">برنامه ها</string>
+    <string name="exit">خروج</string>
+    <string name="next_level">مرحله بعد</string>
+
+    <!--   title appBar-->
+    <string name="distribution_of_cards">توزیع کارت ها</string>
+    <string name="guide">راهنما</string>
+    <string name="determining_the_initiator">تعیین آغاز کننده</string>
+    <string name="setting">تنظیمات بازی</string>
+
+
+
+    <string name="team_one">تیم اول</string>
+    <string name="team_two">تیم دوم</string>
+    <string name="start_team_one">تیم اول بازی رو شروع می کند.</string>
+    <string name="start_team_two">تیم دوم بازی رو شروع می کند.</string>
+    <string name="start_random">انتخاب تصادفی آغازکننده</string>
+    <string name="starter_description">به دو تیم تقسیم شوید و سپس تیم آغاز کننده بازی را مشخص کنید.</string>
+    <string name="description_setting">در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.</string>
+
+    <string name="number_player">تعداد بازیکنان</string>
+    <string name="victory_points">امتیاز پیروزی</string>
+    <string name="time_get_goal">زمان گرفتن گل</string>
+    <string name="time_get_king_goal">زمان گرفتن شاه گل</string>
+    <string name="number_cards">تعداد کارت های بازی</string>
 </resources>

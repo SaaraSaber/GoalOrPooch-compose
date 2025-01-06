@@ -33,18 +33,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
+import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
+import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.fontSizeButton
 import ir.developer.goalorpooch_compose.ui.theme.heightButton
-import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
@@ -54,7 +55,7 @@ import ir.kaaveh.sdpcompose.sdp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingScreen(navController: NavController,sharedViewModel: SharedViewModel) {
+fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     LaunchedEffect(Unit) {
         sharedViewModel.getAllCards()
     }
@@ -71,7 +72,7 @@ fun SettingScreen(navController: NavController,sharedViewModel: SharedViewModel)
                         contentScale = ContentScale.Crop
                     )
             ) {
-                AppBar(title = "تنظیمات بازی")
+                AppBar(title = stringResource(R.string.setting))
 
                 Text(
                     modifier = Modifier.padding(
@@ -79,7 +80,7 @@ fun SettingScreen(navController: NavController,sharedViewModel: SharedViewModel)
                         start = paddingRound(),
                         end = paddingRound()
                     ),
-                    text = "در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.",
+                    text = stringResource(R.string.description_setting),
                     fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
@@ -107,7 +108,7 @@ fun SettingScreen(navController: NavController,sharedViewModel: SharedViewModel)
                     contentPadding = PaddingValues(0.dp),
                     onClick = { navController.navigate(Utils.STARTER_SCREEN) }) {
                     Text(
-                        text = "مرحله بعد",
+                        text = stringResource(R.string.next_level),
                         fontSize = fontSizeButton(),
                         fontFamily = FontPeydaBold
                     )
@@ -132,11 +133,11 @@ fun ListSettings() {
         verticalArrangement = Arrangement.spacedBy(16.sdp)
     ) {
         val labels = listOf(
-            "تعداد بازیکنان",
-            "امتیاز پیروزی",
-            "زمان گرفتن گل",
-            "زمان گرفتن شاه گل",
-            "تعداد کارت های بازی"
+            stringResource(R.string.number_player),
+            stringResource(R.string.victory_points),
+            stringResource(R.string.time_get_goal),
+            stringResource(R.string.time_get_king_goal),
+            stringResource(R.string.number_cards)
         )
         labels.forEachIndexed { index, label ->
             CounterRow(

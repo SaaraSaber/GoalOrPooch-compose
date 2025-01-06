@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -88,11 +89,20 @@ fun ShowCardsScreen(
                     modifier = Modifier
                         .padding(paddingTop())
                         .size(sizePicMedium()),
-                    painter = painterResource(id = if (idItemSelected == 0) R.drawable.pic_team_one else R.drawable.pic_team_two),
+                    painter = painterResource(
+                        id =
+                        if (idItemSelected == 0)
+                            R.drawable.pic_team_one
+                        else
+                            R.drawable.pic_team_two
+                    ),
                     contentDescription = "pic"
                 )
                 Text(
-                    text = if (idItemSelected == 0) "تیم اول" else "تیم دوم",
+                    text = if (idItemSelected == 0)
+                        stringResource(R.string.team_one)
+                    else
+                        stringResource(R.string.team_two),
                     color = Color.White,
                     fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium

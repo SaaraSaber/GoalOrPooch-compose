@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -103,7 +104,7 @@ fun HomeScreen(navController: NavController) {
                 onClick = { navController.navigate(Utils.SETTING_SCREEN) }
             ) {
                 Text(
-                    text = "شروع",
+                    text = stringResource(R.string.start),
                     fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
@@ -125,7 +126,7 @@ fun HomeScreen(navController: NavController) {
                 contentPadding = PaddingValues(0.dp),
                 onClick = { navController.navigate(Utils.GAME_GUIDE_SCREEN) }) {
                 Text(
-                    text = "راهنما",
+                    text = stringResource(R.string.guide),
                     fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
@@ -147,7 +148,7 @@ fun HomeScreen(navController: NavController) {
                 contentPadding = PaddingValues(0.dp),
                 onClick = { }) {
                 Text(
-                    text = "درباره ما",
+                    text = stringResource(R.string.about_us),
                     fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
@@ -169,7 +170,7 @@ fun HomeScreen(navController: NavController) {
                 contentPadding = PaddingValues(0.dp),
                 onClick = { }) {
                 Text(
-                    text = "برنامه ها",
+                    text = stringResource(R.string.apps),
                     fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
@@ -191,7 +192,7 @@ fun HomeScreen(navController: NavController) {
                 contentPadding = PaddingValues(0.dp),
                 onClick = { }) {
                 Text(
-                    text = "خروج",
+                    text = stringResource(R.string.exit),
                     fontSize = fontSizeButton(),
                     fontFamily = FontPeydaBold
                 )
@@ -203,7 +204,7 @@ fun HomeScreen(navController: NavController) {
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
-                text = "version 1",
+                text = stringResource(R.string.version_app),
                 color = Color.White,
                 fontSize = 15.sp,
                 fontFamily = FontPeydaBold

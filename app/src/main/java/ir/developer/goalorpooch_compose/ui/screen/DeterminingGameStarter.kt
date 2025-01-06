@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -46,9 +47,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.ItemStarterModel
-import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
+import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
@@ -66,9 +67,9 @@ import kotlin.random.Random
 @Composable
 fun DeterminingGameStarter(navController: NavController) {
     val items = listOf(
-        ItemStarterModel(0, R.drawable.pic_team_one, "تیم اول بازی رو شروع می کند."),
-        ItemStarterModel(1, R.drawable.pic_team_two, "تیم دوم بازی رو شروع می کند."),
-        ItemStarterModel(2, R.drawable.pic_random_box, "انتخاب تصادفی آغازکننده")
+        ItemStarterModel(0, R.drawable.pic_team_one, stringResource(R.string.start_team_one)),
+        ItemStarterModel(1, R.drawable.pic_team_two, stringResource(R.string.start_team_two)),
+        ItemStarterModel(2, R.drawable.pic_random_box, stringResource(R.string.start_random))
     )
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -81,7 +82,7 @@ fun DeterminingGameStarter(navController: NavController) {
                         contentScale = ContentScale.Crop
                     )
             ) {
-                AppBar(title = "تعیین آغاز کننده")
+                AppBar(title = stringResource(R.string.determining_the_initiator))
 
                 Text(
                     modifier = Modifier.padding(
@@ -90,7 +91,7 @@ fun DeterminingGameStarter(navController: NavController) {
                         top = paddingTop(),
                         bottom = 30.sdp
                     ),
-                    text = "به دو تیم تقسیم شوید و سپس تیم آغاز کننده بازی را مشخص کنید.",
+                    text = stringResource(R.string.starter_description),
                     fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
@@ -175,9 +176,11 @@ fun BottomSheetContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val selectedImage =
-            if (randomIndex == 0) R.drawable.pic_team_one else R.drawable.pic_team_two
+            if (randomIndex == 0) R.drawable.pic_team_one
+            else R.drawable.pic_team_two
         val selectedText =
-            if (randomIndex == 0) "تیم اول بازی رو شروع می کند." else "تیم دوم بازی رو شروع می کند."
+            if (randomIndex == 0) stringResource(R.string.start_team_one)
+            else stringResource(R.string.start_team_two)
 
         Image(
             modifier = Modifier
@@ -209,7 +212,7 @@ fun BottomSheetContent(
                 onClick = { onCardSelection(randomIndex) }
             ) {
                 Text(
-                    text = "انتخاب کارت",
+                    text = stringResource(R.string.choose_card),
                     fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = FenceGreen
@@ -225,7 +228,7 @@ fun BottomSheetContent(
                 onClick = onDismiss
             ) {
                 Text(
-                    text = "انصراف",
+                    text = stringResource(R.string.cansel),
                     fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White
