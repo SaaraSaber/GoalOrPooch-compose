@@ -7,6 +7,7 @@ object Utils {
     const val STARTER_SCREEN = "starter-screen"
     const val SELECT_CARD_SCREEN = "selectCard-screen"
     const val SHOW_SELECTED_CARD_SCREEN = "show-selected-card-screen"
+    const val GAME_GUIDE_SCREEN = "game-guide-screen"
 
     //......................................................................................
 //setting

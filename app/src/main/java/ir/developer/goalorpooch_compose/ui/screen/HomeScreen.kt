@@ -30,16 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.util.Utils
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
+import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
 import ir.developer.goalorpooch_compose.ui.theme.fontSizeButton
 import ir.developer.goalorpooch_compose.ui.theme.heightButton
-import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.widthButton
+import ir.developer.goalorpooch_compose.util.Utils
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -123,7 +123,7 @@ fun HomeScreen(navController: NavController) {
                 border = BorderStroke(1.dp, Color.White),
                 shape = RoundedCornerShape(100f),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { }) {
+                onClick = { navController.navigate(Utils.GAME_GUIDE_SCREEN) }) {
                 Text(
                     text = "راهنما",
                     fontSize = fontSizeButton(),

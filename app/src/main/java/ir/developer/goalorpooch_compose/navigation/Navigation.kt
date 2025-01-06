@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ir.developer.goalorpooch_compose.ui.screen.DeterminingGameStarter
+import ir.developer.goalorpooch_compose.ui.screen.GameGuideScreen
 import ir.developer.goalorpooch_compose.ui.screen.HomeScreen
 import ir.developer.goalorpooch_compose.ui.screen.SelectCardScreen
 import ir.developer.goalorpooch_compose.ui.screen.SettingScreen
@@ -103,5 +104,7 @@ fun Navigation(sharedViewModel: SharedViewModel) {
                 sharedViewModel = sharedViewModel
             )
         }
+
+        composable(route = Utils.GAME_GUIDE_SCREEN) { GameGuideScreen(sharedViewModel = sharedViewModel) }
     })
 }

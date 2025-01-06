@@ -47,13 +47,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
+import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
+import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.fontSizeButton
 import ir.developer.goalorpooch_compose.ui.theme.heightButton
-import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
@@ -69,7 +69,7 @@ fun SelectCardScreen(
     navController: NavController
 ) {
     val remainingCount = remember { mutableIntStateOf(Utils.THE_NUMBER_OF_PLAYING_CARDS) }
-    val selectedState = remember { mutableStateListOf(*Array(8) { false }) }
+    val selectedState = remember { mutableStateListOf(*Array(9) { false }) }
 
     if (idItemSelected == 0) {
         ManegeGame.team_one_has_card = true
@@ -139,7 +139,7 @@ fun SelectCardScreen(
                     verticalArrangement = Arrangement.spacedBy(10.sdp),
                     horizontalArrangement = Arrangement.spacedBy(10.sdp)
                 ) {
-                    items(8) { index ->
+                    items(9) { index ->
                         CardItem(isSelected = selectedState[index],
                             onCardClick = {
                                 if (!selectedState[index] && remainingCount.intValue > 0) {
