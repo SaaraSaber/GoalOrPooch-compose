@@ -1,6 +1,8 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -32,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,12 +56,13 @@ import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "QueryPermissionsNeeded")
 @Composable
 fun HomeScreen(navController: NavController) {
-    var  showBottomSheetAboutUs by remember { mutableStateOf(false) }
+    var showBottomSheetAboutUs by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -238,7 +242,18 @@ fun HomeScreen(navController: NavController) {
                                 sheetState.hide()
                             }.invokeOnCompletion { showBottomSheetAboutUs = false }
                         },
-                        onItemClick = {}
+                        onItemClick = {
+                            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                data = Uri.parse("mailto:")
+                                putExtra(
+                                    Intent.EXTRA_EMAIL,
+                                    arrayOf(context.getString(R.string.address_email))
+                                )
+                                putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.support))
+                            }
+                            context.startActivity(intent)
+
+                        }
                     )
                 }
             }
