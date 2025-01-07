@@ -61,6 +61,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(navController: NavController) {
     var showBottomSheetAboutUs by remember { mutableStateOf(false) }
     var showBottomSheetApps by remember { mutableStateOf(false) }
+    var showBottomSheetExit by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -210,7 +211,7 @@ fun HomeScreen(navController: NavController) {
                 border = BorderStroke(1.dp, Color.White),
                 shape = RoundedCornerShape(100f),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { }) {
+                onClick = { showBottomSheetExit = true }) {
                 Text(
                     text = stringResource(R.string.exit),
                     fontSize = fontSizeButton(),
@@ -272,22 +273,28 @@ fun HomeScreen(navController: NavController) {
                                 sheetState.hide()
                             }.invokeOnCompletion { showBottomSheetApps = false }
                         }
-//                        onItemClick = {
-//                            val intent = Intent(Intent.ACTION_SENDTO).apply {
-//                                data = Uri.parse("mailto:")
-//                                putExtra(
-//                                    Intent.EXTRA_EMAIL,
-//                                    arrayOf(context.getString(R.string.address_email))
-//                                )
-//                                putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.support))
-//                            }
-//                            context.startActivity(intent)
-//
-//                        }
                     )
                 }
             }
 
+            if (showBottomSheetExit) {
+                ModalBottomSheet(
+                    onDismissRequest = { showBottomSheetExit = false },
+                    sheetState = sheetState,
+                    shape = RoundedCornerShape(16.sdp),
+                    containerColor = FenceGreen
+                ) {
+                    BottomSheetContactExit(
+                        onDismiss = {
+                            scope.launch {
+                                sheetState.hide()
+                            }.invokeOnCompletion { showBottomSheetExit = false }
+                        },
+                        onClickStar = {},
+                        onClickExit = {}
+                    )
+                }
+            }
         }
     }
 }

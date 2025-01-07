@@ -142,10 +142,145 @@ fun BottomSheetContentAboutUs(
 }
 
 @Composable
+fun BottomSheetContactExit(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    onClickStar: () -> Unit,
+    onClickExit: () -> Unit,
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.exit),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+                Spacer(modifier = modifier.weight(1f))
+                IconButton(
+                    onClick = { onDismiss() }
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.close_circle),
+                        contentDescription = "btn_close",
+                        modifier = modifier.size(20.sdp)
+                    )
+                }
+
+            }
+            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
+
+            Text(
+                modifier = modifier.padding(top = paddingTop(), bottom = paddingTopMedium()),
+                text = stringResource(R.string.description_exit),
+                color = Color.White,
+                fontFamily = FontPeydaMedium,
+                fontSize = descriptionSize(),
+                textAlign = TextAlign.Justify
+            )
+            Row(
+                modifier = modifier
+                    .padding(
+                        top = paddingTop(),
+                        start = paddingTopMedium(),
+                        end = paddingTopMedium()
+                    )
+                    .fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.sdp)
+            ) {
+                Card(
+                    modifier = modifier
+                        .weight(1f)
+                        .clickable { onClickStar() }
+                        .align(Alignment.CenterVertically),
+                    colors = CardColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        disabledContentColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(10.sdp),
+                    border = BorderStroke(width = 1.sdp, color = Color.White)
+                ) {
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(paddingTopMedium()),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.star),
+                            contentDescription = "star",
+                            modifier = modifier.size(sizePicMedium())
+                        )
+                        Text(
+                            modifier = modifier.padding(
+                                top = paddingTopMedium()
+                            ),
+                            text = stringResource(R.string.rate),
+                            color = Color.White,
+                            fontFamily = FontPeydaMedium,
+                            fontSize = descriptionSize(),
+                            textAlign = TextAlign.Justify
+                        )
+                    }
+                }
+
+                Card(
+                    modifier = modifier
+                        .weight(1f)
+                        .clickable { onClickExit() },
+                    colors = CardColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        disabledContentColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(10.sdp),
+                    border = BorderStroke(width = 1.sdp, color = Color.White)
+                ) {
+                    Column(
+                        modifier = modifier
+                            .padding(paddingTopMedium())
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.Bottom,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.exit),
+                            contentDescription = "star",
+                            modifier = modifier.size(sizePicMedium())
+                        )
+                        Text(
+                            modifier = modifier.padding(
+                                top = paddingTopMedium(),
+                            ),
+                            text = stringResource(R.string.exit),
+                            color = Color.White,
+                            fontFamily = FontPeydaMedium,
+                            fontSize = descriptionSize(),
+                            textAlign = TextAlign.Justify
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun BottomSheetContactApps(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
-//    onItemClick: () -> Unit
 ) {
     val listApps = listOf(
         AppModel(
@@ -323,5 +458,15 @@ private fun BottomSheetContentPreview() {
 private fun BottomSheetContactAppsPreview() {
     BottomSheetContactApps(
         onDismiss = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ExitPreview() {
+    BottomSheetContactExit(
+        onDismiss = {},
+        onClickStar = {},
+        onClickExit = {}
     )
 }
