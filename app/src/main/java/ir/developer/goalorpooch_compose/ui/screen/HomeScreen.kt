@@ -1,6 +1,7 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -65,6 +66,7 @@ fun HomeScreen(navController: NavController) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val activity = context as? Activity
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -291,7 +293,7 @@ fun HomeScreen(navController: NavController) {
                             }.invokeOnCompletion { showBottomSheetExit = false }
                         },
                         onClickStar = {},
-                        onClickExit = {}
+                        onClickExit = { activity?.finishAffinity() }
                     )
                 }
             }
