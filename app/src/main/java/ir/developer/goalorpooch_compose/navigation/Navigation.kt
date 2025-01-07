@@ -37,6 +37,7 @@ fun Navigation(sharedViewModel: SharedViewModel) {
         ) {
             HomeScreen(navController)
         }
+
         composable(
             route = SETTING_SCREEN,
             enterTransition = {
@@ -57,6 +58,7 @@ fun Navigation(sharedViewModel: SharedViewModel) {
         {
             SettingScreen(navController, sharedViewModel)
         }
+
         composable(
             route = STARTER_SCREEN,
             enterTransition = {
@@ -77,6 +79,7 @@ fun Navigation(sharedViewModel: SharedViewModel) {
         {
             DeterminingGameStarter(navController)
         }
+
         composable(route = Utils.SELECT_CARD_SCREEN + "/{idItem}",
             arguments = listOf(
                 navArgument("idItem") {
@@ -106,5 +109,9 @@ fun Navigation(sharedViewModel: SharedViewModel) {
         }
 
         composable(route = Utils.GAME_GUIDE_SCREEN) { GameGuideScreen(sharedViewModel = sharedViewModel) }
+
+//        composable(route = Utils.ABOUT_US_SCREEN) { AboutUsScreen(showBottomSheetAboutUs) }
+//
+//        composable(route = Utils.APPS_SCREEN) { AppsScreen() }
     })
 }

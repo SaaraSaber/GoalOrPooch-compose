@@ -144,7 +144,7 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
         ModalBottomSheet(
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(16.sdp),
             containerColor = FenceGreen
         ) {
             BottomSheetContent(

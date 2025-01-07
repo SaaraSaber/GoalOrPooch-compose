@@ -26,43 +26,49 @@ class MainActivity : ComponentActivity() {
 
         sharedViewModel.addCard(
             id = 0,
-            name = "سنگ مفت گنجشک مفت",
-            description = "این کارت به تیم حدس زننده کمک میکند که اگر یکبار اشتباه کند و گل را درست حدس نزند یک دست دیگر را که به آن مشکوک است باز کند.از این کارت برای هر تیم دو عدد وجود دارد."
+            name = ContextCompat.getString(this, R.string.free_stone_free_sparrow),
+            description = ContextCompat.getString(
+                this,
+                R.string.description_free_stone_free_sparrow
+            )
         )
         sharedViewModel.addCard(
             id = 1,
-            name = "گوی بزرگ",
-            description = "این کارت به تیم حدس زننده کمک می\u200Cکند تا به تیم مقابل دستور دهد تا به جای بازی با گوی معمولی با گوی بزرگتر بازی کند. در واقع بازی با گوی بزرگتر سخت\u200Cتر می\u200Cشود و گل زودتر لو می\u200Cرود."
+            name = ContextCompat.getString(this, R.string.big_ball),
+            description = ContextCompat.getString(this, R.string.description_bid_ball)
         )
         sharedViewModel.addCard(
             id = 2,
-            name = "گوی صدا دار",
-            description = " کارت گوی صدا دار یکی از هیجان\u200Cانگیزترین کارت\u200Cهای بازی است. چون به تیم حدس زننده کمک می\u200Cکند تا گل را از تیم مقابل راحت\u200Cتر پس بگیرد چرا که تیم مقابل مجبور از با گویی بازی کند که با هر حرکت صدا می\u200Cدهد!"
+            name = ContextCompat.getString(this, R.string.sound_ball),
+            description = ContextCompat.getString(this, R.string.description_sound_ball)
         )
         sharedViewModel.addCard(
             id = 3,
-            name = "یک تیر و دو نشان",
-            description = "با پوچ کردن درست یک دست سر گروه تیم مقابل موظف است یک دست دیگر را پوچ کند.از این کارت دو عدد برای هر تیم وجود دارد."
+            name = ContextCompat.getString(this, R.string.one_arrow_and_two_badges),
+            description = ContextCompat.getString(
+                this,
+                R.string.description_one_arrow_and_two_badges
+            )
         )
         sharedViewModel.addCard(
             id = 4,
-            name = "آنتن",
-            description = "تیم حدس زننده می تواند از تیم حریف سوالی بپرسد بازیکن موظف است حقیقت را با بله و خیر جواب دهد."
+            name = ContextCompat.getString(this, R.string.antenna),
+            description = ContextCompat.getString(this, R.string.description_antenna)
         )
         sharedViewModel.addCard(
             id = 5,
-            name = "دوئل",
-            description = "بازیکنی که صاحب گل است گل را نشان داده و به صورت تک به تک با کسی وارد نبرد می شود."
+            name = ContextCompat.getString(this, R.string.duel),
+            description = ContextCompat.getString(this, R.string.description_duel)
         )
         sharedViewModel.addCard(
             id = 6,
-            name = "خالی بازی",
-            description = "تیم حریف باید سه خالی بازی مجدد انجام دهد."
+            name = ContextCompat.getString(this, R.string.empty_game),
+            description = ContextCompat.getString(this, R.string.description_empty_game)
         )
         sharedViewModel.addCard(
             id = 7,
-            name = "حذف یک دست",
-            description = "سر گروه تیم حریف باید یکی از دستان تیم خود را پوچ کند."
+            name = ContextCompat.getString(this, R.string.remove_one_hand),
+            description = ContextCompat.getString(this, R.string.description_remove_one_hand)
         )
 
         setContent {

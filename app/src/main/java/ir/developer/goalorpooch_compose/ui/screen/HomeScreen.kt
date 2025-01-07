@@ -15,10 +15,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -41,10 +49,17 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.widthButton
 import ir.developer.goalorpooch_compose.util.Utils
+import ir.kaaveh.sdpcompose.sdp
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavController) {
+    var  showBottomSheetAboutUs by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -146,7 +161,7 @@ fun HomeScreen(navController: NavController) {
                 border = BorderStroke(1.dp, Color.White),
                 shape = RoundedCornerShape(100f),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { }) {
+                onClick = { showBottomSheetAboutUs = true }) {
                 Text(
                     text = stringResource(R.string.about_us),
                     fontSize = fontSizeButton(),
@@ -209,6 +224,24 @@ fun HomeScreen(navController: NavController) {
                 fontSize = 15.sp,
                 fontFamily = FontPeydaBold
             )
+
+            if (showBottomSheetAboutUs) {
+                ModalBottomSheet(
+                    onDismissRequest = { showBottomSheetAboutUs = false },
+                    sheetState = sheetState,
+                    shape = RoundedCornerShape(16.sdp),
+                    containerColor = FenceGreen
+                ) {
+                    BottomSheetContentAboutUs(
+                        onDismiss = {
+                            scope.launch {
+                                sheetState.hide()
+                            }.invokeOnCompletion { showBottomSheetAboutUs = false }
+                        },
+                        onItemClick = {}
+                    )
+                }
+            }
 
         }
     }

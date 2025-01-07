@@ -8,6 +8,8 @@ object Utils {
     const val SELECT_CARD_SCREEN = "selectCard-screen"
     const val SHOW_SELECTED_CARD_SCREEN = "show-selected-card-screen"
     const val GAME_GUIDE_SCREEN = "game-guide-screen"
+    const val ABOUT_US_SCREEN = "about-us-screen"
+    const val APPS_SCREEN = "apps-screen"
 
     //......................................................................................
 //setting
