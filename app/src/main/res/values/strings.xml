@@ -65,6 +65,7 @@
     <string name="start_random">انتخاب تصادفی آغازکننده</string>
     <string name="starter_description">به دو تیم تقسیم شوید و سپس تیم آغاز کننده بازی را مشخص کنید.</string>
     <string name="description_setting">در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.</string>
+    <string name="description_apps">منتخب برنامه‌های ما را ببینید! برای دانلود، کافیست روی برنامه دلخواهتان کلیک کنید.</string>
 
     <string name="number_player">تعداد بازیکنان</string>
     <string name="victory_points">امتیاز پیروزی</string>
@@ -94,4 +95,14 @@
     <string name="description_empty_game">تیم حریف باید سه خالی بازی مجدد انجام دهد.</string>
     <string name="remove_one_hand">حذف یک دست</string>
     <string name="description_remove_one_hand">سر گروه تیم حریف باید یکی از دستان تیم خود را پوچ کند.</string>
+
+<!--    apps-->
+    <string name="open_chest">چیستان باز</string>
+    <string name="description_open_chest">آیا برای چالش های فکری آماده اید؟</string>
+    <string name="pro_wallpaper">تصویر زمینه حرفه ای</string>
+    <string name="description_pro_wallpaper">تصویر زمینه خود را به روز و حرفه ای کنید !</string>
+    <string name="intelligence_test">تست هوش ریاضی</string>
+    <string name="description_intelligence_test">آیا آماده اید ذهن خود را به چالش بکشید؟</string>
+    <string name="check_list">چک لیست</string>
+    <string name="description_check_list">به راحتی روزهایتان را مدیریت کنید!</string>
 </resources>

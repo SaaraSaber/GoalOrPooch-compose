@@ -60,6 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(navController: NavController) {
     var showBottomSheetAboutUs by remember { mutableStateOf(false) }
+    var showBottomSheetApps by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -187,7 +188,7 @@ fun HomeScreen(navController: NavController) {
                 border = BorderStroke(1.dp, Color.White),
                 shape = RoundedCornerShape(100f),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { }) {
+                onClick = { showBottomSheetApps = true }) {
                 Text(
                     text = stringResource(R.string.apps),
                     fontSize = fontSizeButton(),
@@ -254,6 +255,35 @@ fun HomeScreen(navController: NavController) {
                             context.startActivity(intent)
 
                         }
+                    )
+                }
+            }
+
+            if (showBottomSheetApps) {
+                ModalBottomSheet(
+                    onDismissRequest = { showBottomSheetApps = false },
+                    sheetState = sheetState,
+                    shape = RoundedCornerShape(16.sdp),
+                    containerColor = FenceGreen
+                ) {
+                    BottomSheetContactApps(
+                        onDismiss = {
+                            scope.launch {
+                                sheetState.hide()
+                            }.invokeOnCompletion { showBottomSheetApps = false }
+                        }
+//                        onItemClick = {
+//                            val intent = Intent(Intent.ACTION_SENDTO).apply {
+//                                data = Uri.parse("mailto:")
+//                                putExtra(
+//                                    Intent.EXTRA_EMAIL,
+//                                    arrayOf(context.getString(R.string.address_email))
+//                                )
+//                                putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.support))
+//                            }
+//                            context.startActivity(intent)
+//
+//                        }
                     )
                 }
             }

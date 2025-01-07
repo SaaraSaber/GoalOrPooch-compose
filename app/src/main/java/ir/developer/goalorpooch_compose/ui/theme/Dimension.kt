@@ -35,6 +35,9 @@ fun widthButton() = 200.sdp
 fun sizePicSmall() = 30.sdp
 
 @Composable
+fun sizeIcon() = 20.sdp
+
+@Composable
 fun sizePicMedium() = 40.sdp
 
 @Composable
