@@ -4,6 +4,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -22,6 +23,7 @@ import ir.developer.goalorpooch_compose.util.Utils.HOME_SCREEN
 import ir.developer.goalorpooch_compose.util.Utils.SETTING_SCREEN
 import ir.developer.goalorpooch_compose.util.Utils.STARTER_SCREEN
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation(sharedViewModel: SharedViewModel) {
     val navController = rememberNavController()
@@ -114,9 +116,5 @@ fun Navigation(sharedViewModel: SharedViewModel) {
                 sharedViewModel = sharedViewModel
             )
         }
-
-//        composable(route = Utils.ABOUT_US_SCREEN) { AboutUsScreen(showBottomSheetAboutUs) }
-//
-//        composable(route = Utils.APPS_SCREEN) { AppsScreen() }
     })
 }

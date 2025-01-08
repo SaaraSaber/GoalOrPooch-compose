@@ -1,5 +1,6 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -17,11 +18,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -52,7 +61,9 @@ import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
+import kotlinx.coroutines.launch
 
+@ExperimentalMaterial3Api
 @Composable
 fun ShowCardsScreen(
     idItemSelected: Int,
@@ -68,6 +79,13 @@ fun ShowCardsScreen(
         sharedViewModel.randomCardsTeam1()
     } else {
         sharedViewModel.randomCardsTeam2()
+    }
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    BackHandler {
+        showBottomSheet = true
     }
 
     Scaffold(
@@ -160,6 +178,31 @@ fun ShowCardsScreen(
                         fontFamily = FontPeydaBold
                     )
                 }
+
+                if (showBottomSheet) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheet = false },
+                        sheetState = sheetState,
+                        shape = RoundedCornerShape(topEnd = 16.sdp, topStart = 16.sdp),
+                        containerColor = FenceGreen
+                    ) {
+                        BottomSheetContactExitGame(
+                            onClickExit = {
+                                scope.launch { sheetState.hide() }
+                                    .invokeOnCompletion { showBottomSheet = false }
+                                navController.navigate(Utils.HOME_SCREEN) {
+                                    popUpTo(0) // پاک کردن کل استک
+                                    launchSingleTop = true // جلوگیری از ایجاد دوباره صفحه در استک
+                                }
+                            },
+                            onClickContinueGame = {
+                                scope.launch { sheetState.hide() }
+                                    .invokeOnCompletion { showBottomSheet = false }
+                            }
+                        )
+                    }
+                }
+
             }
         }
     }

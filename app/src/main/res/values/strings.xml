@@ -44,6 +44,7 @@
     <!--    text btn-->
     <string name="btn_ok">تایید( %1$d )</string>
     <string name="choose_card">انتخاب کارت</string>
+    <string name="continue_game">ادامه بازی</string>
     <string name="cansel">انصراف</string>
     <string name="start">شروع</string>
     <string name="about_us">درباره ما</string>
@@ -67,7 +68,8 @@
     <string name="starter_description">به دو تیم تقسیم شوید و سپس تیم آغاز کننده بازی را مشخص کنید.</string>
     <string name="description_setting">در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.</string>
     <string name="description_apps">منتخب برنامه‌های ما را ببینید! برای دانلود، کافیست روی برنامه دلخواهتان کلیک کنید.</string>
-    <string name="description_exit">لطفاً برای حمایت از ما  ۵ ستاره بدهید! حمایت شما برای ما بسیار ارزشمند است.️</string>
+    <string name="description_exit_app">لطفاً برای حمایت از ما  ۵ ستاره بدهید! حمایت شما برای ما بسیار ارزشمند است.️</string>
+    <string name="description_exit_game">اگر اکنون از بازی خارج شوید، باید بازی را از ابتدا شروع کنید. آیا مطمئن هستید که می‌خواهید ادامه دهید؟️</string>
     <string name="rate">امتیاز دهید</string>
 
     <string name="number_player">تعداد بازیکنان</string>

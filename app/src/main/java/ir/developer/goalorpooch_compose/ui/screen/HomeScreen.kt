@@ -286,7 +286,7 @@ fun HomeScreen(navController: NavController) {
                     shape = RoundedCornerShape(16.sdp),
                     containerColor = FenceGreen
                 ) {
-                    BottomSheetContactExit(
+                    BottomSheetContactExitApp(
                         onDismiss = {
                             scope.launch {
                                 sheetState.hide()

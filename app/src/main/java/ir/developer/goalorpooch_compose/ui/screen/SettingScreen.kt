@@ -50,6 +50,7 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
+import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 
@@ -58,7 +59,10 @@ import ir.kaaveh.sdpcompose.sdp
 fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     LaunchedEffect(Unit) {
         sharedViewModel.getAllCards()
+        ManegeGame.team_one_has_card = false
+        ManegeGame.team_two_has_card = false
     }
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->

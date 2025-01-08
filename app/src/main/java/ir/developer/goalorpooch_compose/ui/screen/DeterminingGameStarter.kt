@@ -152,7 +152,8 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
             containerColor = FenceGreen
         ) {
             BottomSheetContent(
-                item, onDismiss = {
+                item = item,
+                onDismiss = {
                     scope.launch { sheetState.hide() }
                         .invokeOnCompletion { showBottomSheet = false }
                 }, onCardSelection = { idItem ->
