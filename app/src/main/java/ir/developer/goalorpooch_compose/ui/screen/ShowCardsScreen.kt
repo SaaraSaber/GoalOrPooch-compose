@@ -84,7 +84,11 @@ fun ShowCardsScreen(
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AppBar(title = "نمایش کارت ها")
+                AppBar(
+                    title = stringResource(R.string.show_cards),
+                    showBackButton = false,
+                    navController = navController
+                )
                 Image(
                     modifier = Modifier
                         .padding(paddingTop())

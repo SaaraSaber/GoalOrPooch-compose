@@ -108,7 +108,12 @@ fun Navigation(sharedViewModel: SharedViewModel) {
             )
         }
 
-        composable(route = Utils.GAME_GUIDE_SCREEN) { GameGuideScreen(sharedViewModel = sharedViewModel) }
+        composable(route = Utils.GAME_GUIDE_SCREEN) {
+            GameGuideScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
+        }
 
 //        composable(route = Utils.ABOUT_US_SCREEN) { AboutUsScreen(showBottomSheetAboutUs) }
 //

@@ -82,7 +82,11 @@ fun DeterminingGameStarter(navController: NavController) {
                         contentScale = ContentScale.Crop
                     )
             ) {
-                AppBar(title = stringResource(R.string.determining_the_initiator))
+                AppBar(
+                    title = stringResource(R.string.determining_the_initiator),
+                    showBackButton = true,
+                    navController = navController
+                )
 
                 Text(
                     modifier = Modifier.padding(

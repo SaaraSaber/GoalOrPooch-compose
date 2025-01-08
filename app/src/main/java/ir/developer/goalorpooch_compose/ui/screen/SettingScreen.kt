@@ -72,7 +72,11 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                         contentScale = ContentScale.Crop
                     )
             ) {
-                AppBar(title = stringResource(R.string.setting))
+                AppBar(
+                    title = stringResource(R.string.setting),
+                    showBackButton = true,
+                    navController = navController
+                )
 
                 Text(
                     modifier = Modifier.padding(

@@ -91,7 +91,11 @@ fun SelectCardScreen(
                         contentScale = ContentScale.Crop
                     )
             ) {
-                AppBar(title = stringResource(R.string.distribution_of_cards))
+                AppBar(
+                    title = stringResource(R.string.distribution_of_cards),
+                    showBackButton = false,
+                    navController = navController
+                )
                 Row(
                     modifier = Modifier.padding(
                         top = paddingTop(),
@@ -102,10 +106,12 @@ fun SelectCardScreen(
                 ) {
                     Image(
                         modifier = Modifier.size(sizePicMedium()),
-                        painter = painterResource(id = if (idItemSelected == 0)
-                            R.drawable.pic_team_one
-                        else
-                            R.drawable.pic_team_two),
+                        painter = painterResource(
+                            id = if (idItemSelected == 0)
+                                R.drawable.pic_team_one
+                            else
+                                R.drawable.pic_team_two
+                        ),
                         contentDescription = "pic_team_one"
                     )
                     Text(
