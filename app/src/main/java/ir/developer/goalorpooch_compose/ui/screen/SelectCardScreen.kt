@@ -8,6 +8,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,7 +43,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -65,6 +66,7 @@ import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
+import ir.developer.goalorpooch_compose.ui.theme.sizePicLarge
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
 import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
@@ -223,7 +225,7 @@ fun SelectCardScreen(
                             onClickExit = {
                                 scope.launch { sheetState.hide() }
                                     .invokeOnCompletion { showBottomSheet = false }
-                                navController.navigate(Utils.HOME_SCREEN){
+                                navController.navigate(Utils.HOME_SCREEN) {
                                     popUpTo(0) // پاک کردن کل استک
                                     launchSingleTop = true // جلوگیری از ایجاد دوباره صفحه در استک
                                 }
@@ -253,20 +255,21 @@ fun CardItem(isSelected: Boolean, onCardClick: () -> Unit) {
 
     Box(
         modifier = Modifier
-            .clickable { onCardClick() }
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }) { onCardClick() }
             .background(Color.Transparent)
             .graphicsLayer(
                 rotationY = rotation,
                 alpha = alpha
-            )
-            .shadow(0.dp),
+            ),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(id = R.drawable.card),
             contentDescription = null,
             modifier = Modifier
-                .fillMaxWidth()
+                .width(sizePicLarge())
                 .alpha(if (isSelected) 0.4f else 1f),
             contentScale = ContentScale.FillWidth
         )
