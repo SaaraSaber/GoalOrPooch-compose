@@ -26,6 +26,9 @@ fun titleSize() = 20.ssp
 fun descriptionSize() = 14.ssp
 
 @Composable
+fun textSize() = 16.ssp
+
+@Composable
 fun heightButton() = 45.sdp
 
 @Composable

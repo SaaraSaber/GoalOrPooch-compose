@@ -49,6 +49,8 @@ import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
+import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
+import ir.developer.goalorpooch_compose.ui.theme.textSize
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
@@ -234,7 +236,7 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
         Text(
             text = label,
             textAlign = TextAlign.Start,
-            fontSize = descriptionSize(),
+            fontSize = textSize(),
             fontFamily = FontPeydaMedium,
             color = Color.White
         )
@@ -242,7 +244,7 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
             verticalAlignment = Alignment.CenterVertically
         ) {
             ElevatedButton(
-                modifier = Modifier.size(25.sdp),
+                modifier = Modifier.size(sizePicSmall()),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
                     contentColor = Color.White,
@@ -254,6 +256,7 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
                 onClick = { onIncrement() }
             ) {
                 Icon(
+                    modifier = Modifier.size(12.sdp),
                     painter = painterResource(id = R.drawable.increase),
                     contentDescription = null,
                     tint = Color.White
@@ -266,12 +269,12 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
                     .width(40.sdp),
                 text = count.toString(),
                 textAlign = TextAlign.Center,
-                fontSize = descriptionSize(),
+                fontSize = textSize(),
                 fontFamily = FontPeydaMedium,
                 color = Color.White
             )
             ElevatedButton(
-                modifier = Modifier.size(25.sdp),
+                modifier = Modifier.size(sizePicSmall()),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
                     contentColor = Color.White,
@@ -282,6 +285,7 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
                 contentPadding = PaddingValues(4.dp),
                 onClick = { onDecrement() }) {
                 Icon(
+                    modifier = Modifier.size(12.sdp),
                     painter = painterResource(id = R.drawable.decrease),
                     contentDescription = null,
                     tint = Color.White
