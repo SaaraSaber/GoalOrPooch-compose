@@ -1,6 +1,7 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,12 +19,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -35,6 +44,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -47,11 +58,21 @@ import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
 import ir.developer.goalorpooch_compose.ui.theme.sizePicVerySmall
 import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
+import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun StartGameScreen(modifier: Modifier = Modifier) {
+fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController) {
+    var showBottomSheetExitGame by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    BackHandler {
+        showBottomSheetExitGame = true
+    }
+
     Scaffold { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Column(
@@ -94,8 +115,10 @@ fun StartGameScreen(modifier: Modifier = Modifier) {
                     )
                 }
 
-                Row(modifier = modifier.padding(top = paddingTopMedium()),
-                    horizontalArrangement = Arrangement.spacedBy(5.sdp)) {
+                Row(
+                    modifier = modifier.padding(top = paddingTopMedium()),
+                    horizontalArrangement = Arrangement.spacedBy(5.sdp)
+                ) {
                     Column(
                         modifier = modifier
                             .size(75.sdp)
@@ -201,6 +224,31 @@ fun StartGameScreen(modifier: Modifier = Modifier) {
                         )
                     }
                 }
+
+
+                if (showBottomSheetExitGame) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheetExitGame = false },
+                        sheetState = sheetState,
+                        shape = RoundedCornerShape(topEnd = 16.sdp, topStart = 16.sdp),
+                        containerColor = FenceGreen
+                    ) {
+                        BottomSheetContactExitGame(
+                            onClickExit = {
+                                scope.launch { sheetState.hide() }
+                                    .invokeOnCompletion { showBottomSheetExitGame = false }
+                                navController.navigate(Utils.HOME_SCREEN) {
+                                    popUpTo(0) // پاک کردن کل استک
+                                    launchSingleTop = true // جلوگیری از ایجاد دوباره صفحه در استک
+                                }
+                            },
+                            onClickContinueGame = {
+                                scope.launch { sheetState.hide() }
+                                    .invokeOnCompletion { showBottomSheetExitGame = false }
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -290,9 +338,9 @@ fun TableGame(modifier: Modifier = Modifier) {
 fun HeaderGame(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .height(70.sdp)
             .padding(paddingRound())
+            .fillMaxWidth()
+            .height(50.sdp)
             .background(color = FenceGreen, shape = RoundedCornerShape(sizeRound())),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -342,5 +390,6 @@ fun HeaderGame(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun StartGameScreenPreview() {
-    StartGameScreen()
+    val navController = rememberNavController()
+    StartGameScreen(navController = navController)
 }
