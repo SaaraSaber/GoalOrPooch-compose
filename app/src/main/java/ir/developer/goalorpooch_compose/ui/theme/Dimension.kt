@@ -17,6 +17,9 @@ fun paddingTopMedium() = 15.sdp
 fun paddingRound() = 12.sdp
 
 @Composable
+fun sizeRound() = 5.sdp
+
+@Composable
 fun fontSizeButton() = 18.ssp
 
 @Composable
@@ -38,10 +41,16 @@ fun widthButton() = 200.sdp
 fun sizePicSmall() = 30.sdp
 
 @Composable
+fun sizePicVerySmall() = 20.sdp
+
+@Composable
 fun sizeIcon() = 20.sdp
 
 @Composable
 fun sizePicMedium() = 40.sdp
+
+@Composable
+fun sizePicMedium_two() = 50.sdp
 
 @Composable
 fun sizePicLarge() = 70.sdp

@@ -51,6 +51,8 @@
     <string name="apps">برنامه ها</string>
     <string name="exit">خروج</string>
     <string name="next_level">مرحله بعد</string>
+    <string name="start_game">شروع بازی</string>
+    <string name="start_time">شروع زمان</string>
 
     <!--   title appBar-->
     <string name="distribution_of_cards">توزیع کارت ها</string>

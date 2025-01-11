@@ -17,6 +17,7 @@ import ir.developer.goalorpooch_compose.ui.screen.HomeScreen
 import ir.developer.goalorpooch_compose.ui.screen.SelectCardScreen
 import ir.developer.goalorpooch_compose.ui.screen.SettingScreen
 import ir.developer.goalorpooch_compose.ui.screen.ShowCardsScreen
+import ir.developer.goalorpooch_compose.ui.screen.StartGameScreen
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.developer.goalorpooch_compose.util.Utils.HOME_SCREEN
@@ -116,5 +117,6 @@ fun Navigation(sharedViewModel: SharedViewModel) {
                 sharedViewModel = sharedViewModel
             )
         }
+        composable(route = Utils.START_GAME_SCREEN) { StartGameScreen() }
     })
 }

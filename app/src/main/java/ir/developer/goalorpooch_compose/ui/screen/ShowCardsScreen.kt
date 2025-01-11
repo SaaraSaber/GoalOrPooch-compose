@@ -166,14 +166,17 @@ fun ShowCardsScreen(
                     contentPadding = PaddingValues(0.dp),
                     onClick = {
                         if (ManegeGame.team_one_has_card && ManegeGame.team_two_has_card) {
-//                            navController.navigate("${Utils.SELECT_CARD_SCREEN}/$nextHowSeeCards")
+                            navController.navigate(Utils.START_GAME_SCREEN)
                         } else {
                             navController.navigate("${Utils.SELECT_CARD_SCREEN}/$nextHowSeeCards")
                         }
                     }
                 ) {
                     Text(
-                        text = if (ManegeGame.team_one_has_card && ManegeGame.team_two_has_card) "شروع بازی" else "مرحله بعد",
+                        text = if (ManegeGame.team_one_has_card && ManegeGame.team_two_has_card)
+                            stringResource(R.string.start_game)
+                        else
+                            stringResource(R.string.next_level),
                         fontSize = fontSizeButton(),
                         fontFamily = FontPeydaBold
                     )
