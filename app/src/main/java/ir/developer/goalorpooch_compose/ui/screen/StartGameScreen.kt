@@ -32,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import ir.developer.goalorpooch_compose.R
@@ -40,6 +41,7 @@ import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium_two
 import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
 import ir.developer.goalorpooch_compose.ui.theme.sizePicVerySmall
@@ -67,7 +69,9 @@ fun StartGameScreen(modifier: Modifier = Modifier) {
 
 //time
                 Button(
-                    modifier = modifier.width(130.sdp).height(50.sdp),
+                    modifier = modifier
+                        .width(130.sdp)
+                        .height(50.sdp),
                     onClick = {},
                     colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
                     shape = RoundedCornerShape(sizeRound()),
@@ -90,7 +94,113 @@ fun StartGameScreen(modifier: Modifier = Modifier) {
                     )
                 }
 
+                Row(modifier = modifier.padding(top = paddingTopMedium()),
+                    horizontalArrangement = Arrangement.spacedBy(5.sdp)) {
+                    Column(
+                        modifier = modifier
+                            .size(75.sdp)
+                            .background(
+                                color = FenceGreen,
+                                shape = RoundedCornerShape(sizeRound())
+                            )
+                            .padding(8.sdp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Text(
+                            modifier = modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                            text = "3",
+                            fontSize = descriptionSize(),
+                            fontFamily = FontPeydaMedium,
+                            color = Color.White
+                        )
 
+                        Icon(
+                            painter = painterResource(R.drawable.hand),
+                            contentDescription = "time",
+                            modifier = modifier.size(
+                                sizePicVerySmall()
+                            ), tint = Color.White
+                        )
+                        Text(
+                            text = stringResource(R.string.empty_game),
+                            fontSize = descriptionSize(),
+                            fontFamily = FontPeydaMedium,
+                            color = Color.White
+                        )
+                    }
+
+                    Column(
+                        modifier = modifier
+                            .size(75.sdp)
+                            .background(
+                                color = FenceGreen,
+                                shape = RoundedCornerShape(sizeRound())
+                            )
+                            .padding(8.sdp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Text(
+                            modifier = modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                            text = "5",
+                            fontSize = descriptionSize(),
+                            fontFamily = FontPeydaMedium,
+                            color = Color.White
+                        )
+
+                        Icon(
+                            painter = painterResource(R.drawable.card),
+                            contentDescription = "card",
+                            modifier = modifier.size(
+                                sizePicVerySmall()
+                            ), tint = Color.White
+                        )
+                        Text(
+                            text = stringResource(R.string.cards),
+                            fontSize = descriptionSize(),
+                            fontFamily = FontPeydaMedium,
+                            color = Color.White
+                        )
+                    }
+
+                    Column(
+                        modifier = modifier
+                            .size(75.sdp)
+                            .background(
+                                color = FenceGreen,
+                                shape = RoundedCornerShape(sizeRound())
+                            )
+                            .padding(8.sdp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Text(
+                            modifier = modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                            text = "2",
+                            fontSize = descriptionSize(),
+                            fontFamily = FontPeydaMedium,
+                            color = Color.White
+                        )
+
+                        Icon(
+                            painter = painterResource(R.drawable.cube),
+                            contentDescription = "time",
+                            modifier = modifier.size(
+                                sizePicVerySmall()
+                            ), tint = Color.White
+                        )
+                        Text(
+                            text = stringResource(R.string.cube),
+                            fontSize = descriptionSize(),
+                            fontFamily = FontPeydaMedium,
+                            color = Color.White
+                        )
+                    }
+                }
             }
         }
     }

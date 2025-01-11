@@ -53,6 +53,8 @@
     <string name="next_level">مرحله بعد</string>
     <string name="start_game">شروع بازی</string>
     <string name="start_time">شروع زمان</string>
+    <string name="cards">کارت ها</string>
+    <string name="cube">مکعب</string>
 
     <!--   title appBar-->
     <string name="distribution_of_cards">توزیع کارت ها</string>
