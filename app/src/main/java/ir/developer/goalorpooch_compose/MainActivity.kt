@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ir.developer.goalorpooch_compose.navigation.Navigation
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 
+
 @AndroidEntryPoint
 @SuppressLint("RestrictedApi")
 class MainActivity : ComponentActivity() {
@@ -24,6 +25,14 @@ class MainActivity : ComponentActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.hihadaBrown)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.hihadaBrown)
 
+        insertCards()
+
+        setContent {
+            Navigation(sharedViewModel = sharedViewModel)
+        }
+    }
+
+    private fun insertCards() {
         sharedViewModel.addCard(
             id = 0,
             name = ContextCompat.getString(this, R.string.free_stone_free_sparrow),
@@ -70,10 +79,14 @@ class MainActivity : ComponentActivity() {
             name = ContextCompat.getString(this, R.string.remove_one_hand),
             description = ContextCompat.getString(this, R.string.description_remove_one_hand)
         )
-
-        setContent {
-            Navigation(sharedViewModel = sharedViewModel)
-        }
+        sharedViewModel.addCard(
+            id = 8,
+            name = ContextCompat.getString(this, R.string.free_stone_free_sparrow),
+            description = ContextCompat.getString(
+                this,
+                R.string.description_free_stone_free_sparrow
+            )
+        )
     }
 }
 

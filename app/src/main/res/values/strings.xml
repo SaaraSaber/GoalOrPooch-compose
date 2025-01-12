@@ -37,7 +37,7 @@
 در هر نوبت بازی اگر حداقل سه دست باشد فقط از یک کارت می توان استفاده کرد.\n
 شرط استفاده از کارت باقی ماندن حداقل سه دست از شش دست تیم حریف است.\n
 اگر گل قبل از شروع بازی از دست بیافتد دوئل انجام می شود.\n
-اگر گل وسط بازی بازی از دست بیافتد گل دست حریف میافتد و حریف امتیاز نمی گیرد.\n
+اگر گل وسط بازی از دست بیافتد گل دست حریف میافتد و حریف امتیاز نمی گیرد.\n
 اگر کارت آنتن رو بپرسیم و آن شخص بگوید گل ندارد سپس بدون پوچ بگیریم دو امتیاز ندارد و انگار دو دست پوچ کرده ایم.\n</string>
 
 
@@ -75,6 +75,18 @@
     <string name="description_exit_app">لطفاً برای حمایت از ما  ۵ ستاره بدهید! حمایت شما برای ما بسیار ارزشمند است.️</string>
     <string name="description_exit_game">اگر اکنون از بازی خارج شوید، باید بازی را از ابتدا شروع کنید. آیا مطمئن هستید که می‌خواهید ادامه دهید؟️</string>
     <string name="rate">امتیاز دهید</string>
+    <string name="result_of_this_round">نتیجه این دور</string>
+    <string name="final_result">نتیجه نهایی</string>
+    <string name="first_team_scored_a_single_goal">تیم اول گل را تک ضرب گرفت.</string>
+    <string name="first_team_scored">تیم اول گل را گرفت.</string>
+    <string name="first_team_did_not_score">تیم اول گل را نگرفت.</string>
+    <string name="second_team_scored_a_single_goal">تیم دوم گل را تک ضرب گرفت.</string>
+    <string name="second_team_scored">تیم دوم گل را گرفت.</string>
+    <string name="second_team_did_not_score">تیم دوم گل را نگرفت.</string>
+    <string name="description_opening_duel">دو نفر مقابل هم دوئل آغازین را انجام دهید تا شروع کننده بازی مشخص بشود.</string>
+    <string name="opening_duel">دوئل آغازین بازی</string>
+    <string name="first_team_kept_goal.">تیم اول گل را حفظ کرد.</string>
+    <string name="second_team_kept_goal.">تیم دوم گل را حفظ کرد.</string>
 
     <string name="number_player">تعداد بازیکنان</string>
     <string name="victory_points">امتیاز پیروزی</string>

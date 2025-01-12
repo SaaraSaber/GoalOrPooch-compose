@@ -12,7 +12,7 @@ data class CardModel(
     val name: String,
     val description: String,
     @DrawableRes
-    val image: Int = R.drawable.card,
+    val image: Int = R.drawable.pic_card,
     val isSelect: Boolean,
     var disable: Boolean
 )

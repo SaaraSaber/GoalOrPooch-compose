@@ -183,7 +183,7 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController)
                         )
 
                         Icon(
-                            painter = painterResource(R.drawable.card),
+                            painter = painterResource(R.drawable.icon_card),
                             contentDescription = "card",
                             modifier = modifier.size(
                                 sizePicVerySmall()

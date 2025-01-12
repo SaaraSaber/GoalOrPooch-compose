@@ -266,7 +266,7 @@ fun CardItem(isSelected: Boolean, onCardClick: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.card),
+            painter = painterResource(id = R.drawable.pic_card),
             contentDescription = null,
             modifier = Modifier
                 .width(sizePicLarge())

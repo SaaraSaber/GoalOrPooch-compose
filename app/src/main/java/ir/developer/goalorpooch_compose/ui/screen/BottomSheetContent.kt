@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,12 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -26,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.AppModel
+import ir.developer.goalorpooch_compose.model.ResultThisRoundModel
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
@@ -49,6 +54,7 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizeIcon
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
+import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -110,7 +116,7 @@ fun BottomSheetContentAboutUs(
                     disabledContainerColor = Color.Transparent,
                     disabledContentColor = Color.Transparent
                 ),
-                shape = RoundedCornerShape(10.sdp),
+                shape = RoundedCornerShape(sizeRound()),
                 border = BorderStroke(width = 1.sdp, color = Color.White)
             ) {
                 Row(
@@ -146,6 +152,234 @@ fun BottomSheetContentAboutUs(
 
         }
     }
+}
+
+@Composable
+fun ResultOfThisRound(
+    modifier: Modifier = Modifier,
+    whichTeamResult: Int,
+    onClickExit: () -> Unit,
+    onClickItem: (Int) -> Unit
+) {
+    val listResult: List<ResultThisRoundModel> =
+        if (whichTeamResult == 0) {
+            listOf(
+                ResultThisRoundModel(
+                    id = 0,
+                    image = R.drawable.cup,
+                    text = stringResource(R.string.first_team_scored_a_single_goal)
+                ),
+                ResultThisRoundModel(
+                    id = 1,
+                    image = R.drawable.tick,
+                    text = stringResource(R.string.first_team_scored)
+                ),
+                ResultThisRoundModel(
+                    id = 0,
+                    image = R.drawable.square_cross,
+                    text = stringResource(R.string.first_team_did_not_score)
+                )
+            )
+        } else {
+            listOf(
+                ResultThisRoundModel(
+                    id = 0,
+                    image = R.drawable.cup,
+                    text = stringResource(R.string.second_team_scored_a_single_goal)
+                ),
+                ResultThisRoundModel(
+                    id = 0,
+                    image = R.drawable.tick,
+                    text = stringResource(R.string.second_team_scored)
+                ),
+                ResultThisRoundModel(
+                    id = 0,
+                    image = R.drawable.square_cross,
+                    text = stringResource(R.string.second_team_did_not_score)
+                )
+            )
+        }
+
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl
+    ) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.result_of_this_round),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+                IconButton(
+                    onClick = onClickExit
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.close_circle),
+                        contentDescription = "btn_close",
+                        modifier = modifier.size(20.sdp)
+                    )
+                }
+            }
+            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
+            LazyColumn(
+                modifier = modifier
+                    .padding(top = paddingTopMedium())
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.sdp)
+            ) {
+                items(listResult.size) { index ->
+                    val item = listResult[index]
+                    ItemResult(
+                        modifier = modifier,
+                        item = item,
+                        onClickItem = { onClickItem(whichTeamResult) })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ItemResult(modifier: Modifier, item: ResultThisRoundModel, onClickItem: () -> Unit) {
+    Row(
+        modifier = modifier
+            .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
+            .clip(RoundedCornerShape(sizeRound()))
+            .fillMaxWidth()
+            .clickable { onClickItem() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            modifier = Modifier
+                .padding(paddingTopMedium())
+                .size(sizePicSmall()),
+            painter = painterResource(id = item.image),
+            contentDescription = null
+        )
+
+        Text(
+            text = item.text,
+            fontSize = descriptionSize(),
+            fontFamily = FontPeydaMedium,
+            color = Color.White,
+            textAlign = TextAlign.Justify
+        )
+    }
+}
+
+@Composable
+fun TheOpeningDuelOfTheGame(
+    modifier: Modifier = Modifier,
+    whichTeamHasGoal: Int,
+    onClickItem: (Int) -> Unit
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.note),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = modifier.padding(end = 5.sdp)
+                )
+                Text(
+                    text = stringResource(R.string.opening_duel),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+            }
+            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
+
+            Text(
+                modifier = modifier.padding(top = paddingTop(), bottom = paddingTopMedium()),
+                text = stringResource(R.string.description_opening_duel),
+                color = Color.White,
+                fontFamily = FontPeydaMedium,
+                fontSize = descriptionSize(),
+                textAlign = TextAlign.Justify
+            )
+            Row(
+                modifier = modifier
+                    .padding(bottom = 8.sdp)
+                    .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
+                    .clip(RoundedCornerShape(sizeRound()))
+                    .fillMaxWidth()
+                    .clickable { if (whichTeamHasGoal == 0) onClickItem(0) else onClickItem(1) },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .padding(paddingTopMedium())
+                        .size(sizePicSmall()),
+                    painter = if (whichTeamHasGoal == 0)
+                        painterResource(id = R.drawable.pic_team_one)
+                    else
+                        painterResource(R.drawable.pic_team_two),
+                    contentDescription = null
+                )
+
+                Text(
+                    text = if (whichTeamHasGoal == 0)
+                        stringResource(R.string.first_team_kept_goal_)
+                    else
+                        stringResource(R.string.second_team_kept_goal_),
+                    fontSize = descriptionSize(),
+                    fontFamily = FontPeydaMedium,
+                    color = Color.White,
+                    textAlign = TextAlign.Justify
+                )
+            }
+            Row(
+                modifier = modifier
+                    .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
+                    .clip(RoundedCornerShape(sizeRound()))
+                    .fillMaxWidth()
+                    .clickable { if (whichTeamHasGoal == 0) onClickItem(1) else onClickItem(0) },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .padding(paddingTopMedium())
+                        .size(sizePicSmall()),
+                    painter = if (whichTeamHasGoal == 0)
+                        painterResource(id = R.drawable.pic_team_two)
+                    else
+                        painterResource(R.drawable.pic_team_one),
+                    contentDescription = null
+                )
+                Text(
+                    text = if (whichTeamHasGoal == 0)
+                        stringResource(R.string.second_team_scored)
+                    else
+                        stringResource(R.string.first_team_scored),
+                    fontSize = descriptionSize(),
+                    fontFamily = FontPeydaMedium,
+                    color = Color.White,
+                    textAlign = TextAlign.Justify
+                )
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -204,7 +438,7 @@ fun BottomSheetContactExitGame(
                         containerColor = Color.White,
                         contentColor = FenceGreen
                     ),
-                    onClick = {onClickContinueGame() }
+                    onClick = { onClickContinueGame() }
                 ) {
                     Text(
                         text = stringResource(R.string.continue_game),
@@ -301,7 +535,7 @@ fun BottomSheetContactExitApp(
                         disabledContainerColor = Color.Transparent,
                         disabledContentColor = Color.Transparent
                     ),
-                    shape = RoundedCornerShape(10.sdp),
+                    shape = RoundedCornerShape(sizeRound()),
                     border = BorderStroke(width = 1.sdp, color = Color.White)
                 ) {
                     Column(
@@ -339,7 +573,7 @@ fun BottomSheetContactExitApp(
                         disabledContainerColor = Color.Transparent,
                         disabledContentColor = Color.Transparent
                     ),
-                    shape = RoundedCornerShape(10.sdp),
+                    shape = RoundedCornerShape(sizeRound()),
                     border = BorderStroke(width = 1.sdp, color = Color.White)
                 ) {
                     Column(
@@ -497,7 +731,7 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
             disabledContainerColor = Color.Transparent,
             disabledContentColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(10.sdp),
+        shape = RoundedCornerShape(sizeRound()),
         border = BorderStroke(width = 1.sdp, color = Color.White)
     ) {
         Row(
@@ -540,6 +774,12 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
 
 @Preview
 @Composable
+private fun TheOpeningDuelOfTheGamePreview() {
+    TheOpeningDuelOfTheGame(whichTeamHasGoal = 1, onClickItem = {})
+}
+
+@Preview
+@Composable
 private fun BottomSheetContentPreview() {
     BottomSheetContentAboutUs(
         onDismiss = {},
@@ -573,3 +813,10 @@ private fun ExitGamePreview() {
         onClickExit = {}
     )
 }
+
+@Preview
+@Composable
+private fun ResultOfThisRoundPreview() {
+    ResultOfThisRound(whichTeamResult = 0, onClickExit = {}, onClickItem = {})
+}
+
