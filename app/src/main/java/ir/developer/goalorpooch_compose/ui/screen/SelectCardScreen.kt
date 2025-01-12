@@ -68,6 +68,8 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicLarge
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundMax
 import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
@@ -202,7 +204,7 @@ fun SelectCardScreen(
                         disabledContentColor = HihadaBrown
                     ),
                     border = BorderStroke(1.dp, Color.White),
-                    shape = RoundedCornerShape(100f),
+                    shape = RoundedCornerShape(sizeRoundMax()),
                     contentPadding = PaddingValues(0.dp),
                     enabled = remainingCount.intValue == 0,
                     onClick = { navController.navigate("${Utils.SHOW_SELECTED_CARD_SCREEN}/${idItemSelected}") }) {
@@ -218,7 +220,7 @@ fun SelectCardScreen(
                     ModalBottomSheet(
                         onDismissRequest = { showBottomSheet = false },
                         sheetState = sheetState,
-                        shape = RoundedCornerShape(topEnd = 16.sdp, topStart = 16.sdp),
+                        shape = RoundedCornerShape(topEnd = sizeRoundBottomSheet(), topStart = sizeRoundBottomSheet()),
                         containerColor = FenceGreen
                     ) {
                         BottomSheetContactExitGame(

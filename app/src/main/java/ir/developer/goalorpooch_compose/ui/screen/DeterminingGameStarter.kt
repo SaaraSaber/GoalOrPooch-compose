@@ -42,7 +42,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
@@ -57,6 +56,8 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicLarge
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
+import ir.developer.goalorpooch_compose.ui.theme.sizeRound
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
@@ -120,8 +121,8 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
     Row(
         modifier = Modifier
             .padding(end = paddingRound(), start = paddingRound(), top = paddingTop())
-            .border(1.sdp, Color.White, RoundedCornerShape(8.dp))
-            .clip(RoundedCornerShape(8.dp))
+            .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
+            .clip(RoundedCornerShape(sizeRound()))
             .fillMaxWidth()
             .background(FenceGreen)
             .clickable { showBottomSheet = true },
@@ -148,7 +149,7 @@ fun ItemGameStarter(item: ItemStarterModel, navController: NavController) {
         ModalBottomSheet(
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
-            shape = RoundedCornerShape(16.sdp),
+            shape = RoundedCornerShape(sizeRoundBottomSheet()),
             containerColor = FenceGreen
         ) {
             BottomSheetContent(

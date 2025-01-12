@@ -59,6 +59,7 @@ import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium_two
 import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
 import ir.developer.goalorpooch_compose.ui.theme.sizePicVerySmall
 import ir.developer.goalorpooch_compose.ui.theme.sizeRound
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
@@ -238,7 +239,7 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController)
                     ModalBottomSheet(
                         onDismissRequest = { showBottomSheetExitGame = false },
                         sheetState = sheetState,
-                        shape = RoundedCornerShape(topEnd = 16.sdp, topStart = 16.sdp),
+                        shape = RoundedCornerShape(topEnd = sizeRoundBottomSheet(), topStart = sizeRoundBottomSheet()),
                         containerColor = FenceGreen
                     ) {
                         BottomSheetContactExitGame(

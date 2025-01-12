@@ -51,9 +51,11 @@ import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
+import ir.developer.goalorpooch_compose.ui.theme.sizeRound
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundMax
 import ir.developer.goalorpooch_compose.ui.theme.widthButton
 import ir.developer.goalorpooch_compose.util.Utils
-import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +92,7 @@ fun HomeScreen(navController: NavController) {
                     disabledContainerColor = HihadaBrown,
                     disabledContentColor = HihadaBrown
                 ),
-                shape = RoundedCornerShape(10f),
+                shape = RoundedCornerShape(sizeRound()),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { }) {
                 Icon(
@@ -122,7 +124,7 @@ fun HomeScreen(navController: NavController) {
                     disabledContentColor = HihadaBrown
                 ),
                 border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(100f),
+                shape = RoundedCornerShape(sizeRoundMax()),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { navController.navigate(Utils.SETTING_SCREEN) }
             ) {
@@ -145,7 +147,7 @@ fun HomeScreen(navController: NavController) {
                     disabledContentColor = HihadaBrown
                 ),
                 border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(100f),
+                shape = RoundedCornerShape(sizeRoundMax()),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { navController.navigate(Utils.GAME_GUIDE_SCREEN) }) {
                 Text(
@@ -167,7 +169,7 @@ fun HomeScreen(navController: NavController) {
                     disabledContentColor = HihadaBrown
                 ),
                 border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(100f),
+                shape = RoundedCornerShape(sizeRoundMax()),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { showBottomSheetAboutUs = true }) {
                 Text(
@@ -189,7 +191,7 @@ fun HomeScreen(navController: NavController) {
                     disabledContentColor = HihadaBrown
                 ),
                 border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(100f),
+                shape = RoundedCornerShape(sizeRoundMax()),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { showBottomSheetApps = true }) {
                 Text(
@@ -211,7 +213,7 @@ fun HomeScreen(navController: NavController) {
                     disabledContentColor = HihadaBrown
                 ),
                 border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(100f),
+                shape = RoundedCornerShape(sizeRoundMax()),
                 contentPadding = PaddingValues(0.dp),
                 onClick = { showBottomSheetExit = true }) {
                 Text(
@@ -237,7 +239,7 @@ fun HomeScreen(navController: NavController) {
                 ModalBottomSheet(
                     onDismissRequest = { showBottomSheetAboutUs = false },
                     sheetState = sheetState,
-                    shape = RoundedCornerShape(16.sdp),
+                    shape = RoundedCornerShape(sizeRoundBottomSheet()),
                     containerColor = FenceGreen
                 ) {
                     BottomSheetContentAboutUs(
@@ -266,7 +268,7 @@ fun HomeScreen(navController: NavController) {
                 ModalBottomSheet(
                     onDismissRequest = { showBottomSheetApps = false },
                     sheetState = sheetState,
-                    shape = RoundedCornerShape(16.sdp),
+                    shape = RoundedCornerShape(sizeRoundBottomSheet()),
                     containerColor = FenceGreen
                 ) {
                     BottomSheetContactApps(
@@ -283,7 +285,7 @@ fun HomeScreen(navController: NavController) {
                 ModalBottomSheet(
                     onDismissRequest = { showBottomSheetExit = false },
                     sheetState = sheetState,
-                    shape = RoundedCornerShape(16.sdp),
+                    shape = RoundedCornerShape(sizeRoundBottomSheet()),
                     containerColor = FenceGreen
                 ) {
                     BottomSheetContactExitApp(

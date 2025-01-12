@@ -50,6 +50,7 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundMax
 import ir.developer.goalorpooch_compose.ui.theme.textSize
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.ManegeGame
@@ -114,7 +115,7 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                         disabledContentColor = HihadaBrown
                     ),
                     border = BorderStroke(1.dp, Color.White),
-                    shape = RoundedCornerShape(100f),
+                    shape = RoundedCornerShape(sizeRoundMax()),
                     contentPadding = PaddingValues(0.dp),
                     onClick = { navController.navigate(Utils.STARTER_SCREEN) }) {
                     Text(

@@ -57,6 +57,8 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
+import ir.developer.goalorpooch_compose.ui.theme.sizeRoundMax
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
@@ -162,7 +164,7 @@ fun ShowCardsScreen(
                         disabledContentColor = HihadaBrown
                     ),
                     border = BorderStroke(1.sdp, Color.White),
-                    shape = RoundedCornerShape(100f),
+                    shape = RoundedCornerShape(sizeRoundMax()),
                     contentPadding = PaddingValues(0.dp),
                     onClick = {
                         if (ManegeGame.team_one_has_card && ManegeGame.team_two_has_card) {
@@ -186,7 +188,7 @@ fun ShowCardsScreen(
                     ModalBottomSheet(
                         onDismissRequest = { showBottomSheet = false },
                         sheetState = sheetState,
-                        shape = RoundedCornerShape(topEnd = 16.sdp, topStart = 16.sdp),
+                        shape = RoundedCornerShape(topEnd = sizeRoundBottomSheet(), topStart = sizeRoundBottomSheet()),
                         containerColor = FenceGreen
                     ) {
                         BottomSheetContactExitGame(

@@ -20,6 +20,12 @@ fun paddingRound() = 12.sdp
 fun sizeRound() = 5.sdp
 
 @Composable
+fun sizeRoundBottomSheet() = 15.sdp
+
+@Composable
+fun sizeRoundMax() = 100.sdp
+
+@Composable
 fun fontSizeButton() = 18.ssp
 
 @Composable

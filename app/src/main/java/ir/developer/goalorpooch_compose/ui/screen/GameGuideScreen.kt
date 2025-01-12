@@ -44,6 +44,7 @@ import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -104,7 +105,7 @@ fun ItemGameGuide(item: GameGuideModel, modifier: Modifier) {
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(5.sdp),
+        shape = RoundedCornerShape(sizeRound()),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         border = BorderStroke(width = 1.sdp, color = Color.White)
     ) {
