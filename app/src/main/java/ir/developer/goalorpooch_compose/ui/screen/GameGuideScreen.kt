@@ -2,6 +2,11 @@ package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,7 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -57,6 +62,7 @@ fun GameGuideScreen(
     sharedViewModel: SharedViewModel
 ) {
     val item = remember { sharedViewModel.getItemsGameGuide() }
+    var expandedItemIndex by remember { mutableIntStateOf(-1) } // نگهداری آیتم باز (index)
 
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -90,7 +96,12 @@ fun GameGuideScreen(
                         val items = item[index]
                         ItemGameGuide(
                             item = items,
-                            modifier = modifier
+                            modifier = modifier,
+                            isExpanded = expandedItemIndex == index, // بررسی اینکه این آیتم باز است یا خیر
+                            onClick = {
+                                expandedItemIndex =
+                                    if (expandedItemIndex == index) -1 else index // باز یا بسته کردن
+                            }
                         )
                     }
                 }
@@ -100,8 +111,13 @@ fun GameGuideScreen(
 }
 
 @Composable
-fun ItemGameGuide(item: GameGuideModel, modifier: Modifier) {
-    var expanded by remember { mutableStateOf(false) }
+fun ItemGameGuide(
+    item: GameGuideModel,
+    modifier: Modifier,
+    isExpanded: Boolean,
+    onClick: () -> Unit
+) {
+//    var expanded by remember { mutableStateOf(false) }
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -120,7 +136,7 @@ fun ItemGameGuide(item: GameGuideModel, modifier: Modifier) {
                     .clickable(
                         indication = null, // حذف Ripple
                         interactionSource = remember { MutableInteractionSource() } // جلوگیری از Highlight
-                    ) { expanded = !expanded },
+                    ) { onClick() },// فراخوانی callback برای تغییر وضعیت
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -131,14 +147,22 @@ fun ItemGameGuide(item: GameGuideModel, modifier: Modifier) {
                     fontFamily = FontPeydaMedium
                 )
                 Icon(
-                    imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                    imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = null,
                     tint = Color.White
                 )
             }
 
             // محتوای کارت (در حالت باز)
-            AnimatedVisibility(visible = expanded) {
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = expandVertically(animationSpec = tween(durationMillis = 700)) + fadeIn(
+                    animationSpec = tween(durationMillis = 700)
+                ),
+                exit = shrinkVertically(animationSpec = tween(durationMillis = 700)) + fadeOut(
+                    animationSpec = tween(durationMillis = 700)
+                )
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
