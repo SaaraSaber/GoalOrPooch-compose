@@ -278,10 +278,11 @@ fun ItemResult(modifier: Modifier, item: ResultThisRoundModel, onClickItem: () -
 }
 
 @Composable
-fun TheOpeningDuelOfTheGame(
+fun BottomSheetContactTheOpeningDuelOfTheGame(
     modifier: Modifier = Modifier,
     whichTeamHasGoal: Int,
-    onClickItem: (Int) -> Unit
+    onClickItem: (Int) -> Unit,
+    onDismissRequest: () -> Unit // مدیریت بسته شدن Bottom Sheet
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
@@ -323,13 +324,20 @@ fun TheOpeningDuelOfTheGame(
                     .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
                     .clip(RoundedCornerShape(sizeRound()))
                     .fillMaxWidth()
-                    .clickable { if (whichTeamHasGoal == 0) onClickItem(0) else onClickItem(1) },
+                    .clickable {
+                        if (whichTeamHasGoal == 0) {
+                            onClickItem(0)
+                        } else {
+                            onClickItem(1)
+                        }
+                        onDismissRequest()
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     modifier = Modifier
-                        .padding(paddingTopMedium())
-                        .size(sizePicSmall()),
+                        .padding(paddingRound())
+                        .size(sizePicMedium()),
                     painter = if (whichTeamHasGoal == 0)
                         painterResource(id = R.drawable.pic_team_one)
                     else
@@ -348,18 +356,26 @@ fun TheOpeningDuelOfTheGame(
                     textAlign = TextAlign.Justify
                 )
             }
+
             Row(
                 modifier = modifier
                     .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
                     .clip(RoundedCornerShape(sizeRound()))
                     .fillMaxWidth()
-                    .clickable { if (whichTeamHasGoal == 0) onClickItem(1) else onClickItem(0) },
+                    .clickable {
+                        if (whichTeamHasGoal == 0) {
+                            onClickItem(1)
+                        } else {
+                            onClickItem(0)
+                        }
+                        onDismissRequest ()
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     modifier = Modifier
-                        .padding(paddingTopMedium())
-                        .size(sizePicSmall()),
+                        .padding(paddingRound())
+                        .size(sizePicMedium()),
                     painter = if (whichTeamHasGoal == 0)
                         painterResource(id = R.drawable.pic_team_two)
                     else
@@ -775,7 +791,7 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
 @Preview
 @Composable
 private fun TheOpeningDuelOfTheGamePreview() {
-    TheOpeningDuelOfTheGame(whichTeamHasGoal = 1, onClickItem = {})
+    BottomSheetContactTheOpeningDuelOfTheGame(whichTeamHasGoal = 1, onClickItem = {}, onDismissRequest = {})
 }
 
 @Preview

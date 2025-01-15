@@ -17,6 +17,9 @@ fun paddingTopMedium() = 15.sdp
 fun paddingRound() = 12.sdp
 
 @Composable
+fun paddingRoundMini() = 8.sdp
+
+@Composable
 fun sizeRound() = 5.sdp
 
 @Composable

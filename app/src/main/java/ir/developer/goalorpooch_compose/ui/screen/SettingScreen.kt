@@ -24,8 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -35,11 +33,13 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
+import ir.developer.goalorpooch_compose.ui.theme.FenceGreenLow
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
@@ -65,6 +65,7 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
         ManegeGame.team_one_has_card = false
         ManegeGame.team_two_has_card = false
     }
+//    val itemSetting = sharedViewModel.itemSetting
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -98,7 +99,7 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                     textAlign = TextAlign.Justify
                 )
 
-                ListSettings()
+                ListSettings(sharedViewModel = sharedViewModel)
 
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -131,10 +132,12 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
 }
 
 
+@SuppressLint("StateFlowValueCalledInComposition", "UnrememberedMutableState")
 @Composable
-fun ListSettings() {
-    val counters = remember { mutableStateListOf(6, 10, 30, 60, 5) }
-
+fun ListSettings(sharedViewModel: SharedViewModel) {
+//    val counters = remember { mutableStateListOf(6, 10, 30, 60, 5) }
+    val itemSetting = sharedViewModel.itemSetting
+//    var itemSetting by mutableStateOf(SettingModel())
     Column(
         modifier = Modifier
             .padding(
@@ -143,92 +146,98 @@ fun ListSettings() {
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.sdp)
     ) {
-        val labels = listOf(
-            stringResource(R.string.number_player),
-            stringResource(R.string.victory_points),
-            stringResource(R.string.time_get_goal),
-            stringResource(R.string.time_get_king_goal),
-            stringResource(R.string.number_cards)
-        )
-        labels.forEachIndexed { index, label ->
-            CounterRow(
-                label = label,
-                count = counters[index],
-                onIncrement = {
-                    when (index) {
-                        0 -> {
-                            counters[index] += 2
-                            Utils.COUNT_PLAYER = counters[index]
-                        }
-
-                        1 -> {
-                            counters[index]++
-                            Utils.VICTORY_POINTS = counters[index]
-                        }
-
-                        2 -> {
-                            counters[index] += 5
-                            Utils.TIME_TO_GET_GOAL = counters[index]
-                        }
-
-                        3 -> {
-                            counters[index] += 5
-                            Utils.TIME_TO_GET_SHAH_GOAL = counters[index]
-                        }
-
-                        4 -> {
-                            counters[index]++
-                            Utils.THE_NUMBER_OF_PLAYING_CARDS = counters[index]
-                        }
-
-                        else -> {}
-                    }
-                },
-                onDecrement = {
-                    when (index) {
-                        0 -> {
-                            if (counters[index] > 0) {
-                                counters[index] -= 2
-                                Utils.COUNT_PLAYER = counters[index]
-                            }
-                        }
-
-                        1 -> {
-                            if (counters[index] > 0) {
-                                counters[index]--
-                                Utils.VICTORY_POINTS = counters[index]
-                            }
-                        }
-
-                        2 -> {
-                            if (counters[index] > 0) {
-                                counters[index] -= 5
-                                Utils.TIME_TO_GET_GOAL = counters[index]
-                            }
-                        }
-
-                        3 -> {
-                            if (counters[index] > 0) counters[index] -= 5
-                            Utils.TIME_TO_GET_SHAH_GOAL = counters[index]
-                        }
-
-                        4 -> {
-                            if (counters[index] > 0) counters[index]--
-                            Utils.THE_NUMBER_OF_PLAYING_CARDS = counters[index]
-                        }
-
-                        else -> {}
-                    }
-//                    if (counters[index] > 0) counters[index]-- // جلوگیری از مقادیر منفی
+        ItemSetting(
+            label = stringResource(R.string.number_player),
+            count = itemSetting.value.playerNumber,
+            minCount = 4,
+            maxCount = 10,
+            onIncrement = {
+                sharedViewModel.updateItemSetting(
+                    itemSetting.value.copy(playerNumber = itemSetting.value.playerNumber + 2)
+                )
+            },
+            onDecrement = {
+                if (itemSetting.value.playerNumber > 4) {
+                    sharedViewModel.updateItemSetting(itemSetting.value.copy(playerNumber = itemSetting.value.playerNumber - 2))
                 }
-            )
-        }
-
+            }
+        )
+        ItemSetting(
+            label = stringResource(R.string.victory_points),
+            count = itemSetting.value.victoryPoint,
+            minCount = 4,
+            maxCount = 21,
+            onIncrement = {
+                sharedViewModel.updateItemSetting(
+                    itemSetting.value.copy(victoryPoint = itemSetting.value.victoryPoint + 1)
+                )
+            },
+            onDecrement = {
+                if (itemSetting.value.victoryPoint > 4) {
+                    sharedViewModel.updateItemSetting(itemSetting.value.copy(victoryPoint = itemSetting.value.victoryPoint - 1))
+                }
+            }
+        )
+        ItemSetting(
+            label = stringResource(R.string.time_get_goal),
+            count = itemSetting.value.getTimeToGetGoal,
+            minCount = 30,
+            maxCount = 600,
+            onIncrement = {
+                sharedViewModel.updateItemSetting(
+                    itemSetting.value.copy(getTimeToGetGoal = itemSetting.value.getTimeToGetGoal + 10)
+                )
+            },
+            onDecrement = {
+                if (itemSetting.value.getTimeToGetGoal > 30) {
+                    sharedViewModel.updateItemSetting(itemSetting.value.copy(getTimeToGetGoal = itemSetting.value.getTimeToGetGoal - 10))
+                }
+            }
+        )
+        ItemSetting(
+            label = stringResource(R.string.time_get_king_goal),
+            count = itemSetting.value.getTimeToGetShahGoal,
+            minCount = 30,
+            maxCount = 600,
+            onIncrement = {
+                sharedViewModel.updateItemSetting(
+                    itemSetting.value.copy(getTimeToGetShahGoal = itemSetting.value.getTimeToGetShahGoal + 10)
+                )
+            },
+            onDecrement = {
+                if (itemSetting.value.getTimeToGetShahGoal > 30) {
+                    sharedViewModel.updateItemSetting(itemSetting.value.copy(getTimeToGetShahGoal = itemSetting.value.getTimeToGetShahGoal - 10))
+                }
+            }
+        )
+        ItemSetting(
+            label = stringResource(R.string.number_cards),
+            count = itemSetting.value.countOfPlayingCards,
+            minCount = 5,
+            maxCount = 9,
+            onIncrement = {
+                sharedViewModel.updateItemSetting(
+                    itemSetting.value.copy(countOfPlayingCards = itemSetting.value.countOfPlayingCards + 1)
+                )
+            },
+            onDecrement = {
+                if (itemSetting.value.countOfPlayingCards > 5) {
+                    sharedViewModel.updateItemSetting(itemSetting.value.copy(countOfPlayingCards = itemSetting.value.countOfPlayingCards - 1))
+                }
+            }
+        )
     }
 }
 
 @Composable
-fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit) {
+fun ItemSetting(
+    label: String,
+    count: Int,
+    minCount: Int,
+    maxCount: Int,
+    onIncrement: () -> Unit,
+    onDecrement: () -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -245,15 +254,17 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
             verticalAlignment = Alignment.CenterVertically
         ) {
             ElevatedButton(
-                modifier = Modifier.size(sizePicSmall()),
+                modifier = Modifier
+                    .size(sizePicSmall()),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
                     contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
+                    disabledContainerColor = FenceGreenLow,
+                    disabledContentColor = FenceGreenLow
                 ),
                 shape = CircleShape,
                 contentPadding = PaddingValues(4.dp),
+                enabled = count < maxCount,
                 onClick = { onIncrement() }
             ) {
                 Icon(
@@ -275,16 +286,19 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
                 color = Color.White
             )
             ElevatedButton(
-                modifier = Modifier.size(sizePicSmall()),
+                modifier = Modifier
+                    .size(sizePicSmall()),
                 colors = ButtonColors(
                     containerColor = FenceGreen,
                     contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
+                    disabledContainerColor = FenceGreenLow,
+                    disabledContentColor = FenceGreenLow
                 ),
                 shape = CircleShape,
                 contentPadding = PaddingValues(4.dp),
-                onClick = { onDecrement() }) {
+                enabled = count > minCount,
+                onClick = { onDecrement() }
+            ) {
                 Icon(
                     modifier = Modifier.size(12.sdp),
                     painter = painterResource(id = R.drawable.decrease),
@@ -296,9 +310,8 @@ fun CounterRow(label: String, count: Int, onIncrement: () -> Unit, onDecrement: 
     }
 }
 
-//@Preview
-//@Composable
-//private fun SettingScreenPreview() {
-//    val navController = rememberNavController()
-//    SettingScreen(navController)
-//}
+@Preview
+@Composable
+private fun SettingScreenPreview() {
+    ItemSetting(label = "hello", count = 5, minCount = 5, maxCount = 600, onIncrement = {}, onDecrement = {})
+}

@@ -38,7 +38,10 @@ fun Navigation(sharedViewModel: SharedViewModel) {
                 EnterTransition.None
             }
         ) {
-            HomeScreen(navController)
+            HomeScreen(
+                navController
+//                ,sharedViewModel
+            )
         }
 
         composable(

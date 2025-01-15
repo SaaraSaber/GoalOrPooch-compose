@@ -228,7 +228,7 @@ fun ItemSelectedCard(card: CardModel, isLastItem: Boolean, modifier: Modifier = 
                 Image(
                     modifier = Modifier
                         .width(sizePicSmall()),
-                    painter = painterResource(id = card.image),
+                    painter = painterResource(id = R.drawable.pic_card),
                     contentDescription = "image"
                 )
                 Text(

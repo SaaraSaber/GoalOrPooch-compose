@@ -24,6 +24,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -31,6 +32,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
@@ -70,8 +73,18 @@ import kotlinx.coroutines.launch
 @Composable
 fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController) {
     var showBottomSheetExitGame by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheetOpeningDuel by remember { mutableStateOf(false) }
+    val sheetStateExitGame = rememberModalBottomSheetState()
+    val sheetStateOpeningDuel = rememberModalBottomSheetState(
+        //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
+        skipPartiallyExpanded = false,
+        confirmValueChange = { false }
+    )
     val scope = rememberCoroutineScope()
+
+    var scoreTeamOne by remember { mutableIntStateOf(0) }
+    var scoreTeamTwo by remember { mutableIntStateOf(0) }
+
     BackHandler {
         showBottomSheetExitGame = true
     }
@@ -85,11 +98,12 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController)
                     .paint(
                         painter = painterResource(R.drawable.main_background),
                         contentScale = ContentScale.Crop
-                    ).verticalScroll(rememberScrollState()),
+                    )
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                HeaderGame()
+                HeaderGame(scoreTeamOne = scoreTeamOne, scoreTeamTwo = scoreTeamTwo)
                 TableGame()
 
 //time
@@ -238,13 +252,16 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController)
                 if (showBottomSheetExitGame) {
                     ModalBottomSheet(
                         onDismissRequest = { showBottomSheetExitGame = false },
-                        sheetState = sheetState,
-                        shape = RoundedCornerShape(topEnd = sizeRoundBottomSheet(), topStart = sizeRoundBottomSheet()),
+                        sheetState = sheetStateExitGame,
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
                         containerColor = FenceGreen
                     ) {
                         BottomSheetContactExitGame(
                             onClickExit = {
-                                scope.launch { sheetState.hide() }
+                                scope.launch { sheetStateExitGame.hide() }
                                     .invokeOnCompletion { showBottomSheetExitGame = false }
                                 navController.navigate(Utils.HOME_SCREEN) {
                                     popUpTo(0) // پاک کردن کل استک
@@ -252,8 +269,49 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController)
                                 }
                             },
                             onClickContinueGame = {
-                                scope.launch { sheetState.hide() }
+                                scope.launch { sheetStateExitGame.hide() }
                                     .invokeOnCompletion { showBottomSheetExitGame = false }
+                            }
+                        )
+                    }
+                }
+
+//BottomSheetOpeningDuel
+                if (showBottomSheetOpeningDuel) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            showBottomSheetOpeningDuel = false
+                        },
+                        sheetState = sheetStateOpeningDuel,
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
+                        containerColor = FenceGreen,
+                        properties = ModalBottomSheetProperties(
+                            securePolicy = SecureFlagPolicy.SecureOff,
+                            shouldDismissOnBackPress = false
+                        )
+                    ) {
+                        BottomSheetContactTheOpeningDuelOfTheGame(
+                            whichTeamHasGoal = Utils.STARTER_GAME,
+                            onClickItem = { int ->
+                                scope.launch {
+                                    sheetStateOpeningDuel.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetStateOpeningDuel.isVisible) {
+                                        showBottomSheetOpeningDuel = false
+                                    }
+                                }
+                            },
+                            onDismissRequest = {
+                                scope.launch {
+                                    sheetStateOpeningDuel.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetStateOpeningDuel.isVisible) {
+                                        showBottomSheetOpeningDuel = false
+                                    }
+                                }
                             }
                         )
                     }
@@ -344,7 +402,7 @@ fun TableGame(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun HeaderGame(modifier: Modifier = Modifier) {
+fun HeaderGame(modifier: Modifier = Modifier, scoreTeamOne: Int, scoreTeamTwo: Int) {
     Row(
         modifier = modifier
             .padding(paddingRound())
@@ -368,14 +426,14 @@ fun HeaderGame(modifier: Modifier = Modifier) {
             color = Color.White
         )
         Text(
-            text = "8",
+            text = "$scoreTeamOne",
             fontSize = descriptionSize(),
             fontFamily = FontPeydaBold,
             color = Color.White
         )
         VerticalDivider(modifier.height(25.sdp), thickness = 2.sdp)
         Text(
-            text = "5",
+            text = "$scoreTeamTwo",
             fontSize = descriptionSize(),
             fontFamily = FontPeydaBold,
             color = Color.White
