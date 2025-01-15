@@ -120,6 +120,6 @@ fun Navigation(sharedViewModel: SharedViewModel) {
                 sharedViewModel = sharedViewModel
             )
         }
-        composable(route = Utils.START_GAME_SCREEN) { StartGameScreen(navController = navController) }
+        composable(route = Utils.START_GAME_SCREEN) { StartGameScreen(navController = navController, sharedViewModel = sharedViewModel) }
     })
 }

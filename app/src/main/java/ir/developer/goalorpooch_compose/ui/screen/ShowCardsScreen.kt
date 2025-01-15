@@ -1,5 +1,6 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -65,6 +66,7 @@ import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @ExperimentalMaterial3Api
 @Composable
 fun ShowCardsScreen(
@@ -78,9 +80,10 @@ fun ShowCardsScreen(
         0
     }
     val randomItem: List<CardModel> = if (idItemSelected == 0) {
-        sharedViewModel.randomCardsTeam1()
+        sharedViewModel.assignRandomCardsToTeam(teamId = 0, sharedViewModel.allCards.value)
     } else {
-        sharedViewModel.randomCardsTeam2()
+//        sharedViewModel.randomCardsTeam2()
+        sharedViewModel.assignRandomCardsToTeam(teamId = 1, sharedViewModel.allCards.value)
     }
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -188,7 +191,10 @@ fun ShowCardsScreen(
                     ModalBottomSheet(
                         onDismissRequest = { showBottomSheet = false },
                         sheetState = sheetState,
-                        shape = RoundedCornerShape(topEnd = sizeRoundBottomSheet(), topStart = sizeRoundBottomSheet()),
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
                         containerColor = FenceGreen
                     ) {
                         BottomSheetContactExitGame(

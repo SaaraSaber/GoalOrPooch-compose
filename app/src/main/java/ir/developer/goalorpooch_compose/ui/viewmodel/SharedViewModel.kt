@@ -11,8 +11,9 @@ import ir.developer.goalorpooch_compose.database.repository.CardRepository
 import ir.developer.goalorpooch_compose.database.repository.SettingRepository
 import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.model.GameGuideModel
-import ir.developer.goalorpooch_compose.model.PlayerModel
+import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.model.SettingModel
+import ir.developer.goalorpooch_compose.util.TeamManager
 import ir.developer.goalorpooch_compose.util.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +28,27 @@ class SharedViewModel @Inject constructor(
     private val settingRepository: SettingRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
+
+    private val teamManager = TeamManager()
+
+    // بازیکنان (تیم‌ها)
+    val players: StateFlow<List<TeamModel>> = teamManager.players
+
+    // اختصاص کارت‌های تصادفی به یک تیم
+    fun assignRandomCardsToTeam(teamId: Int, allCards: List<CardModel>): List<CardModel> {
+        val listCards = teamManager.assignRandomCardsToPlayer(teamId, allCards)
+        return listCards
+    }
+
+    // به‌روزرسانی ویژگی خاصی از یک تیم
+    fun updateTeam(teamId: Int, update: TeamModel.() -> TeamModel) {
+        teamManager.updatePlayer(teamId, update)
+    }
+
+    // گرفتن اطلاعات یک تیم خاص
+    fun getTeam(teamId: Int): TeamModel? {
+        return teamManager.getPlayer(teamId)
+    }
 
     //..........................cards.............
     private val _allCards =
@@ -47,47 +69,18 @@ class SharedViewModel @Inject constructor(
                 id = id,
                 name = name,
                 description = description,
-                isSelect = false,
+//                isSelect = false,
                 disable = false
             )
             cardRepository.addCard(cardModel = cardModel)
         }
     }
 
-    fun updateCard(
-        id: Int,
-        name: String,
-        description: String,
-        isSelect: Boolean,
-        disable: Boolean
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val cardModel = CardModel(
-                id = id,
-                name = name,
-                description = description,
-                isSelect = isSelect,
-                disable = disable
-            )
-            cardRepository.updateCard(cardModel)
-        }
+    fun disableCardForPlayer(teamId: Int, cardId: Int) {
+        teamManager.disableCardForPlayer(teamId, cardId)
     }
 
-
     //...................setting...................
-
-//    private val _allItemSetting =
-//        MutableStateFlow<SettingModel>(
-//            value =
-//            SettingModel(
-//                id = 0,
-//                playerNumber = 6,
-//                victoryPoint = 9,
-//                getTimeToGetGoal = 90,
-//                getTimeToGetShahGoal = 180,
-//                countOfPlayingCards = 5
-//            )
-//        )
 
     var itemSetting = mutableStateOf(
         SettingModel(
@@ -105,64 +98,47 @@ class SharedViewModel @Inject constructor(
         itemSetting.value = newSetting
     }
 
-//    fun addItemSetting(
-//        id: Int,
-//        playerNumber: Int,
-//        victoryPoint: Int,
-//        getTimeToGetGoal: Int,
-//        getTimeToGetShahGoal: Int,
-//        countOfPlayingCards: Int
-//    ) {
-//        viewModelScope.launch {
-//            val settingModel = SettingModel(
-//                id = id,
-//                playerNumber = playerNumber,
-//                victoryPoint = victoryPoint,
-//                getTimeToGetGoal = getTimeToGetGoal,
-//                getTimeToGetShahGoal = getTimeToGetShahGoal,
-//                countOfPlayingCards = countOfPlayingCards
-//            )
-//            settingRepository.addItemSetting(settingModel = settingModel)
-//        }
-//    }
-//
-//    fun getItemSetting() {
-//        viewModelScope.launch {
-//            settingRepository.getItemSetting.collect {
-//                _allItemSetting.value = it
-//            }
-//        }
-//    }
-
     //.........manegeGame............................
 
     fun randomCardsTeam1(): List<CardModel> {
         val randomCards = allCards.value.shuffled().take(Utils.THE_NUMBER_OF_PLAYING_CARDS)
-        val teamOne = PlayerModel(
+        val teamOne = TeamModel(
             id = 0,
             hasCard = true,
-            numberKhaliBazy = 3,
-            numberMokaab = 2,
+            numberOfEmptyGames = 3,
+            numberCubes = 2,
             hasGoal = false,
             cards = randomCards
         )
         return randomCards
+    }
+
+    fun teamOne(cards: List<CardModel>): TeamModel {
+        val teamOne = TeamModel(
+            id = 0,
+            hasCard = true,
+            numberOfEmptyGames = 3,
+            numberCubes = 2,
+            hasGoal = false,
+            cards = cards
+        )
+        return teamOne
     }
 
     fun randomCardsTeam2(): List<CardModel> {
         val randomCards = allCards.value.shuffled().take(Utils.THE_NUMBER_OF_PLAYING_CARDS)
-        val teamTwo = PlayerModel(
+        val teamTwo = TeamModel(
             id = 1,
             hasCard = true,
-            numberKhaliBazy = 3,
-            numberMokaab = 2,
+            numberOfEmptyGames = 3,
+            numberCubes = 2,
             hasGoal = false,
             cards = randomCards
         )
         return randomCards
     }
 
-//...................guide............................
+    //...................guide............................
     fun getItemsGameGuide(): List<GameGuideModel> {
         return listOf(
             GameGuideModel(

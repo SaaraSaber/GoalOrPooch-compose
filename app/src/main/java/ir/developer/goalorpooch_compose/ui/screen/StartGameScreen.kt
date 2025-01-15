@@ -1,6 +1,7 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -46,11 +47,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -64,6 +63,7 @@ import ir.developer.goalorpooch_compose.ui.theme.sizePicVerySmall
 import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
+import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
@@ -71,7 +71,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController,sharedViewModel: SharedViewModel) {
     var showBottomSheetExitGame by remember { mutableStateOf(false) }
     var showBottomSheetOpeningDuel by remember { mutableStateOf(false) }
     val sheetStateExitGame = rememberModalBottomSheetState()
@@ -85,6 +85,8 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController)
     var scoreTeamOne by remember { mutableIntStateOf(0) }
     var scoreTeamTwo by remember { mutableIntStateOf(0) }
 
+    Log.i("StartGameScreen0", "StartGameScreen0: ${sharedViewModel.getTeam(0)}")
+    Log.i("StartGameScreen0", "StartGameScreen1: ${sharedViewModel.getTeam(1)}")
     BackHandler {
         showBottomSheetExitGame = true
     }
@@ -454,9 +456,9 @@ fun HeaderGame(modifier: Modifier = Modifier, scoreTeamOne: Int, scoreTeamTwo: I
     }
 }
 
-@Preview
-@Composable
-private fun StartGameScreenPreview() {
-    val navController = rememberNavController()
-    StartGameScreen(navController = navController)
-}
+//@Preview
+//@Composable
+//private fun StartGameScreenPreview() {
+//    val navController = rememberNavController()
+//    StartGameScreen(navController = navController)
+//}
