@@ -6,6 +6,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,14 +33,15 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -51,6 +53,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
+import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
@@ -71,9 +74,13 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController,sharedViewModel: SharedViewModel) {
+fun StartGameScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    sharedViewModel: SharedViewModel
+) {
     var showBottomSheetExitGame by remember { mutableStateOf(false) }
-    var showBottomSheetOpeningDuel by remember { mutableStateOf(false) }
+    var showBottomSheetOpeningDuel by remember { mutableStateOf(true) }
     val sheetStateExitGame = rememberModalBottomSheetState()
     val sheetStateOpeningDuel = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
@@ -82,11 +89,11 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController,
     )
     val scope = rememberCoroutineScope()
 
-    var scoreTeamOne by remember { mutableIntStateOf(0) }
-    var scoreTeamTwo by remember { mutableIntStateOf(0) }
+    val teams by sharedViewModel.teams.collectAsState()
 
-    Log.i("StartGameScreen0", "StartGameScreen0: ${sharedViewModel.getTeam(0)}")
-    Log.i("StartGameScreen0", "StartGameScreen1: ${sharedViewModel.getTeam(1)}")
+    val teamOne = teams[0]
+    val teamTwo = teams[1]
+
     BackHandler {
         showBottomSheetExitGame = true
     }
@@ -105,148 +112,52 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                HeaderGame(scoreTeamOne = scoreTeamOne, scoreTeamTwo = scoreTeamTwo)
-                TableGame()
+                if (!showBottomSheetOpeningDuel) {
+                    HeaderGame(
+                        scoreTeamOne = teamOne.score,
+                        scoreTeamTwo = teamTwo.score,
+                        whichTeamHasGoal =
+                        if (teamOne.hasGoal) {
+                            0
+                        } else if (teamTwo.hasGoal) {
+                            1
+                        } else {
+                            2
+                        }
+                    )
+                    TableGame()
 
 //time
-                Button(
-                    modifier = modifier
-                        .width(130.sdp)
-                        .height(50.sdp),
-                    onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
-                    shape = RoundedCornerShape(sizeRound()),
-                    border = BorderStroke(width = 1.sdp, color = Color.White)
-                ) {
-                    Text(
-                        modifier = modifier.padding(end = paddingRound()),
-                        text = stringResource(R.string.start_time),
-                        fontSize = descriptionSize(),
-                        fontFamily = FontPeydaMedium,
-                        color = Color.White
-                    )
-
-                    Icon(
-                        painter = painterResource(R.drawable.time),
-                        contentDescription = "time",
-                        modifier = modifier.size(
-                            sizePicVerySmall()
-                        )
-                    )
-                }
-
-                Row(
-                    modifier = modifier.padding(
-                        top = paddingTopMedium(),
-                        start = paddingRound(),
-                        end = paddingRound(),
-                        bottom = paddingRound()
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(5.sdp)
-                ) {
-                    Column(
+                    Button(
                         modifier = modifier
-                            .size(75.sdp)
-                            .background(
-                                color = FenceGreen,
-                                shape = RoundedCornerShape(sizeRound())
-                            )
-                            .padding(8.sdp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly
+                            .width(130.sdp)
+                            .height(50.sdp),
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
+                        shape = RoundedCornerShape(sizeRound()),
+                        border = BorderStroke(width = 1.sdp, color = Color.White)
                     ) {
                         Text(
-                            modifier = modifier.fillMaxWidth(),
-                            textAlign = TextAlign.End,
-                            text = "3",
+                            modifier = modifier.padding(end = paddingRound()),
+                            text = stringResource(R.string.start_time),
                             fontSize = descriptionSize(),
                             fontFamily = FontPeydaMedium,
                             color = Color.White
                         )
 
                         Icon(
-                            painter = painterResource(R.drawable.hand),
+                            painter = painterResource(R.drawable.time),
                             contentDescription = "time",
                             modifier = modifier.size(
                                 sizePicVerySmall()
-                            ), tint = Color.White
-                        )
-                        Text(
-                            text = stringResource(R.string.empty_game),
-                            fontSize = descriptionSize(),
-                            fontFamily = FontPeydaMedium,
-                            color = Color.White
+                            )
                         )
                     }
 
-                    Column(
-                        modifier = modifier
-                            .size(75.sdp)
-                            .background(
-                                color = FenceGreen,
-                                shape = RoundedCornerShape(sizeRound())
-                            )
-                            .padding(8.sdp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Text(
-                            modifier = modifier.fillMaxWidth(),
-                            textAlign = TextAlign.End,
-                            text = "5",
-                            fontSize = descriptionSize(),
-                            fontFamily = FontPeydaMedium,
-                            color = Color.White
-                        )
-
-                        Icon(
-                            painter = painterResource(R.drawable.icon_card),
-                            contentDescription = "card",
-                            modifier = modifier.size(
-                                sizePicVerySmall()
-                            ), tint = Color.White
-                        )
-                        Text(
-                            text = stringResource(R.string.cards),
-                            fontSize = descriptionSize(),
-                            fontFamily = FontPeydaMedium,
-                            color = Color.White
-                        )
-                    }
-
-                    Column(
-                        modifier = modifier
-                            .size(75.sdp)
-                            .background(
-                                color = FenceGreen,
-                                shape = RoundedCornerShape(sizeRound())
-                            )
-                            .padding(8.sdp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Text(
-                            modifier = modifier.fillMaxWidth(),
-                            textAlign = TextAlign.End,
-                            text = "2",
-                            fontSize = descriptionSize(),
-                            fontFamily = FontPeydaMedium,
-                            color = Color.White
-                        )
-
-                        Icon(
-                            painter = painterResource(R.drawable.cube),
-                            contentDescription = "time",
-                            modifier = modifier.size(
-                                sizePicVerySmall()
-                            ), tint = Color.White
-                        )
-                        Text(
-                            text = stringResource(R.string.cube),
-                            fontSize = descriptionSize(),
-                            fontFamily = FontPeydaMedium,
-                            color = Color.White
-                        )
+                    if (teamOne.hasGoal) {
+                        TeamInfoSection(team = teamOne)
+                    } else {
+                        TeamInfoSection(team = teamTwo)
                     }
                 }
 
@@ -297,8 +208,23 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController,
                     ) {
                         BottomSheetContactTheOpeningDuelOfTheGame(
                             whichTeamHasGoal = Utils.STARTER_GAME,
-                            onClickItem = { int ->
+                            onClickItem = { idTeam ->
                                 scope.launch {
+                                    if (idTeam == 0) {
+                                        sharedViewModel.updateTeam(teamId = 0) {
+                                            copy(hasGoal = true)
+                                        }
+                                        sharedViewModel.updateTeam(teamId = 1) {
+                                            copy(hasGoal = false)
+                                        }
+                                    } else if (idTeam == 1) {
+                                        sharedViewModel.updateTeam(teamId = 1) {
+                                            copy(hasGoal = true)
+                                        }
+                                        sharedViewModel.updateTeam(teamId = 0) {
+                                            copy(hasGoal = false)
+                                        }
+                                    }
                                     sheetStateOpeningDuel.hide()
                                 }.invokeOnCompletion {
                                     if (!sheetStateOpeningDuel.isVisible) {
@@ -320,6 +246,87 @@ fun StartGameScreen(modifier: Modifier = Modifier, navController: NavController,
                 }
             }
         }
+    }
+}
+
+@Composable
+fun TeamInfoSection(modifier: Modifier = Modifier, team: TeamModel) {
+    Row(
+        modifier = modifier.padding(
+            top = paddingTopMedium(),
+            start = paddingRound(),
+            end = paddingRound(),
+            bottom = paddingRound()
+        ),
+        horizontalArrangement = Arrangement.spacedBy(5.sdp)
+    ) {
+        // تعداد خالی بازی
+        InfoBox(
+            value = team.numberOfEmptyGames.toString(),
+            icon = R.drawable.hand,
+            label = stringResource(R.string.empty_game),
+            onClickItem = {}
+        )
+        // تعداد کارت‌ها
+        InfoBox(
+            value = team.cards.size.toString(),
+            icon = R.drawable.icon_card,
+            label = stringResource(R.string.cards),
+            onClickItem = {}
+        )
+        // تعداد مکعب
+        InfoBox(
+            value = team.numberCubes.toString(),
+            icon = R.drawable.cube,
+            label = stringResource(R.string.cube),
+            onClickItem = {}
+        )
+    }
+}
+
+@Composable
+fun InfoBox(
+    modifier: Modifier = Modifier,
+    value: String,
+    icon: Int,
+    label: String,
+    onClickItem: () -> Unit
+) {
+
+    Column(
+        modifier = modifier
+            .size(75.sdp)
+            .background(
+                color = FenceGreen,
+                shape = RoundedCornerShape(sizeRound())
+            )
+            .padding(8.sdp)
+            .clickable { onClickItem() },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text(
+            modifier = modifier.fillMaxWidth(),
+            textAlign = TextAlign.End,
+            text = value,
+            fontSize = descriptionSize(),
+            fontFamily = FontPeydaMedium,
+            color = Color.White
+        )
+
+        Icon(
+            painter = painterResource(icon),
+            contentDescription = "time",
+            modifier = modifier.size(
+                sizePicVerySmall()
+            ), tint = Color.White
+        )
+        Text(
+            text = label,
+            fontSize = descriptionSize(),
+            fontFamily = FontPeydaMedium,
+            color = Color.White
+        )
     }
 }
 
@@ -404,7 +411,13 @@ fun TableGame(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun HeaderGame(modifier: Modifier = Modifier, scoreTeamOne: Int, scoreTeamTwo: Int) {
+fun HeaderGame(
+    modifier: Modifier = Modifier,
+    scoreTeamOne: Int,
+    scoreTeamTwo: Int,
+    whichTeamHasGoal: Int
+) {
+    Log.i("StartGameScreen", "HeaderGame: $whichTeamHasGoal")
     Row(
         modifier = modifier
             .padding(paddingRound())
@@ -417,17 +430,21 @@ fun HeaderGame(modifier: Modifier = Modifier, scoreTeamOne: Int, scoreTeamTwo: I
         Image(
             painter = painterResource(R.drawable.pic_team_one),
             contentDescription = "pic_one",
-            modifier = modifier.size(
-                sizePicSmall()
-            )
+            modifier = modifier
+                .size(
+                    sizePicSmall()
+                )
+                .alpha(if (whichTeamHasGoal == 0) 1f else .3f)
         )
         Text(
+            modifier = modifier.alpha(if (whichTeamHasGoal == 0) 1f else .3f),
             text = stringResource(R.string.team_one),
             fontSize = descriptionSize(),
             fontFamily = FontPeydaMedium,
             color = Color.White
         )
         Text(
+            modifier = modifier.alpha(if (whichTeamHasGoal == 0) 1f else .3f),
             text = "$scoreTeamOne",
             fontSize = descriptionSize(),
             fontFamily = FontPeydaBold,
@@ -435,12 +452,14 @@ fun HeaderGame(modifier: Modifier = Modifier, scoreTeamOne: Int, scoreTeamTwo: I
         )
         VerticalDivider(modifier.height(25.sdp), thickness = 2.sdp)
         Text(
+            modifier = modifier.alpha(if (whichTeamHasGoal == 1) 1f else .3f),
             text = "$scoreTeamTwo",
             fontSize = descriptionSize(),
             fontFamily = FontPeydaBold,
             color = Color.White
         )
         Text(
+            modifier = modifier.alpha(if (whichTeamHasGoal == 1) 1f else .3f),
             text = stringResource(R.string.team_two),
             fontSize = descriptionSize(),
             fontFamily = FontPeydaMedium,
@@ -449,9 +468,11 @@ fun HeaderGame(modifier: Modifier = Modifier, scoreTeamOne: Int, scoreTeamTwo: I
         Image(
             painter = painterResource(R.drawable.pic_team_two),
             contentDescription = "pic_two",
-            modifier = modifier.size(
-                sizePicSmall()
-            )
+            modifier = modifier
+                .size(
+                    sizePicSmall()
+                )
+                .alpha(if (whichTeamHasGoal == 1) 1f else .3f)
         )
     }
 }

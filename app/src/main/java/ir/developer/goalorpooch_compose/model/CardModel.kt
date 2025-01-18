@@ -13,6 +13,5 @@ data class CardModel(
     val description: String,
     @DrawableRes
     val image: Int = R.drawable.pic_card,
-//    var isSelect: MutableState<Boolean> = mutableStateOf(false),
     var disable: Boolean = false
 )

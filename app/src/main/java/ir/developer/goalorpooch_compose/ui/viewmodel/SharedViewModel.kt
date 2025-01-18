@@ -8,13 +8,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.database.repository.CardRepository
-import ir.developer.goalorpooch_compose.database.repository.SettingRepository
 import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.model.GameGuideModel
-import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.model.SettingModel
+import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.util.TeamManager
-import ir.developer.goalorpooch_compose.util.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,14 +23,31 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val cardRepository: CardRepository,
-    private val settingRepository: SettingRepository,
+    private val teamManager: TeamManager, // حالا از طریق Hilt مقداردهی می‌شود
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
-    private val teamManager = TeamManager()
+    init {
+        // مقداردهی اولیه یا بارگذاری داده‌ها
+        initializeTeams()
+    }
+    private val _player = MutableStateFlow(
+        listOf(
+            TeamModel(id = 0),
+            TeamModel(id = 1)
+        )
+    )
+    private fun initializeTeams() {
+        // به‌عنوان مثال، تیم‌ها را از منابع خارجی بارگذاری کن.
+        val initialTeams = listOf(
+            TeamModel(id = 0, hasGoal = false),
+            TeamModel(id = 1, hasGoal = false)
+        )
+        teamManager.updateTeams(initialTeams)
+    }
 
-    // بازیکنان (تیم‌ها)
-    val players: StateFlow<List<TeamModel>> = teamManager.players
+    // تیم‌ها
+    val teams: StateFlow<List<TeamModel>> = teamManager.teams
 
     // اختصاص کارت‌های تصادفی به یک تیم
     fun assignRandomCardsToTeam(teamId: Int, allCards: List<CardModel>): List<CardModel> {
@@ -96,46 +111,6 @@ class SharedViewModel @Inject constructor(
 
     fun updateItemSetting(newSetting: SettingModel) {
         itemSetting.value = newSetting
-    }
-
-    //.........manegeGame............................
-
-    fun randomCardsTeam1(): List<CardModel> {
-        val randomCards = allCards.value.shuffled().take(Utils.THE_NUMBER_OF_PLAYING_CARDS)
-        val teamOne = TeamModel(
-            id = 0,
-            hasCard = true,
-            numberOfEmptyGames = 3,
-            numberCubes = 2,
-            hasGoal = false,
-            cards = randomCards
-        )
-        return randomCards
-    }
-
-    fun teamOne(cards: List<CardModel>): TeamModel {
-        val teamOne = TeamModel(
-            id = 0,
-            hasCard = true,
-            numberOfEmptyGames = 3,
-            numberCubes = 2,
-            hasGoal = false,
-            cards = cards
-        )
-        return teamOne
-    }
-
-    fun randomCardsTeam2(): List<CardModel> {
-        val randomCards = allCards.value.shuffled().take(Utils.THE_NUMBER_OF_PLAYING_CARDS)
-        val teamTwo = TeamModel(
-            id = 1,
-            hasCard = true,
-            numberOfEmptyGames = 3,
-            numberCubes = 2,
-            hasGoal = false,
-            cards = randomCards
-        )
-        return randomCards
     }
 
     //...................guide............................

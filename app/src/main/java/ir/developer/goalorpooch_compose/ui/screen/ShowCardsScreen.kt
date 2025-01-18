@@ -82,7 +82,6 @@ fun ShowCardsScreen(
     val randomItem: List<CardModel> = if (idItemSelected == 0) {
         sharedViewModel.assignRandomCardsToTeam(teamId = 0, sharedViewModel.allCards.value)
     } else {
-//        sharedViewModel.randomCardsTeam2()
         sharedViewModel.assignRandomCardsToTeam(teamId = 1, sharedViewModel.allCards.value)
     }
     val sheetState = rememberModalBottomSheetState()

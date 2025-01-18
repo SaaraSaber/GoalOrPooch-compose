@@ -2,7 +2,6 @@ package ir.developer.goalorpooch_compose.model
 
 data class TeamModel(
     val id: Int,
-    val name: String,
     var score: Int = 0,
     var hasGoal: Boolean = false,
     var numberOfEmptyGames: Int = 3,

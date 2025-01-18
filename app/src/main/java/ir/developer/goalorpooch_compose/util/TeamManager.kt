@@ -4,23 +4,26 @@ import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.model.TeamModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TeamManager {
-    private val _player = MutableStateFlow(
+@Singleton
+class TeamManager @Inject constructor(){
+    private val _team = MutableStateFlow(
         listOf(
             TeamModel(id = 0),
             TeamModel(id = 1)
         )
     )
 
-    val players: StateFlow<List<TeamModel>> = _player
+    val teams: StateFlow<List<TeamModel>> = _team
 
     // اختصاص کارت‌های تصادفی به تیم خاص
     fun assignRandomCardsToPlayer(teamId: Int, allCards: List<CardModel>): List<CardModel> {
         val randomCards = allCards.shuffled().take(Utils.THE_NUMBER_OF_PLAYING_CARDS)
-        _player.value = _player.value.map { player ->
+        _team.value = _team.value.map { player ->
             if (player.id == teamId) {
-                player.copy(cards = randomCards, hasCard = true)
+                player.copy(cards = randomCards)
             } else {
                 player
             }
@@ -30,7 +33,7 @@ class TeamManager {
 
     // به‌روزرسانی ویژگی خاصی از PlayerModel
     fun updatePlayer(teamId: Int, update: TeamModel.() -> TeamModel) {
-        _player.value = _player.value.map { player ->
+        _team.value = _team.value.map { player ->
             if (player.id == teamId) {
                 player.update() // اعمال تغییرات
             } else {
@@ -41,11 +44,11 @@ class TeamManager {
 
     // گرفتن اطلاعات یک تیم خاص
     fun getPlayer(teamId: Int): TeamModel? {
-        return _player.value.firstOrNull { it.id == teamId }
+        return _team.value.firstOrNull { it.id == teamId }
     }
 
     fun disableCardForPlayer(teamId: Int, cardId: Int) {
-        _player.value = _player.value.map { playerModel ->
+        _team.value = _team.value.map { playerModel ->
             if (playerModel.id == teamId) {
                 val updateCards = playerModel.cards.map { cardModel ->
                     if (cardModel.id == cardId) cardModel.copy(disable = true) else cardModel
@@ -55,5 +58,9 @@ class TeamManager {
                 playerModel
             }
         }
+    }
+
+    fun updateTeams(newTeams: List<TeamModel>) {
+        _team.value = newTeams
     }
 }
