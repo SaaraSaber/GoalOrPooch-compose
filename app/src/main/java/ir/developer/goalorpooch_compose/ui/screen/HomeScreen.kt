@@ -61,12 +61,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "QueryPermissionsNeeded")
 @Composable
-fun HomeScreen(navController: NavController
-//               , sharedViewModel: SharedViewModel
-) {
-
-//    LaunchedEffect(Unit) { sharedViewModel.getAllCards() }
-
+fun HomeScreen(navController: NavController) {
     var showBottomSheetAboutUs by remember { mutableStateOf(false) }
     var showBottomSheetApps by remember { mutableStateOf(false) }
     var showBottomSheetExit by remember { mutableStateOf(false) }

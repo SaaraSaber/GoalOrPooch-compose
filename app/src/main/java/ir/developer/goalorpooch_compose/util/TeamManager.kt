@@ -32,7 +32,7 @@ class TeamManager @Inject constructor(){
     }
 
     // به‌روزرسانی ویژگی خاصی از PlayerModel
-    fun updatePlayer(teamId: Int, update: TeamModel.() -> TeamModel) {
+    fun updateTeam(teamId: Int, update: TeamModel.() -> TeamModel) {
         _team.value = _team.value.map { player ->
             if (player.id == teamId) {
                 player.update() // اعمال تغییرات
@@ -43,11 +43,11 @@ class TeamManager @Inject constructor(){
     }
 
     // گرفتن اطلاعات یک تیم خاص
-    fun getPlayer(teamId: Int): TeamModel? {
+    fun getInfoTeam(teamId: Int): TeamModel? {
         return _team.value.firstOrNull { it.id == teamId }
     }
 
-    fun disableCardForPlayer(teamId: Int, cardId: Int) {
+    fun disableCardForTeam(teamId: Int, cardId: Int) {
         _team.value = _team.value.map { playerModel ->
             if (playerModel.id == teamId) {
                 val updateCards = playerModel.cards.map { cardModel ->
@@ -60,6 +60,7 @@ class TeamManager @Inject constructor(){
         }
     }
 
+//اپدیت کلی تیم
     fun updateTeams(newTeams: List<TeamModel>) {
         _team.value = newTeams
     }

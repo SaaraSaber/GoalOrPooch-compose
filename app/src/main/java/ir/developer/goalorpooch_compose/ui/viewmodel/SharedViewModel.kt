@@ -57,12 +57,12 @@ class SharedViewModel @Inject constructor(
 
     // به‌روزرسانی ویژگی خاصی از یک تیم
     fun updateTeam(teamId: Int, update: TeamModel.() -> TeamModel) {
-        teamManager.updatePlayer(teamId, update)
+        teamManager.updateTeam(teamId, update)
     }
 
     // گرفتن اطلاعات یک تیم خاص
     fun getTeam(teamId: Int): TeamModel? {
-        return teamManager.getPlayer(teamId)
+        return teamManager.getInfoTeam(teamId)
     }
 
     //..........................cards.............
@@ -92,7 +92,7 @@ class SharedViewModel @Inject constructor(
     }
 
     fun disableCardForPlayer(teamId: Int, cardId: Int) {
-        teamManager.disableCardForPlayer(teamId, cardId)
+        teamManager.disableCardForTeam(teamId, cardId)
     }
 
     //...................setting...................

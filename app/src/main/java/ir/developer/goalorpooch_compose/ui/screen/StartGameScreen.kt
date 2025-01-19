@@ -50,7 +50,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
@@ -74,6 +77,7 @@ import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -89,7 +93,6 @@ fun StartGameScreen(
     val sheetStateOpeningDuel = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
         skipPartiallyExpanded = true,
-//        skipPartiallyExpanded = false,
         confirmValueChange = { false }
     )
     val scope = rememberCoroutineScope()
@@ -118,7 +121,11 @@ fun StartGameScreen(
                 delay(1000L)
                 remainingTime -= 1
             }
+            if (remainingTime == 0) {
+                showBottomSheetResult = true
+            }
             isRunning = false
+//            remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
         }
     }
 
@@ -157,7 +164,8 @@ fun StartGameScreen(
                     } else {
                         2
                     },
-                    remainingTime = remainingTime
+                    remainingTime = remainingTime,
+                    showTimer = isRunning
                 )
 
 //time
@@ -169,8 +177,10 @@ fun StartGameScreen(
                         if (isRunning) {
                             isRunning = false
                             showBottomSheetResult = true
+                            remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
                         } else {
                             isRunning = true
+                            remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
@@ -287,7 +297,7 @@ fun StartGameScreen(
                 }
             }
 
-            //BottomSheetResultThisRound
+//BottomSheetResultThisRound
             if (showBottomSheetResult) {
                 ModalBottomSheet(
                     onDismissRequest = {
@@ -411,8 +421,14 @@ fun InfoBox(
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
-fun TableGame(modifier: Modifier = Modifier, whichTeamHasGoal: Int, remainingTime: Int) {
+fun TableGame(
+    modifier: Modifier = Modifier,
+    whichTeamHasGoal: Int,
+    remainingTime: Int,
+    showTimer: Boolean
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -457,10 +473,23 @@ fun TableGame(modifier: Modifier = Modifier, whichTeamHasGoal: Int, remainingTim
                 contentScale = ContentScale.FillWidth
             )
             Text(
-                text = "${remainingTime / 60}:${remainingTime % 60}",
+                modifier = modifier.width(100.sdp),
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontFamily = FontPeydaBold)) { // فونت پیش‌فرض برای اعداد
+                        append(
+                            if (showTimer) String.format(
+                                Locale.US,
+                                "%02d:%02d",
+                                remainingTime / 60,
+                                remainingTime % 60
+                            ) else ""
+                        )
+                    }
+                },
                 fontSize = titleSize(),
                 fontFamily = FontPeydaBold,
                 color = Color.White,
+                textAlign = TextAlign.Center
             )
         }
 
