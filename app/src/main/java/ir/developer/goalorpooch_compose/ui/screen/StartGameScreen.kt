@@ -88,7 +88,8 @@ fun StartGameScreen(
     val sheetStateExitGame = rememberModalBottomSheetState()
     val sheetStateOpeningDuel = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
-        skipPartiallyExpanded = false,
+        skipPartiallyExpanded = true,
+//        skipPartiallyExpanded = false,
         confirmValueChange = { false }
     )
     val scope = rememberCoroutineScope()

@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -222,78 +221,79 @@ fun BottomSheetResultOfThisRound(
                     fontSize = titleSize()
                 )
             }
-            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
-            LazyColumn(
-                modifier = modifier
-                    .padding(top = paddingTopMedium())
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.sdp)
-            ) {
-                items(listResult.size) { index ->
-                    val item = listResult[index]
-                    ItemResult(
-                        modifier = modifier,
-                        item = item,
-                        onClickItem = {
-                            if (index == 0 && whichTeamResult == 1) {
-                                sharedViewModel.updateTeam(teamId = 1) {
-                                    copy(
-                                        score = sharedViewModel.getTeam(1)!!.score + 2,
-                                        hasGoal = true
-                                    )
-                                }
-                                sharedViewModel.updateTeam(teamId = 0) {
-                                    copy(hasGoal = false)
-                                }
-                            } else if (index == 1 && whichTeamResult == 1) {
-                                sharedViewModel.updateTeam(teamId = 1) {
-                                    copy(hasGoal = true)
-                                }
-                                sharedViewModel.updateTeam(teamId = 0) {
-                                    copy(hasGoal = false)
-                                }
-                            } else if (index == 2 && whichTeamResult == 1) {
-                                sharedViewModel.updateTeam(teamId = 0) {
-                                    copy(
-                                        score = sharedViewModel.getTeam(0)!!.score + 1,
-                                        hasGoal = true
-                                    )
-                                }
-                                sharedViewModel.updateTeam(teamId = 1) {
-                                    copy(hasGoal = false)
-                                }
-                            } else if (index == 0 && whichTeamResult == 0) {
-                                sharedViewModel.updateTeam(teamId = 0) {
-                                    copy(
-                                        score = sharedViewModel.getTeam(0)!!.score + 2,
-                                        hasGoal = true
-                                    )
-                                }
-                                sharedViewModel.updateTeam(teamId = 1) {
-                                    copy(hasGoal = false)
-                                }
-                            } else if (index == 1 && whichTeamResult == 0) {
-                                sharedViewModel.updateTeam(teamId = 0) {
-                                    copy(hasGoal = true)
-                                }
-                                sharedViewModel.updateTeam(teamId = 1) {
-                                    copy(hasGoal = false)
-                                }
-                            } else if (index == 2 && whichTeamResult == 0) {
-                                sharedViewModel.updateTeam(teamId = 0) {
-                                    copy(hasGoal = false)
-                                }
-                                sharedViewModel.updateTeam(teamId = 1) {
-                                    copy(
-                                        score = sharedViewModel.getTeam(1)!!.score + 1,
-                                        hasGoal = true
-                                    )
-                                }
-                            }
-                            onClickItem(whichTeamResult)
-                        })
+            HorizontalDivider(
+                modifier = modifier.padding(
+                    top = paddingTop(),
+                    bottom = paddingTop()
+                )
+            )
+
+            ItemResult(modifier = modifier, item = listResult[0], onClickItem = {
+                if (whichTeamResult == 0) {
+                    sharedViewModel.updateTeam(teamId = 0) {
+                        copy(
+                            score = sharedViewModel.getTeam(0)!!.score + 2,
+                            hasGoal = true
+                        )
+                    }
+                    sharedViewModel.updateTeam(teamId = 1) {
+                        copy(hasGoal = false)
+                    }
+                } else if (whichTeamResult == 1) {
+                    sharedViewModel.updateTeam(teamId = 1) {
+                        copy(
+                            score = sharedViewModel.getTeam(1)!!.score + 2,
+                            hasGoal = true
+                        )
+                    }
+                    sharedViewModel.updateTeam(teamId = 0) {
+                        copy(hasGoal = false)
+                    }
                 }
-            }
+                onClickItem(whichTeamResult)
+            })
+            ItemResult(modifier = modifier, item = listResult[1], onClickItem = {
+                if (whichTeamResult == 1) {
+                    sharedViewModel.updateTeam(teamId = 1) {
+                        copy(hasGoal = true)
+                    }
+                    sharedViewModel.updateTeam(teamId = 0) {
+                        copy(hasGoal = false)
+                    }
+                } else if (whichTeamResult == 0) {
+                    sharedViewModel.updateTeam(teamId = 0) {
+                        copy(hasGoal = true)
+                    }
+                    sharedViewModel.updateTeam(teamId = 1) {
+                        copy(hasGoal = false)
+                    }
+                }
+                onClickItem(whichTeamResult)
+            })
+            ItemResult(modifier = modifier, item = listResult[2], onClickItem = {
+                if (whichTeamResult == 0) {
+                    sharedViewModel.updateTeam(teamId = 0) {
+                        copy(hasGoal = false)
+                    }
+                    sharedViewModel.updateTeam(teamId = 1) {
+                        copy(
+                            score = sharedViewModel.getTeam(1)!!.score + 1,
+                            hasGoal = true
+                        )
+                    }
+                } else if (whichTeamResult == 1) {
+                    sharedViewModel.updateTeam(teamId = 0) {
+                        copy(
+                            score = sharedViewModel.getTeam(0)!!.score + 1,
+                            hasGoal = true
+                        )
+                    }
+                    sharedViewModel.updateTeam(teamId = 1) {
+                        copy(hasGoal = false)
+                    }
+                }
+                onClickItem(whichTeamResult)
+            })
         }
     }
 }
@@ -306,6 +306,7 @@ fun ItemResult(
 ) {
     Row(
         modifier = modifier
+            .padding(top = paddingTop())
             .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
             .clip(RoundedCornerShape(sizeRound()))
             .fillMaxWidth()
