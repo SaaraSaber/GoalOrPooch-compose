@@ -63,3 +63,6 @@ fun sizePicMedium_two() = 50.sdp
 
 @Composable
 fun sizePicLarge() = 70.sdp
+
+@Composable
+fun mediumAlpha() = .3f

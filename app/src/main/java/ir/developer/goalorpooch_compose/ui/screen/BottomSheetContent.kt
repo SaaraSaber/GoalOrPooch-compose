@@ -56,6 +56,7 @@ import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
 import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
+import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -155,11 +156,11 @@ fun BottomSheetContentAboutUs(
 }
 
 @Composable
-fun ResultOfThisRound(
+fun BottomSheetResultOfThisRound(
     modifier: Modifier = Modifier,
     whichTeamResult: Int,
-    onClickExit: () -> Unit,
-    onClickItem: (Int) -> Unit
+    onClickItem: (Int) -> Unit,
+    sharedViewModel: SharedViewModel
 ) {
     val listResult: List<ResultThisRoundModel> =
         if (whichTeamResult == 0) {
@@ -205,7 +206,7 @@ fun ResultOfThisRound(
     ) {
         Column(
             modifier = modifier
-                .padding(start = paddingRound(), end = paddingRound())
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
                 .fillMaxWidth()
         ) {
             Row(
@@ -220,15 +221,6 @@ fun ResultOfThisRound(
                     fontFamily = FontPeydaBold,
                     fontSize = titleSize()
                 )
-                IconButton(
-                    onClick = onClickExit
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.close_circle),
-                        contentDescription = "btn_close",
-                        modifier = modifier.size(20.sdp)
-                    )
-                }
             }
             HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
             LazyColumn(
@@ -242,7 +234,64 @@ fun ResultOfThisRound(
                     ItemResult(
                         modifier = modifier,
                         item = item,
-                        onClickItem = { onClickItem(whichTeamResult) })
+                        onClickItem = {
+                            if (index == 0 && whichTeamResult == 1) {
+                                sharedViewModel.updateTeam(teamId = 1) {
+                                    copy(
+                                        score = sharedViewModel.getTeam(1)!!.score + 2,
+                                        hasGoal = true
+                                    )
+                                }
+                                sharedViewModel.updateTeam(teamId = 0) {
+                                    copy(hasGoal = false)
+                                }
+                            } else if (index == 1 && whichTeamResult == 1) {
+                                sharedViewModel.updateTeam(teamId = 1) {
+                                    copy(hasGoal = true)
+                                }
+                                sharedViewModel.updateTeam(teamId = 0) {
+                                    copy(hasGoal = false)
+                                }
+                            } else if (index == 2 && whichTeamResult == 1) {
+                                sharedViewModel.updateTeam(teamId = 0) {
+                                    copy(
+                                        score = sharedViewModel.getTeam(0)!!.score + 1,
+                                        hasGoal = true
+                                    )
+                                }
+                                sharedViewModel.updateTeam(teamId = 1) {
+                                    copy(hasGoal = false)
+                                }
+                            } else if (index == 0 && whichTeamResult == 0) {
+                                sharedViewModel.updateTeam(teamId = 0) {
+                                    copy(
+                                        score = sharedViewModel.getTeam(0)!!.score + 2,
+                                        hasGoal = true
+                                    )
+                                }
+                                sharedViewModel.updateTeam(teamId = 1) {
+                                    copy(hasGoal = false)
+                                }
+                            } else if (index == 1 && whichTeamResult == 0) {
+                                sharedViewModel.updateTeam(teamId = 0) {
+                                    copy(hasGoal = true)
+                                }
+                                sharedViewModel.updateTeam(teamId = 1) {
+                                    copy(hasGoal = false)
+                                }
+                            } else if (index == 2 && whichTeamResult == 0) {
+                                sharedViewModel.updateTeam(teamId = 0) {
+                                    copy(hasGoal = false)
+                                }
+                                sharedViewModel.updateTeam(teamId = 1) {
+                                    copy(
+                                        score = sharedViewModel.getTeam(1)!!.score + 1,
+                                        hasGoal = true
+                                    )
+                                }
+                            }
+                            onClickItem(whichTeamResult)
+                        })
                 }
             }
         }
@@ -250,7 +299,11 @@ fun ResultOfThisRound(
 }
 
 @Composable
-fun ItemResult(modifier: Modifier, item: ResultThisRoundModel, onClickItem: () -> Unit) {
+fun ItemResult(
+    modifier: Modifier,
+    item: ResultThisRoundModel,
+    onClickItem: () -> Unit
+) {
     Row(
         modifier = modifier
             .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
@@ -368,7 +421,7 @@ fun BottomSheetContactTheOpeningDuelOfTheGame(
                         } else {
                             onClickItem(0)
                         }
-                        onDismissRequest ()
+                        onDismissRequest()
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -791,7 +844,10 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
 @Preview
 @Composable
 private fun TheOpeningDuelOfTheGamePreview() {
-    BottomSheetContactTheOpeningDuelOfTheGame(whichTeamHasGoal = 1, onClickItem = {}, onDismissRequest = {})
+    BottomSheetContactTheOpeningDuelOfTheGame(
+        whichTeamHasGoal = 1,
+        onClickItem = {},
+        onDismissRequest = {})
 }
 
 @Preview
@@ -830,9 +886,9 @@ private fun ExitGamePreview() {
     )
 }
 
-@Preview
-@Composable
-private fun ResultOfThisRoundPreview() {
-    ResultOfThisRound(whichTeamResult = 0, onClickExit = {}, onClickItem = {})
-}
+//@Preview
+//@Composable
+//private fun ResultOfThisRoundPreview() {
+//    BottomSheetResultOfThisRound(whichTeamResult = 0, onClickItem = {})
+//}
 

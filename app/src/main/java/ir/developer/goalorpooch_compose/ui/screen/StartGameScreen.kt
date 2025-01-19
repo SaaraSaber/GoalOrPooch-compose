@@ -1,7 +1,6 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -18,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -33,8 +33,10 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,6 +60,7 @@ import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
+import ir.developer.goalorpooch_compose.ui.theme.mediumAlpha
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium_two
@@ -69,6 +72,7 @@ import ir.developer.goalorpooch_compose.ui.theme.titleSize
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,6 +101,25 @@ fun StartGameScreen(
     BackHandler {
         showBottomSheetExitGame = true
     }
+    //timer
+    var isRunning by remember { mutableStateOf(false) }
+    var remainingTime by remember { mutableIntStateOf(sharedViewModel.itemSetting.value.getTimeToGetGoal) }
+    var showBottomSheetResult by remember { mutableStateOf(false) }
+    val sheetStateResult = rememberModalBottomSheetState(
+        //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
+        skipPartiallyExpanded = false,
+        confirmValueChange = { false }
+    )
+
+    LaunchedEffect(isRunning) {
+        if (isRunning) {
+            while (remainingTime > 0) {
+                delay(1000L)
+                remainingTime -= 1
+            }
+            isRunning = false
+        }
+    }
 
     Scaffold { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -112,53 +135,70 @@ fun StartGameScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                if (!showBottomSheetOpeningDuel) {
-                    HeaderGame(
-                        scoreTeamOne = teamOne.score,
-                        scoreTeamTwo = teamTwo.score,
-                        whichTeamHasGoal =
-                        if (teamOne.hasGoal) {
-                            0
-                        } else if (teamTwo.hasGoal) {
-                            1
-                        } else {
-                            2
-                        }
-                    )
-                    TableGame()
+                HeaderGame(
+                    scoreTeamOne = teamOne.score,
+                    scoreTeamTwo = teamTwo.score,
+                    whichTeamHasGoal =
+                    if (teamOne.hasGoal) {
+                        0
+                    } else if (teamTwo.hasGoal) {
+                        1
+                    } else {
+                        2
+                    }
+                )
+                TableGame(
+                    whichTeamHasGoal =
+                    if (teamOne.hasGoal) {
+                        0
+                    } else if (teamTwo.hasGoal) {
+                        1
+                    } else {
+                        2
+                    },
+                    remainingTime = remainingTime
+                )
 
 //time
-                    Button(
-                        modifier = modifier
-                            .width(130.sdp)
-                            .height(50.sdp),
-                        onClick = {},
-                        colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
-                        shape = RoundedCornerShape(sizeRound()),
-                        border = BorderStroke(width = 1.sdp, color = Color.White)
-                    ) {
-                        Text(
-                            modifier = modifier.padding(end = paddingRound()),
-                            text = stringResource(R.string.start_time),
-                            fontSize = descriptionSize(),
-                            fontFamily = FontPeydaMedium,
-                            color = Color.White
-                        )
+                Button(
+                    modifier = modifier
+                        .wrapContentWidth()
+                        .height(50.sdp),
+                    onClick = {
+                        if (isRunning) {
+                            isRunning = false
+                            showBottomSheetResult = true
+                        } else {
+                            isRunning = true
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
+                    shape = RoundedCornerShape(sizeRound()),
+                    border = BorderStroke(width = 1.sdp, color = Color.White)
+                ) {
+                    Text(
+                        modifier = modifier.padding(end = paddingRound()),
+                        text = if (!isRunning) stringResource(R.string.start_time)
+                        else stringResource(R.string.result_of_this_round),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = Color.White
+                    )
 
-                        Icon(
-                            painter = painterResource(R.drawable.time),
-                            contentDescription = "time",
-                            modifier = modifier.size(
-                                sizePicVerySmall()
-                            )
+                    Icon(
+                        painter = if (!isRunning) painterResource(R.drawable.time)
+                        else painterResource(R.drawable.result),
+                        contentDescription = "time",
+                        modifier = modifier.size(
+                            sizePicVerySmall()
                         )
-                    }
+                    )
+                }
 
-                    if (teamOne.hasGoal) {
-                        TeamInfoSection(team = teamOne)
-                    } else {
-                        TeamInfoSection(team = teamTwo)
-                    }
+                if (teamOne.hasGoal) {
+                    TeamInfoSection(team = teamOne)
+                } else {
+                    TeamInfoSection(team = teamTwo)
                 }
 
 //BottomSheetExitGame
@@ -243,6 +283,46 @@ fun StartGameScreen(
                             }
                         )
                     }
+                }
+            }
+
+            //BottomSheetResultThisRound
+            if (showBottomSheetResult) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheetResult = false
+                    },
+                    sheetState = sheetStateOpeningDuel,
+                    shape = RoundedCornerShape(
+                        topEnd = sizeRoundBottomSheet(),
+                        topStart = sizeRoundBottomSheet()
+                    ),
+                    containerColor = FenceGreen,
+                    properties = ModalBottomSheetProperties(
+                        securePolicy = SecureFlagPolicy.SecureOff,
+                        shouldDismissOnBackPress = false
+                    )
+                ) {
+                    BottomSheetResultOfThisRound(
+                        whichTeamResult =
+                        if (teamOne.hasGoal) {
+                            1
+                        } else if (teamTwo.hasGoal) {
+                            0
+                        } else {
+                            2
+                        },
+                        sharedViewModel = sharedViewModel,
+                        onClickItem = {
+                            scope.launch {
+                                sheetStateResult.hide()
+                            }.invokeOnCompletion {
+                                if (!sheetStateResult.isVisible) {
+                                    showBottomSheetResult = false
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -331,7 +411,7 @@ fun InfoBox(
 }
 
 @Composable
-fun TableGame(modifier: Modifier = Modifier) {
+fun TableGame(modifier: Modifier = Modifier, whichTeamHasGoal: Int, remainingTime: Int) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -341,7 +421,9 @@ fun TableGame(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
-            modifier = modifier.fillMaxHeight(),
+            modifier = modifier
+                .fillMaxHeight()
+                .alpha(if (whichTeamHasGoal == 0) 1f else mediumAlpha()),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Image(
@@ -374,7 +456,7 @@ fun TableGame(modifier: Modifier = Modifier) {
                 contentScale = ContentScale.FillWidth
             )
             Text(
-                text = "59 : 01",
+                text = "${remainingTime / 60}:${remainingTime % 60}",
                 fontSize = titleSize(),
                 fontFamily = FontPeydaBold,
                 color = Color.White,
@@ -382,7 +464,9 @@ fun TableGame(modifier: Modifier = Modifier) {
         }
 
         Column(
-            modifier = modifier.fillMaxHeight(),
+            modifier = modifier
+                .fillMaxHeight()
+                .alpha(if (whichTeamHasGoal == 1) 1f else mediumAlpha()),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Image(
@@ -417,7 +501,6 @@ fun HeaderGame(
     scoreTeamTwo: Int,
     whichTeamHasGoal: Int
 ) {
-    Log.i("StartGameScreen", "HeaderGame: $whichTeamHasGoal")
     Row(
         modifier = modifier
             .padding(paddingRound())
@@ -434,17 +517,17 @@ fun HeaderGame(
                 .size(
                     sizePicSmall()
                 )
-                .alpha(if (whichTeamHasGoal == 0) 1f else .3f)
+                .alpha(if (whichTeamHasGoal == 0) 1f else mediumAlpha())
         )
         Text(
-            modifier = modifier.alpha(if (whichTeamHasGoal == 0) 1f else .3f),
+            modifier = modifier.alpha(if (whichTeamHasGoal == 0) 1f else mediumAlpha()),
             text = stringResource(R.string.team_one),
             fontSize = descriptionSize(),
             fontFamily = FontPeydaMedium,
             color = Color.White
         )
         Text(
-            modifier = modifier.alpha(if (whichTeamHasGoal == 0) 1f else .3f),
+            modifier = modifier.alpha(if (whichTeamHasGoal == 0) 1f else mediumAlpha()),
             text = "$scoreTeamOne",
             fontSize = descriptionSize(),
             fontFamily = FontPeydaBold,
@@ -452,14 +535,14 @@ fun HeaderGame(
         )
         VerticalDivider(modifier.height(25.sdp), thickness = 2.sdp)
         Text(
-            modifier = modifier.alpha(if (whichTeamHasGoal == 1) 1f else .3f),
+            modifier = modifier.alpha(if (whichTeamHasGoal == 1) 1f else mediumAlpha()),
             text = "$scoreTeamTwo",
             fontSize = descriptionSize(),
             fontFamily = FontPeydaBold,
             color = Color.White
         )
         Text(
-            modifier = modifier.alpha(if (whichTeamHasGoal == 1) 1f else .3f),
+            modifier = modifier.alpha(if (whichTeamHasGoal == 1) 1f else mediumAlpha()),
             text = stringResource(R.string.team_two),
             fontSize = descriptionSize(),
             fontFamily = FontPeydaMedium,
@@ -472,14 +555,7 @@ fun HeaderGame(
                 .size(
                     sizePicSmall()
                 )
-                .alpha(if (whichTeamHasGoal == 1) 1f else .3f)
+                .alpha(if (whichTeamHasGoal == 1) 1f else mediumAlpha())
         )
     }
 }
-
-//@Preview
-//@Composable
-//private fun StartGameScreenPreview() {
-//    val navController = rememberNavController()
-//    StartGameScreen(navController = navController)
-//}
