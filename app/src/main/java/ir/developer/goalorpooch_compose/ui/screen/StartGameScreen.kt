@@ -88,6 +88,8 @@ fun StartGameScreen(
     sharedViewModel: SharedViewModel
 ) {
     var showBottomSheetExitGame by remember { mutableStateOf(false) }
+//    var showBottomSheetCards by remember { mutableStateOf(false) }
+//    val sheetStateCards = rememberModalBottomSheetState()
     var showBottomSheetOpeningDuel by remember { mutableStateOf(true) }
     val sheetStateExitGame = rememberModalBottomSheetState()
     val sheetStateOpeningDuel = rememberModalBottomSheetState(
@@ -207,10 +209,34 @@ fun StartGameScreen(
                 }
 
                 if (teamOne.hasGoal) {
-                    TeamInfoSection(team = teamOne)
-                } else {
-                    TeamInfoSection(team = teamTwo)
+                    TeamInfoSection(
+                        team = teamOne,
+                        sharedViewModel = sharedViewModel,
+                        whichTeamHasGoal =
+                        if (teamOne.hasGoal) {
+                            0
+                        } else if (teamTwo.hasGoal) {
+                            1
+                        } else {
+                            2
+                        }
+                    )
+                } else if (teamTwo.hasGoal) {
+                    TeamInfoSection(
+                        team = teamTwo,
+                        sharedViewModel = sharedViewModel,
+                        whichTeamHasGoal =
+                        if (teamOne.hasGoal) {
+                            0
+                        } else if (teamTwo.hasGoal) {
+                            1
+                        } else {
+                            2
+                        }
+                    )
+
                 }
+
 
 //BottomSheetExitGame
                 if (showBottomSheetExitGame) {
@@ -340,9 +366,20 @@ fun StartGameScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TeamInfoSection(modifier: Modifier = Modifier, team: TeamModel) {
+fun TeamInfoSection(
+    modifier: Modifier = Modifier,
+    team: TeamModel,
+    sharedViewModel: SharedViewModel,
+    whichTeamHasGoal: Int
+//    onClickCard: @Composable () -> Unit,
+//    onClickCube: () -> Unit
+) {
     var count by remember { mutableIntStateOf(team.numberOfEmptyGames) }
+    var showBottomSheetCards by remember { mutableStateOf(false) }
+    val sheetStateCards = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
     Row(
         modifier = modifier.padding(
             top = paddingTopMedium(),
@@ -364,15 +401,38 @@ fun TeamInfoSection(modifier: Modifier = Modifier, team: TeamModel) {
             value = team.cards.size.toString(),
             icon = R.drawable.icon_card,
             label = stringResource(R.string.cards),
-            onClickItem = {}
+            onClickItem = { showBottomSheetCards = true }
         )
         // تعداد مکعب
         InfoBox(
             value = team.numberCubes.toString(),
             icon = R.drawable.cube,
             label = stringResource(R.string.cube),
-            onClickItem = {}
+            onClickItem = { }
         )
+
+        //BottomSheetCards
+        if (showBottomSheetCards) {
+            ModalBottomSheet(
+                onDismissRequest = { showBottomSheetCards = false },
+                sheetState = sheetStateCards,
+                shape = RoundedCornerShape(
+                    topEnd = sizeRoundBottomSheet(),
+                    topStart = sizeRoundBottomSheet()
+                ),
+                containerColor = FenceGreen
+            ) {
+                BottomSheetCards(
+                    onDismiss = {
+                        scope.launch { sheetStateCards.hide() }
+                            .invokeOnCompletion { showBottomSheetCards = false }
+                    },
+                    onClickOk = {},
+                    whichTeamHasGoal = whichTeamHasGoal,
+                    sharedViewModel = sharedViewModel
+                )
+            }
+        }
     }
 }
 

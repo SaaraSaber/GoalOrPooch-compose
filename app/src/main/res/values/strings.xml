@@ -77,6 +77,8 @@
     <string name="description_score_cube_team_two">تیم دوم مکعب چند امتیازی  انتخاب  می کنید ؟</string>
     <string name="description_confirm_score_cube_team_one">تیم اول آیا مکعب 2 امتیازی را قبول می کنید ؟</string>
     <string name="description_confirm_score_cube_team_two">تیم دوم آیا مکعب 2 امتیازی را قبول می کنید ؟</string>
+    <string name="description_choose_card_team_one">تیم اول کارت مورد نظر خود را انتخاب کند.</string>
+    <string name="description_choose_card_team_two">تیم دوم کارت مورد نظر خود را انتخاب کند.</string>
     <string name="start_random">انتخاب تصادفی آغازکننده</string>
     <string name="starter_description">به دو تیم تقسیم شوید و سپس تیم آغاز کننده بازی را مشخص کنید.</string>
     <string name="description_setting">در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.</string>

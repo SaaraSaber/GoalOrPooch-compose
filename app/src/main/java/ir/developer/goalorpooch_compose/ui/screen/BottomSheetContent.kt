@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -41,6 +44,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.AppModel
 import ir.developer.goalorpooch_compose.model.ResultThisRoundModel
+import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
@@ -378,8 +382,15 @@ fun BottomSheetConfirmCube(
 fun BottomSheetCards(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
-    onClickItem: (Int) -> Unit
+    onClickOk: () -> Unit,
+    whichTeamHasGoal: Int,
+    sharedViewModel: SharedViewModel
 ) {
+    val card: TeamModel? = if (whichTeamHasGoal == 0) {
+        sharedViewModel.getTeam(0)
+    } else {
+        sharedViewModel.getTeam(1)
+    }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = modifier
@@ -394,7 +405,7 @@ fun BottomSheetCards(
                 Image(
                     painter = painterResource(R.drawable.icon_card),
                     contentDescription = null,
-                    )
+                )
                 Text(
                     modifier = modifier.padding(start = paddingRoundMini()),
                     text = stringResource(R.string.choose_card),
@@ -421,7 +432,8 @@ fun BottomSheetCards(
                 horizontalArrangement = Arrangement.spacedBy(paddingRoundMini())
             ) {
                 Image(
-                    painter = painterResource(R.drawable.pic_team_one),
+                    painter = if (whichTeamHasGoal == 0) painterResource(R.drawable.pic_team_one)
+                    else painterResource(R.drawable.pic_team_two),
                     contentDescription = null,
                     modifier = modifier.size(
                         sizePicSmall()
@@ -432,16 +444,132 @@ fun BottomSheetCards(
                         top = paddingTopMedium(),
                         bottom = paddingTopMedium()
                     ),
-                    text = stringResource(R.string.description_score_cube_team_one),
+                    text = if (whichTeamHasGoal == 0) stringResource(R.string.description_choose_card_team_one)
+                    else stringResource(R.string.description_choose_card_team_two),
                     color = Color.White,
                     fontFamily = FontPeydaMedium,
                     fontSize = descriptionSize(),
                     textAlign = TextAlign.Justify
                 )
             }
+            LazyColumn(modifier = modifier.weight(1f)) {
+                items(card!!.cards.size) { index ->
+                    val itemCard = card.cards[index]
+                    ItemCard(
+                        title = itemCard.name,
+                        description = itemCard.description,
+                        disable = itemCard.disable,
+                        onClickItem = {
+                            sharedViewModel.disableCardForPlayer(
+                                teamId = whichTeamHasGoal,
+                                cardId = itemCard.id
+                            )
+                        }
+                    )
+                }
+            }
+            Row(modifier = Modifier.padding(top = paddingTop())) {
+                Button(
+                    modifier = Modifier
+                        .padding(end = 5.sdp)
+                        .height(heightButton())
+                        .weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = FenceGreen
+                    ),
+                    onClick = { onClickOk() }
+                ) {
+                    Text(
+                        text = stringResource(R.string.yes),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = FenceGreen
+                    )
+                }
+
+                OutlinedButton(
+                    modifier = Modifier
+                        .padding(start = 5.sdp)
+                        .height(heightButton())
+                        .weight(1f),
+                    border = BorderStroke(1.sdp, Color.White),
+                    onClick = onDismiss
+                ) {
+                    Text(
+                        text = stringResource(R.string.cansel),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }
+
+@Composable
+fun ItemCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    description: String,
+    disable: Boolean,
+    onClickItem: () -> Unit
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Card(
+            modifier = modifier
+                .padding(top = paddingRoundMini())
+                .clickable(enabled = !disable) {
+                    onClickItem()
+                }
+                .alpha(if (disable) .5f else 1f),
+            colors = CardColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent
+            ),
+            shape = RoundedCornerShape(sizeRound()),
+            border = BorderStroke(width = 1.sdp, color = Color.White)
+        ) {
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(paddingRoundMini()),
+                verticalArrangement = Arrangement.spacedBy(6.sdp)
+            ) {
+                Row(
+                    modifier = modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.sdp)
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .width(sizePicSmall()),
+                        painter = painterResource(id = R.drawable.pic_card),
+                        contentDescription = "image"
+                    )
+                    Text(
+                        text = title,
+                        color = Color.White,
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaBold
+                    )
+                }
+                Text(
+                    text = description,
+                    color = Color.White,
+                    fontSize = descriptionSize(),
+                    fontFamily = FontPeydaMedium,
+                    textAlign = TextAlign.Justify
+
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 fun BottomSheetContentAboutUs(
@@ -1334,11 +1462,11 @@ private fun BottomSheetConfirmCubePreview() {
     BottomSheetConfirmCube(onDismiss = {}, onClickItem = {})
 }
 
-@Preview
-@Composable
-private fun BottomSheetCardsPreview() {
-    BottomSheetCards(onDismiss = {}, onClickItem = {})
-}
+//@Preview
+//@Composable
+//private fun BottomSheetCardsPreview() {
+//    BottomSheetCards(onDismiss = {}, onClickItem = {})
+//}
 
 @Preview
 @Composable
