@@ -47,6 +47,7 @@ import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingRoundMini
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
@@ -58,6 +59,389 @@ import ir.developer.goalorpooch_compose.ui.theme.titleSize
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
+
+@Composable
+fun BottomSheetCube(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    onClickItem: (Int) -> Unit,
+    onClickOk: () -> Unit,
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.pic_team_one),
+                    contentDescription = null,
+                    modifier = modifier.size(
+                        sizePicSmall()
+                    )
+                )
+                Text(
+                    modifier = modifier.padding(start = paddingRoundMini()),
+                    text = stringResource(R.string.score_cube),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+                Spacer(modifier = modifier.weight(1f))
+                IconButton(
+                    onClick = { onDismiss() }
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.close_circle),
+                        contentDescription = "btn_close",
+                        modifier = modifier.size(20.sdp)
+                    )
+                }
+            }
+
+            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
+
+            Text(
+                modifier = modifier.padding(top = paddingTopMedium(), bottom = paddingTopMedium()),
+                text = stringResource(R.string.description_score_cube_team_one),
+                color = Color.White,
+                fontFamily = FontPeydaMedium,
+                fontSize = descriptionSize(),
+                textAlign = TextAlign.Justify
+            )
+            Row(
+                modifier = modifier
+                    .padding(paddingRound())
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Card(
+                    modifier = modifier
+                        .padding(start = paddingRoundMini())
+                        .clickable { onClickItem(6) }
+                        .align(Alignment.CenterVertically),
+                    colors = CardColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        disabledContentColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(sizeRound()),
+                    border = BorderStroke(width = 1.sdp, color = Color.White)
+                ) {
+                    Column(
+                        modifier = modifier
+                            .padding(
+                                top = paddingRoundMini(),
+                                bottom = paddingRoundMini(),
+                                start = paddingTopMedium(),
+                                end = paddingTopMedium()
+                            ),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.cube),
+                            contentDescription = "star",
+                            modifier = modifier.size(sizePicSmall())
+                        )
+                        Text(
+                            modifier = modifier.padding(
+                                top = paddingTop()
+                            ),
+                            text = "6",
+                            color = Color.White,
+                            fontFamily = FontPeydaMedium,
+                            fontSize = titleSize(),
+                            textAlign = TextAlign.Justify
+                        )
+                    }
+                }
+                Card(
+                    modifier = modifier
+                        .padding(start = paddingRoundMini())
+                        .clickable { onClickItem(4) }
+                        .align(Alignment.CenterVertically),
+                    colors = CardColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        disabledContentColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(sizeRound()),
+                    border = BorderStroke(width = 1.sdp, color = Color.White)
+                ) {
+                    Column(
+                        modifier = modifier
+                            .padding(
+                                top = paddingRoundMini(),
+                                bottom = paddingRoundMini(),
+                                start = paddingTopMedium(),
+                                end = paddingTopMedium()
+                            ),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.cube),
+                            contentDescription = "star",
+                            modifier = modifier.size(sizePicSmall())
+                        )
+                        Text(
+                            modifier = modifier.padding(
+                                top = paddingTop()
+                            ),
+                            text = "4",
+                            color = Color.White,
+                            fontFamily = FontPeydaMedium,
+                            fontSize = titleSize(),
+                            textAlign = TextAlign.Justify
+                        )
+                    }
+                }
+                Card(
+                    modifier = modifier
+                        .padding(start = paddingRoundMini())
+                        .clickable { onClickItem(2) }
+                        .align(Alignment.CenterVertically),
+                    colors = CardColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        disabledContentColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(sizeRound()),
+                    border = BorderStroke(width = 1.sdp, color = Color.White)
+                ) {
+                    Column(
+                        modifier = modifier
+                            .padding(
+                                top = paddingRoundMini(),
+                                bottom = paddingRoundMini(),
+                                start = paddingTopMedium(),
+                                end = paddingTopMedium()
+                            ),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.cube),
+                            contentDescription = "star",
+                            modifier = modifier.size(sizePicSmall())
+                        )
+                        Text(
+                            modifier = modifier.padding(
+                                top = paddingTop()
+                            ),
+                            text = "2",
+                            color = Color.White,
+                            fontFamily = FontPeydaMedium,
+                            fontSize = titleSize(),
+                            textAlign = TextAlign.Justify
+                        )
+                    }
+                }
+            }
+            Row(modifier = Modifier.padding(top = paddingTopLarge(), bottom = paddingRound())) {
+                Button(
+                    modifier = Modifier
+                        .padding(end = 5.sdp)
+                        .height(heightButton())
+                        .weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = FenceGreen
+                    ),
+                    onClick = { onClickOk() }
+                ) {
+                    Text(
+                        text = stringResource(R.string.yes),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = FenceGreen
+                    )
+                }
+
+                OutlinedButton(
+                    modifier = Modifier
+                        .padding(start = 5.sdp)
+                        .height(heightButton())
+                        .weight(1f),
+                    border = BorderStroke(1.sdp, Color.White),
+                    onClick = onDismiss
+                ) {
+                    Text(
+                        text = stringResource(R.string.cansel),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = Color.White
+                    )
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+fun BottomSheetConfirmCube(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    onClickItem: () -> Unit
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.pic_team_one),
+                    contentDescription = null,
+                    modifier = modifier.size(
+                        sizePicSmall()
+                    )
+                )
+                Text(
+                    modifier = modifier.padding(start = paddingRoundMini()),
+                    text = stringResource(R.string.confirmation),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+                Spacer(modifier = modifier.weight(1f))
+            }
+
+            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
+
+            Text(
+                modifier = modifier.padding(top = paddingTopMedium(), bottom = paddingTopMedium()),
+                text = stringResource(R.string.description_confirm_score_cube_team_one),
+                color = Color.White,
+                fontFamily = FontPeydaMedium,
+                fontSize = descriptionSize(),
+                textAlign = TextAlign.Justify
+            )
+            Row(modifier = Modifier.padding(top = paddingTopLarge(), bottom = paddingRound())) {
+                Button(
+                    modifier = Modifier
+                        .padding(end = 5.sdp)
+                        .height(heightButton())
+                        .weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = FenceGreen
+                    ),
+                    onClick = { onClickItem() }
+                ) {
+                    Text(
+                        text = stringResource(R.string.accept_request),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = FenceGreen
+                    )
+                }
+
+                OutlinedButton(
+                    modifier = Modifier
+                        .padding(start = 5.sdp)
+                        .height(heightButton())
+                        .weight(1f),
+                    border = BorderStroke(1.sdp, Color.White),
+                    onClick = onDismiss
+                ) {
+                    Text(
+                        text = stringResource(R.string.no),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = Color.White
+                    )
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+fun BottomSheetCards(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    onClickItem: (Int) -> Unit
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.icon_card),
+                    contentDescription = null,
+                    )
+                Text(
+                    modifier = modifier.padding(start = paddingRoundMini()),
+                    text = stringResource(R.string.choose_card),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+                Spacer(modifier = modifier.weight(1f))
+                IconButton(
+                    onClick = { onDismiss() }
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.close_circle),
+                        contentDescription = "btn_close",
+                        modifier = modifier.size(20.sdp)
+                    )
+                }
+            }
+
+            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(paddingRoundMini())
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.pic_team_one),
+                    contentDescription = null,
+                    modifier = modifier.size(
+                        sizePicSmall()
+                    )
+                )
+                Text(
+                    modifier = modifier.padding(
+                        top = paddingTopMedium(),
+                        bottom = paddingTopMedium()
+                    ),
+                    text = stringResource(R.string.description_score_cube_team_one),
+                    color = Color.White,
+                    fontFamily = FontPeydaMedium,
+                    fontSize = descriptionSize(),
+                    textAlign = TextAlign.Justify
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun BottomSheetContentAboutUs(
@@ -453,6 +837,103 @@ fun BottomSheetContactTheOpeningDuelOfTheGame(
 }
 
 @Composable
+fun BottomSheetContactResultDuel(
+    modifier: Modifier = Modifier,
+//    whichTeamHasGoal: Int,
+    onClickItem: (Int) -> Unit,
+    onDismissRequest: () -> Unit // مدیریت بسته شدن Bottom Sheet
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.note),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = modifier.padding(end = 5.sdp)
+                )
+                Text(
+                    text = stringResource(R.string.result_duel),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+            }
+            HorizontalDivider(
+                modifier = modifier.padding(
+                    top = paddingTop(),
+                    bottom = paddingTopMedium()
+                )
+            )
+
+            Row(
+                modifier = modifier
+                    .padding(bottom = 8.sdp)
+                    .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
+                    .clip(RoundedCornerShape(sizeRound()))
+                    .fillMaxWidth()
+                    .clickable {
+                        onClickItem(0)
+                        onDismissRequest()
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .padding(paddingRound())
+                        .size(sizePicMedium()),
+                    painter = painterResource(id = R.drawable.pic_team_one),
+                    contentDescription = null
+                )
+
+                Text(
+                    text = stringResource(R.string.first_team_scored),
+                    fontSize = descriptionSize(),
+                    fontFamily = FontPeydaMedium,
+                    color = Color.White,
+                    textAlign = TextAlign.Justify
+                )
+            }
+
+            Row(
+                modifier = modifier
+                    .border(1.sdp, Color.White, RoundedCornerShape(sizeRound()))
+                    .clip(RoundedCornerShape(sizeRound()))
+                    .fillMaxWidth()
+                    .clickable {
+                        onClickItem(1)
+                        onDismissRequest()
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .padding(paddingRound())
+                        .size(sizePicMedium()),
+                    painter = painterResource(id = R.drawable.pic_team_two),
+                    contentDescription = null
+                )
+                Text(
+                    text = stringResource(R.string.second_team_scored),
+                    fontSize = descriptionSize(),
+                    fontFamily = FontPeydaMedium,
+                    color = Color.White,
+                    textAlign = TextAlign.Justify
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun BottomSheetContactExitGame(
     modifier: Modifier = Modifier,
     onClickExit: () -> Unit,
@@ -534,7 +1015,6 @@ fun BottomSheetContactExitGame(
                     )
                 }
             }
-
         }
     }
 }
@@ -844,9 +1324,36 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
 
 @Preview
 @Composable
+private fun BottomSheetCubePreview() {
+    BottomSheetCube(onDismiss = {}, onClickItem = {}, onClickOk = {})
+}
+
+@Preview
+@Composable
+private fun BottomSheetConfirmCubePreview() {
+    BottomSheetConfirmCube(onDismiss = {}, onClickItem = {})
+}
+
+@Preview
+@Composable
+private fun BottomSheetCardsPreview() {
+    BottomSheetCards(onDismiss = {}, onClickItem = {})
+}
+
+@Preview
+@Composable
 private fun TheOpeningDuelOfTheGamePreview() {
     BottomSheetContactTheOpeningDuelOfTheGame(
         whichTeamHasGoal = 1,
+        onClickItem = {},
+        onDismissRequest = {})
+}
+
+@Preview
+@Composable
+private fun BottomSheetContactResultDuelPreview() {
+    BottomSheetContactResultDuel(
+//        whichTeamHasGoal = 1,
         onClickItem = {},
         onDismissRequest = {})
 }

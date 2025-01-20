@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">گل یا پوچ</string>
-    <string name="version_app">version 1.0.0</string>
+    <string name="version_app">version 1</string>
 
     <!--    items list game guide-->
     <string name="game_guide_title_how_to_play">نحوه بازی</string>
@@ -55,6 +55,9 @@
     <string name="start_time">شروع زمان</string>
     <string name="cards">کارت ها</string>
     <string name="cube">مکعب</string>
+    <string name="accept_request">قبول درخواست</string>
+    <string name="no">خیر</string>
+    <string name="yes">تایید</string>
 
     <!--   title appBar-->
     <string name="distribution_of_cards">توزیع کارت ها</string>
@@ -62,12 +65,18 @@
     <string name="determining_the_initiator">تعیین آغاز کننده</string>
     <string name="setting">تنظیمات بازی</string>
     <string name="show_cards">نمایش کارت ها</string>
+    <string name="score_cube">مکعب امتیاز</string>
+    <string name="confirmation">تاییدیه</string>
 
 
     <string name="team_one">تیم اول</string>
     <string name="team_two">تیم دوم</string>
     <string name="start_team_one">تیم اول بازی رو شروع می کند.</string>
     <string name="start_team_two">تیم دوم بازی رو شروع می کند.</string>
+    <string name="description_score_cube_team_one">تیم اول مکعب چند امتیازی  انتخاب  می کنید ؟</string>
+    <string name="description_score_cube_team_two">تیم دوم مکعب چند امتیازی  انتخاب  می کنید ؟</string>
+    <string name="description_confirm_score_cube_team_one">تیم اول آیا مکعب 2 امتیازی را قبول می کنید ؟</string>
+    <string name="description_confirm_score_cube_team_two">تیم دوم آیا مکعب 2 امتیازی را قبول می کنید ؟</string>
     <string name="start_random">انتخاب تصادفی آغازکننده</string>
     <string name="starter_description">به دو تیم تقسیم شوید و سپس تیم آغاز کننده بازی را مشخص کنید.</string>
     <string name="description_setting">در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.</string>
@@ -85,6 +94,7 @@
     <string name="second_team_did_not_score">تیم دوم گل را نگرفت.</string>
     <string name="description_opening_duel">دو نفر مقابل هم دوئل آغازین را انجام دهید تا شروع کننده بازی مشخص بشود.</string>
     <string name="opening_duel">دوئل آغازین بازی</string>
+    <string name="result_duel">نتیجه دوئل</string>
     <string name="first_team_kept_goal.">تیم اول گل را حفظ کرد.</string>
     <string name="second_team_kept_goal.">تیم دوم گل را حفظ کرد.</string>
 
@@ -117,7 +127,7 @@
     <string name="remove_one_hand">حذف یک دست</string>
     <string name="description_remove_one_hand">سر گروه تیم حریف باید یکی از دستان تیم خود را پوچ کند.</string>
 
-<!--    apps-->
+    <!--    apps-->
     <string name="open_chest">چیستان باز</string>
     <string name="description_open_chest">آیا برای چالش های فکری آماده اید؟</string>
     <string name="pro_wallpaper">تصویر زمینه حرفه ای</string>
