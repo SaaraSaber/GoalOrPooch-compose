@@ -50,11 +50,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -70,6 +68,7 @@ import ir.developer.goalorpooch_compose.ui.theme.sizePicLarge
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundMax
+import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.ManegeGame
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
@@ -80,10 +79,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun SelectCardScreen(
     idItemSelected: Int,
-    navController: NavController
+    navController: NavController,
+    sharedViewModel: SharedViewModel
 ) {
-    val remainingCount = remember { mutableIntStateOf(Utils.THE_NUMBER_OF_PLAYING_CARDS) }
-    val selectedState = remember { mutableStateListOf(*Array(9) { false }) }
+    val numberCards = sharedViewModel.allCards.value.size
+    val remainingCount =
+        remember { mutableIntStateOf(sharedViewModel.itemSetting.value.countOfPlayingCards) }
+    val selectedState =
+        remember { mutableStateListOf(*Array(numberCards) { false }) }
 
     if (idItemSelected == 0) {
         ManegeGame.team_one_has_card = true
@@ -175,7 +178,7 @@ fun SelectCardScreen(
                     verticalArrangement = Arrangement.spacedBy(10.sdp),
                     horizontalArrangement = Arrangement.spacedBy(10.sdp)
                 ) {
-                    items(9) { index ->
+                    items(numberCards) { index ->
                         CardItem(isSelected = selectedState[index],
                             onCardClick = {
                                 if (!selectedState[index] && remainingCount.intValue > 0) {
@@ -220,7 +223,10 @@ fun SelectCardScreen(
                     ModalBottomSheet(
                         onDismissRequest = { showBottomSheet = false },
                         sheetState = sheetState,
-                        shape = RoundedCornerShape(topEnd = sizeRoundBottomSheet(), topStart = sizeRoundBottomSheet()),
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
                         containerColor = FenceGreen
                     ) {
                         BottomSheetContactExitGame(
@@ -278,9 +284,9 @@ fun CardItem(isSelected: Boolean, onCardClick: () -> Unit) {
     }
 }
 
-@Preview
-@Composable
-private fun SelectCardScreenPreview() {
-    val navController = rememberNavController()
-    SelectCardScreen(idItemSelected = 1, navController = navController)
-}
+//@Preview
+//@Composable
+//private fun SelectCardScreenPreview() {
+//    val navController = rememberNavController()
+//    SelectCardScreen(idItemSelected = 1, navController = navController)
+//}

@@ -96,7 +96,7 @@ fun Navigation(sharedViewModel: SharedViewModel) {
             SelectCardScreen(
                 idItemSelected = entry.arguments?.getInt("idItem")!!,
                 navController = navController,
-//                sharedViewModel = sharedViewModel
+                sharedViewModel = sharedViewModel
             )
         }
 

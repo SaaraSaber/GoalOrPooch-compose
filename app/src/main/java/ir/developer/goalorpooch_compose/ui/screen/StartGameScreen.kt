@@ -342,6 +342,7 @@ fun StartGameScreen(
 
 @Composable
 fun TeamInfoSection(modifier: Modifier = Modifier, team: TeamModel) {
+    var count by remember { mutableIntStateOf(3) }
     Row(
         modifier = modifier.padding(
             top = paddingTopMedium(),
@@ -356,7 +357,7 @@ fun TeamInfoSection(modifier: Modifier = Modifier, team: TeamModel) {
             value = team.numberOfEmptyGames.toString(),
             icon = R.drawable.hand,
             label = stringResource(R.string.empty_game),
-            onClickItem = {}
+            onClickItem = { count-- }
         )
         // تعداد کارت‌ها
         InfoBox(
