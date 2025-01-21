@@ -363,8 +363,11 @@ fun TeamInfoSection(
     val infoTeam = sharedViewModel.getTeam(whichTeamHasGoal)
     val listCard = infoTeam!!.cards.filter { !it.disable }
     val counterCards = listCard.size
+    val counterCube = team.numberCubes
     var showBottomSheetCards by remember { mutableStateOf(false) }
+    var showBottomSheetCube by remember { mutableStateOf(false) }
     val sheetStateCards = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetStateCube = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val scope = rememberCoroutineScope()
     Row(
@@ -392,10 +395,12 @@ fun TeamInfoSection(
         )
         // تعداد مکعب
         InfoBox(
-            value = team.numberCubes.toString(),
+            value = counterCube.toString(),
             icon = R.drawable.cube,
             label = stringResource(R.string.cube),
-            onClickItem = { }
+            onClickItem = {
+                showBottomSheetCube = true
+            }
         )
 
         //BottomSheetCards
@@ -424,6 +429,32 @@ fun TeamInfoSection(
                     },
                     whichTeamHasGoal = whichTeamHasGoal,
                     sharedViewModel = sharedViewModel
+                )
+            }
+        }
+
+        //bottomSheetCube
+        if (showBottomSheetCube && counterCube != 0) {
+            ModalBottomSheet(
+                onDismissRequest = { showBottomSheetCube = false },
+                sheetState = sheetStateCube,
+                shape = RoundedCornerShape(
+                    topEnd = sizeRoundBottomSheet(),
+                    topStart = sizeRoundBottomSheet()
+                ),
+                containerColor = FenceGreen
+            ) {
+                BottomSheetCube(
+                    onDismiss = {
+                        scope.launch { sheetStateCube.hide() }
+                            .invokeOnCompletion { showBottomSheetCube = false }
+                    },
+                    onClickItem = { cube ->
+
+                    },
+                    onClickOk = {
+
+                    }
                 )
             }
         }

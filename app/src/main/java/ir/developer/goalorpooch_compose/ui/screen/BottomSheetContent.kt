@@ -257,7 +257,7 @@ fun BottomSheetCube(
                     }
                 }
             }
-            Row(modifier = Modifier.padding(top = paddingTopLarge(), bottom = paddingRound())) {
+            Row(modifier = Modifier.padding(top = paddingTopLarge())) {
                 Button(
                     modifier = Modifier
                         .padding(end = 5.sdp)
