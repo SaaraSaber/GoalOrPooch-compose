@@ -212,29 +212,14 @@ fun StartGameScreen(
                     TeamInfoSection(
                         team = teamOne,
                         sharedViewModel = sharedViewModel,
-                        whichTeamHasGoal =
-                        if (teamOne.hasGoal) {
-                            0
-                        } else if (teamTwo.hasGoal) {
-                            1
-                        } else {
-                            2
-                        }
+                        whichTeamHasGoal = 0
                     )
                 } else if (teamTwo.hasGoal) {
                     TeamInfoSection(
                         team = teamTwo,
                         sharedViewModel = sharedViewModel,
-                        whichTeamHasGoal =
-                        if (teamOne.hasGoal) {
-                            0
-                        } else if (teamTwo.hasGoal) {
-                            1
-                        } else {
-                            2
-                        }
+                        whichTeamHasGoal = 1
                     )
-
                 }
 
 
@@ -374,9 +359,13 @@ fun TeamInfoSection(
     sharedViewModel: SharedViewModel,
     whichTeamHasGoal: Int
 ) {
-    var count by remember { mutableIntStateOf(team.numberOfEmptyGames) }
+    var counterEmptyGame by remember { mutableIntStateOf(team.numberOfEmptyGames) }
+    val infoTeam = sharedViewModel.getTeam(whichTeamHasGoal)
+    val listCard = infoTeam!!.cards.filter { !it.disable }
+    val counterCards = listCard.size
     var showBottomSheetCards by remember { mutableStateOf(false) }
-    val sheetStateCards = rememberModalBottomSheetState()
+    val sheetStateCards = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     val scope = rememberCoroutineScope()
     Row(
         modifier = modifier.padding(
@@ -389,14 +378,14 @@ fun TeamInfoSection(
     ) {
         // تعداد خالی بازی
         InfoBox(
-            value = count.toString(),
+            value = counterEmptyGame.toString(),
             icon = R.drawable.hand,
             label = stringResource(R.string.empty_game),
-            onClickItem = { if (count != 0) count-- }
+            onClickItem = { if (counterEmptyGame != 0) counterEmptyGame-- }
         )
         // تعداد کارت‌ها
         InfoBox(
-            value = team.cards.size.toString(),
+            value = counterCards.toString(),
             icon = R.drawable.icon_card,
             label = stringResource(R.string.cards),
             onClickItem = { showBottomSheetCards = true }
@@ -410,7 +399,7 @@ fun TeamInfoSection(
         )
 
         //BottomSheetCards
-        if (showBottomSheetCards) {
+        if (showBottomSheetCards && counterCards != 0) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheetCards = false },
                 sheetState = sheetStateCards,
