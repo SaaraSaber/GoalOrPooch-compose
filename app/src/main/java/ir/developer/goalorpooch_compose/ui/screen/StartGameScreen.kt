@@ -373,8 +373,6 @@ fun TeamInfoSection(
     team: TeamModel,
     sharedViewModel: SharedViewModel,
     whichTeamHasGoal: Int
-//    onClickCard: @Composable () -> Unit,
-//    onClickCube: () -> Unit
 ) {
     var count by remember { mutableIntStateOf(team.numberOfEmptyGames) }
     var showBottomSheetCards by remember { mutableStateOf(false) }
@@ -427,7 +425,14 @@ fun TeamInfoSection(
                         scope.launch { sheetStateCards.hide() }
                             .invokeOnCompletion { showBottomSheetCards = false }
                     },
-                    onClickOk = {},
+                    onClickOk = { idCard ->
+                        sharedViewModel.disableCardForPlayer(
+                            teamId = whichTeamHasGoal,
+                            cardId = idCard
+                        )
+                        scope.launch { sheetStateCards.hide() }
+                            .invokeOnCompletion { showBottomSheetCards = false }
+                    },
                     whichTeamHasGoal = whichTeamHasGoal,
                     sharedViewModel = sharedViewModel
                 )
@@ -444,7 +449,6 @@ fun InfoBox(
     label: String,
     onClickItem: () -> Unit
 ) {
-
     Column(
         modifier = modifier
             .size(75.sdp)

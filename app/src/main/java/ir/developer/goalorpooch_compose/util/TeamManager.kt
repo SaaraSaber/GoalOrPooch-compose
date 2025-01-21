@@ -48,14 +48,14 @@ class TeamManager @Inject constructor(){
     }
 
     fun disableCardForTeam(teamId: Int, cardId: Int) {
-        _team.value = _team.value.map { playerModel ->
-            if (playerModel.id == teamId) {
-                val updateCards = playerModel.cards.map { cardModel ->
+        _team.value = _team.value.map { teamModel ->
+            if (teamModel.id == teamId) {
+                val updateCards = teamModel.cards.map { cardModel ->
                     if (cardModel.id == cardId) cardModel.copy(disable = true) else cardModel
                 }
-                playerModel.copy(cards = updateCards)
+                teamModel.copy(cards = updateCards)
             } else {
-                playerModel
+                teamModel
             }
         }
     }
@@ -64,4 +64,6 @@ class TeamManager @Inject constructor(){
     fun updateTeams(newTeams: List<TeamModel>) {
         _team.value = newTeams
     }
+
+
 }

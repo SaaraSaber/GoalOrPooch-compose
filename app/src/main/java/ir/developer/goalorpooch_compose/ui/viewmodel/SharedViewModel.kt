@@ -95,6 +95,8 @@ class SharedViewModel @Inject constructor(
         teamManager.disableCardForTeam(teamId, cardId)
     }
 
+
+
     //...................setting...................
 
     var itemSetting = mutableStateOf(

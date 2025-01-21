@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +29,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -288,7 +293,6 @@ fun BottomSheetCube(
                     )
                 }
             }
-
         }
     }
 }
@@ -382,7 +386,7 @@ fun BottomSheetConfirmCube(
 fun BottomSheetCards(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
-    onClickOk: () -> Unit,
+    onClickOk: (Int) -> Unit,
     whichTeamHasGoal: Int,
     sharedViewModel: SharedViewModel
 ) {
@@ -391,6 +395,10 @@ fun BottomSheetCards(
     } else {
         sharedViewModel.getTeam(1)
     }
+    val availableCards = card?.cards?.filter { !it.disable }
+    // کارت انتخاب شده
+    var selectedCardId by remember { mutableStateOf<Int?>(null) }
+
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = modifier
@@ -452,35 +460,39 @@ fun BottomSheetCards(
                     textAlign = TextAlign.Justify
                 )
             }
+
             LazyColumn(modifier = modifier.weight(1f)) {
-                items(card!!.cards.size) { index ->
-                    val itemCard = card.cards[index]
+                items(availableCards!!.size) { index ->
+                    val itemCard = availableCards[index]
                     ItemCard(
                         title = itemCard.name,
                         description = itemCard.description,
-                        disable = itemCard.disable,
+                        alpha = if (selectedCardId == null || selectedCardId == itemCard.id) 1f else .5f,
                         onClickItem = {
-                            sharedViewModel.disableCardForPlayer(
-                                teamId = whichTeamHasGoal,
-                                cardId = itemCard.id
-                            )
+                            selectedCardId = itemCard.id
                         }
                     )
                 }
             }
+
             Row(modifier = Modifier.padding(top = paddingTop())) {
                 Button(
                     modifier = Modifier
                         .padding(end = 5.sdp)
                         .height(heightButton())
-                        .weight(1f),
+                        .weight(1f)
+                        .alpha(if (selectedCardId == null) 0.5f else 1f), // تغییر آلفا بر اساس مقدار idCard,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
-                        contentColor = FenceGreen
+                        disabledContainerColor = Color.White
                     ),
-                    onClick = { onClickOk() }
+                    enabled = selectedCardId != null,
+                    onClick = {
+                        onClickOk(selectedCardId!!)
+                    }
                 ) {
                     Text(
+                        modifier = modifier.alpha(if (selectedCardId == null) 0.5f else 1f), // تغییر آلفا بر اساس مقدار idCard,,
                         text = stringResource(R.string.yes),
                         fontSize = descriptionSize(),
                         fontFamily = FontPeydaMedium,
@@ -513,22 +525,19 @@ fun ItemCard(
     modifier: Modifier = Modifier,
     title: String,
     description: String,
-    disable: Boolean,
+    alpha: Float = 1f,
     onClickItem: () -> Unit
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Card(
             modifier = modifier
                 .padding(top = paddingRoundMini())
-                .clickable(enabled = !disable) {
+                .clickable {
                     onClickItem()
                 }
-                .alpha(if (disable) .5f else 1f),
-            colors = CardColors(
-                containerColor = Color.Transparent,
-                contentColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
-                disabledContentColor = Color.Transparent
+                .alpha(alpha),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent
             ),
             shape = RoundedCornerShape(sizeRound()),
             border = BorderStroke(width = 1.sdp, color = Color.White)
@@ -967,7 +976,6 @@ fun BottomSheetContactTheOpeningDuelOfTheGame(
 @Composable
 fun BottomSheetContactResultDuel(
     modifier: Modifier = Modifier,
-//    whichTeamHasGoal: Int,
     onClickItem: (Int) -> Unit,
     onDismissRequest: () -> Unit // مدیریت بسته شدن Bottom Sheet
 ) {
