@@ -449,12 +449,7 @@ fun TeamInfoSection(
                         scope.launch { sheetStateCube.hide() }
                             .invokeOnCompletion { showBottomSheetCube = false }
                     },
-                    onClickItem = { cube ->
-
-                    },
-                    onClickOk = {
-
-                    }
+                    onConfirm = {}
                 )
             }
         }

@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -73,9 +74,14 @@ import ir.kaaveh.sdpcompose.ssp
 fun BottomSheetCube(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
-    onClickItem: (Int) -> Unit,
-    onClickOk: () -> Unit,
+    onConfirm: (Int) -> Unit,
 ) {
+    // State برای نگه داشتن انتخاب فعلی
+    var selectedOption by remember { mutableStateOf<Int?>(null) }
+
+    // گزینه‌های مکعب
+    val options = listOf(2, 4, 6)
+
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = modifier
@@ -123,137 +129,56 @@ fun BottomSheetCube(
                 fontSize = descriptionSize(),
                 textAlign = TextAlign.Justify
             )
+            // نمایش گزینه‌ها
             Row(
-                modifier = modifier
-                    .padding(paddingRound())
-                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                    .padding(top = paddingTopMedium())
+                    .fillMaxWidth()
             ) {
-                Card(
-                    modifier = modifier
-                        .padding(start = paddingRoundMini())
-                        .clickable { onClickItem(6) }
-                        .align(Alignment.CenterVertically),
-                    colors = CardColors(
-                        containerColor = Color.Transparent,
-                        contentColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        disabledContentColor = Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(sizeRound()),
-                    border = BorderStroke(width = 1.sdp, color = Color.White)
-                ) {
-                    Column(
+                options.forEach { option ->
+                    Card(
                         modifier = modifier
-                            .padding(
-                                top = paddingRoundMini(),
-                                bottom = paddingRoundMini(),
-                                start = paddingTopMedium(),
-                                end = paddingTopMedium()
-                            ),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .padding(start = paddingRoundMini())
+                            .clickable { selectedOption = option }
+                            .align(Alignment.CenterVertically)
+                            .graphicsLayer(alpha = if (selectedOption == option) 1f else 0.5f),
+                        colors = CardColors(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            disabledContentColor = Color.Transparent
+                        ),
+                        shape = RoundedCornerShape(sizeRound()),
+                        border = BorderStroke(width = 1.sdp, color = Color.White)
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.cube),
-                            contentDescription = "star",
-                            modifier = modifier.size(sizePicSmall())
-                        )
-                        Text(
-                            modifier = modifier.padding(
-                                top = paddingTop()
-                            ),
-                            text = "6",
-                            color = Color.White,
-                            fontFamily = FontPeydaMedium,
-                            fontSize = titleSize(),
-                            textAlign = TextAlign.Justify
-                        )
-                    }
-                }
-                Card(
-                    modifier = modifier
-                        .padding(start = paddingRoundMini())
-                        .clickable { onClickItem(4) }
-                        .align(Alignment.CenterVertically),
-                    colors = CardColors(
-                        containerColor = Color.Transparent,
-                        contentColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        disabledContentColor = Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(sizeRound()),
-                    border = BorderStroke(width = 1.sdp, color = Color.White)
-                ) {
-                    Column(
-                        modifier = modifier
-                            .padding(
-                                top = paddingRoundMini(),
-                                bottom = paddingRoundMini(),
-                                start = paddingTopMedium(),
-                                end = paddingTopMedium()
-                            ),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.cube),
-                            contentDescription = "star",
-                            modifier = modifier.size(sizePicSmall())
-                        )
-                        Text(
-                            modifier = modifier.padding(
-                                top = paddingTop()
-                            ),
-                            text = "4",
-                            color = Color.White,
-                            fontFamily = FontPeydaMedium,
-                            fontSize = titleSize(),
-                            textAlign = TextAlign.Justify
-                        )
-                    }
-                }
-                Card(
-                    modifier = modifier
-                        .padding(start = paddingRoundMini())
-                        .clickable { onClickItem(2) }
-                        .align(Alignment.CenterVertically),
-                    colors = CardColors(
-                        containerColor = Color.Transparent,
-                        contentColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        disabledContentColor = Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(sizeRound()),
-                    border = BorderStroke(width = 1.sdp, color = Color.White)
-                ) {
-                    Column(
-                        modifier = modifier
-                            .padding(
-                                top = paddingRoundMini(),
-                                bottom = paddingRoundMini(),
-                                start = paddingTopMedium(),
-                                end = paddingTopMedium()
-                            ),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.cube),
-                            contentDescription = "star",
-                            modifier = modifier.size(sizePicSmall())
-                        )
-                        Text(
-                            modifier = modifier.padding(
-                                top = paddingTop()
-                            ),
-                            text = "2",
-                            color = Color.White,
-                            fontFamily = FontPeydaMedium,
-                            fontSize = titleSize(),
-                            textAlign = TextAlign.Justify
-                        )
+                        Column(
+                            modifier = modifier
+                                .padding(
+                                    top = paddingRoundMini(),
+                                    bottom = paddingRoundMini(),
+                                    start = paddingTopMedium(),
+                                    end = paddingTopMedium()
+                                ),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.cube),
+                                contentDescription = "star",
+                                modifier = modifier.size(sizePicSmall())
+                            )
+                            Text(
+                                modifier = modifier.padding(
+                                    top = paddingTop()
+                                ),
+                                text = option.toString(),
+                                color = Color.White,
+                                fontFamily = FontPeydaMedium,
+                                fontSize = titleSize(),
+                                textAlign = TextAlign.Justify
+                            )
+                        }
                     }
                 }
             }
@@ -262,12 +187,16 @@ fun BottomSheetCube(
                     modifier = Modifier
                         .padding(end = 5.sdp)
                         .height(heightButton())
-                        .weight(1f),
+                        .weight(1f)
+                        .alpha(if (selectedOption != null) 1f else .5f),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
-                        contentColor = FenceGreen
+                        disabledContainerColor = Color.White
                     ),
-                    onClick = { onClickOk() }
+                    enabled = selectedOption != null,
+                    onClick = {
+                        selectedOption?.let { onConfirm(it) }
+                    }
                 ) {
                     Text(
                         text = stringResource(R.string.yes),
@@ -296,6 +225,7 @@ fun BottomSheetCube(
         }
     }
 }
+
 
 @Composable
 fun BottomSheetConfirmCube(
@@ -1461,7 +1391,7 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
 @Preview
 @Composable
 private fun BottomSheetCubePreview() {
-    BottomSheetCube(onDismiss = {}, onClickItem = {}, onClickOk = {})
+    BottomSheetCube(onDismiss = {}, onConfirm = {})
 }
 
 @Preview

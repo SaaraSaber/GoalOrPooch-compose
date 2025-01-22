@@ -31,7 +31,7 @@ class TeamManager @Inject constructor(){
         return randomCards
     }
 
-    // به‌روزرسانی ویژگی خاصی از PlayerModel
+    // به‌روزرسانی ویژگی خاصی از TeamModel
     fun updateTeam(teamId: Int, update: TeamModel.() -> TeamModel) {
         _team.value = _team.value.map { player ->
             if (player.id == teamId) {
