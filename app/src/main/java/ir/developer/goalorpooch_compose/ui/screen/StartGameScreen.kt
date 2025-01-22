@@ -360,14 +360,17 @@ fun TeamInfoSection(
     whichTeamHasGoal: Int
 ) {
     var counterEmptyGame by remember { mutableIntStateOf(team.numberOfEmptyGames) }
+    var numberCube = 0
     val infoTeam = sharedViewModel.getTeam(whichTeamHasGoal)
     val listCard = infoTeam!!.cards.filter { !it.disable }
     val counterCards = listCard.size
     val counterCube = team.numberCubes
     var showBottomSheetCards by remember { mutableStateOf(false) }
     var showBottomSheetCube by remember { mutableStateOf(false) }
+    var showBottomSheetConfirmCube by remember { mutableStateOf(false) }
     val sheetStateCards = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val sheetStateCube = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetStateConfirmCube = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val scope = rememberCoroutineScope()
     Row(
@@ -445,12 +448,41 @@ fun TeamInfoSection(
                 containerColor = FenceGreen
             ) {
                 BottomSheetCube(
+                    whichTeamHasGoal = whichTeamHasGoal,
                     onDismiss = {
                         scope.launch { sheetStateCube.hide() }
                             .invokeOnCompletion { showBottomSheetCube = false }
                     },
-                    onConfirm = {}
+                    onConfirm = { numberCubes ->
+                        numberCube = numberCubes
+                        scope.launch { sheetStateCube.hide() }
+                            .invokeOnCompletion { showBottomSheetCube = false }
+                        showBottomSheetConfirmCube = true
+                    }
                 )
+            }
+
+//BottomSheetConfirmCube
+            if (showBottomSheetConfirmCube) {
+                ModalBottomSheet(
+                    onDismissRequest = { showBottomSheetConfirmCube = false },
+                    sheetState = sheetStateCube,
+                    shape = RoundedCornerShape(
+                        topEnd = sizeRoundBottomSheet(),
+                        topStart = sizeRoundBottomSheet()
+                    ),
+                    containerColor = FenceGreen
+                ) {
+                    BottomSheetConfirmCube(
+                        whichTeamHasGoal = whichTeamHasGoal,
+                        onDismiss = {
+
+                        },
+                        onClickItem = {
+
+                        }
+                    )
+                }
             }
         }
     }

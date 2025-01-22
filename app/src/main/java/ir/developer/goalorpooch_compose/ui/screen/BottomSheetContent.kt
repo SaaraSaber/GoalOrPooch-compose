@@ -73,6 +73,7 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun BottomSheetCube(
     modifier: Modifier = Modifier,
+    whichTeamHasGoal: Int,
     onDismiss: () -> Unit,
     onConfirm: (Int) -> Unit,
 ) {
@@ -123,7 +124,10 @@ fun BottomSheetCube(
 
             Text(
                 modifier = modifier.padding(top = paddingTopMedium(), bottom = paddingTopMedium()),
-                text = stringResource(R.string.description_score_cube_team_one),
+                text = if (whichTeamHasGoal == 0)
+                    stringResource(R.string.description_score_cube_team_one)
+                else
+                    stringResource(R.string.description_score_cube_team_two),
                 color = Color.White,
                 fontFamily = FontPeydaMedium,
                 fontSize = descriptionSize(),
@@ -230,8 +234,9 @@ fun BottomSheetCube(
 @Composable
 fun BottomSheetConfirmCube(
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit,
-    onClickItem: () -> Unit
+    whichTeamHasGoal: Int,
+    onClickItem: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
@@ -1391,13 +1396,13 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
 @Preview
 @Composable
 private fun BottomSheetCubePreview() {
-    BottomSheetCube(onDismiss = {}, onConfirm = {})
+    BottomSheetCube(whichTeamHasGoal = 0, onDismiss = {}, onConfirm = {})
 }
 
 @Preview
 @Composable
 private fun BottomSheetConfirmCubePreview() {
-    BottomSheetConfirmCube(onDismiss = {}, onClickItem = {})
+    BottomSheetConfirmCube(whichTeamHasGoal = 0, onClickItem = {}, onDismiss = {})
 }
 
 //@Preview
