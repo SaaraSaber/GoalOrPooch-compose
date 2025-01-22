@@ -33,11 +33,11 @@ class TeamManager @Inject constructor(){
 
     // به‌روزرسانی ویژگی خاصی از TeamModel
     fun updateTeam(teamId: Int, update: TeamModel.() -> TeamModel) {
-        _team.value = _team.value.map { player ->
-            if (player.id == teamId) {
-                player.update() // اعمال تغییرات
+        _team.value = _team.value.map { team ->
+            if (team.id == teamId) {
+                team.update() // اعمال تغییرات
             } else {
-                player
+                team
             }
         }
     }

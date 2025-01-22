@@ -360,7 +360,6 @@ fun TeamInfoSection(
     whichTeamHasGoal: Int
 ) {
     var counterEmptyGame by remember { mutableIntStateOf(team.numberOfEmptyGames) }
-    var numberCube = 0
     val infoTeam = sharedViewModel.getTeam(whichTeamHasGoal)
     val listCard = infoTeam!!.cards.filter { !it.disable }
     val counterCards = listCard.size
@@ -454,35 +453,41 @@ fun TeamInfoSection(
                             .invokeOnCompletion { showBottomSheetCube = false }
                     },
                     onConfirm = { numberCubes ->
-                        numberCube = numberCubes
+                        Utils.WHICH_SELECT_NUMBER_CUBE = numberCubes
                         scope.launch { sheetStateCube.hide() }
                             .invokeOnCompletion { showBottomSheetCube = false }
                         showBottomSheetConfirmCube = true
                     }
                 )
             }
+        }
 
 //BottomSheetConfirmCube
-            if (showBottomSheetConfirmCube) {
-                ModalBottomSheet(
-                    onDismissRequest = { showBottomSheetConfirmCube = false },
-                    sheetState = sheetStateCube,
-                    shape = RoundedCornerShape(
-                        topEnd = sizeRoundBottomSheet(),
-                        topStart = sizeRoundBottomSheet()
-                    ),
-                    containerColor = FenceGreen
-                ) {
-                    BottomSheetConfirmCube(
-                        whichTeamHasGoal = whichTeamHasGoal,
-                        onDismiss = {
-
-                        },
-                        onClickItem = {
-
+        if (showBottomSheetConfirmCube) {
+            ModalBottomSheet(
+                onDismissRequest = { showBottomSheetConfirmCube = false },
+                sheetState = sheetStateCube,
+                shape = RoundedCornerShape(
+                    topEnd = sizeRoundBottomSheet(),
+                    topStart = sizeRoundBottomSheet()
+                ),
+                containerColor = FenceGreen
+            ) {
+                BottomSheetConfirmCube(
+                    whichTeamHasGoal = whichTeamHasGoal,
+                    numberCube = Utils.WHICH_SELECT_NUMBER_CUBE,
+                    onDismiss = {
+                        scope.launch { sheetStateConfirmCube.hide() }
+                            .invokeOnCompletion { showBottomSheetConfirmCube = false }
+                    },
+                    onConfirm = {
+                        sharedViewModel.updateTeam(teamId = whichTeamHasGoal) {
+                            copy(numberCubes = infoTeam.numberCubes - 1)
                         }
-                    )
-                }
+                        scope.launch { sheetStateConfirmCube.hide() }
+                            .invokeOnCompletion { showBottomSheetConfirmCube = false }
+                    }
+                )
             }
         }
     }

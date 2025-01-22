@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
         window.navigationBarColor = ContextCompat.getColor(this, R.color.hihadaBrown)
 
         insertCards()
-//        insertItemSetting()
 
         setContent {
             Navigation(sharedViewModel = sharedViewModel)
@@ -90,15 +89,5 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-//    private fun insertItemSetting() {
-//        sharedViewModel.addItemSetting(
-//            id = 0,
-//            playerNumber = 6,
-//            victoryPoint = 9,
-//            getTimeToGetGoal = 90,
-//            getTimeToGetShahGoal = 180,
-//            countOfPlayingCards = 5
-//        )
-//    }
 }
 

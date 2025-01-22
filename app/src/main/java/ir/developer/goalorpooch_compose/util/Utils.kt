@@ -1,7 +1,7 @@
 package ir.developer.goalorpooch_compose.util
 
 object Utils {
-//routScreen
+    //routScreen
     const val HOME_SCREEN = "home-screen"
     const val SETTING_SCREEN = "setting-screen"
     const val STARTER_SCREEN = "starter-screen"
@@ -21,5 +21,7 @@ object Utils {
     //......................................................................................
 
     var STARTER_GAME = 0
+
+    var WHICH_SELECT_NUMBER_CUBE = 0
 
 }

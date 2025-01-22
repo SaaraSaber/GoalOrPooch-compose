@@ -95,7 +95,10 @@ fun BottomSheetCube(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(R.drawable.pic_team_one),
+                    painter = if (whichTeamHasGoal == 1)
+                        painterResource(R.drawable.pic_team_one)
+                    else
+                        painterResource(R.drawable.pic_team_two),
                     contentDescription = null,
                     modifier = modifier.size(
                         sizePicSmall()
@@ -124,7 +127,7 @@ fun BottomSheetCube(
 
             Text(
                 modifier = modifier.padding(top = paddingTopMedium(), bottom = paddingTopMedium()),
-                text = if (whichTeamHasGoal == 0)
+                text = if (whichTeamHasGoal == 1)
                     stringResource(R.string.description_score_cube_team_one)
                 else
                     stringResource(R.string.description_score_cube_team_two),
@@ -199,7 +202,9 @@ fun BottomSheetCube(
                     ),
                     enabled = selectedOption != null,
                     onClick = {
-                        selectedOption?.let { onConfirm(it) }
+                        selectedOption?.let {
+                            onConfirm(it)
+                        }
                     }
                 ) {
                     Text(
@@ -235,7 +240,8 @@ fun BottomSheetCube(
 fun BottomSheetConfirmCube(
     modifier: Modifier = Modifier,
     whichTeamHasGoal: Int,
-    onClickItem: () -> Unit,
+    numberCube: Int,
+    onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -250,7 +256,10 @@ fun BottomSheetConfirmCube(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(R.drawable.pic_team_one),
+                    painter = if (whichTeamHasGoal == 0)
+                        painterResource(R.drawable.pic_team_one)
+                    else
+                        painterResource(R.drawable.pic_team_two),
                     contentDescription = null,
                     modifier = modifier.size(
                         sizePicSmall()
@@ -270,7 +279,10 @@ fun BottomSheetConfirmCube(
 
             Text(
                 modifier = modifier.padding(top = paddingTopMedium(), bottom = paddingTopMedium()),
-                text = stringResource(R.string.description_confirm_score_cube_team_one),
+                text = if (whichTeamHasGoal == 0)
+                    stringResource(R.string.description_confirm_score_cube_team_one, numberCube)
+                else
+                    stringResource(R.string.description_confirm_score_cube_team_two, numberCube),
                 color = Color.White,
                 fontFamily = FontPeydaMedium,
                 fontSize = descriptionSize(),
@@ -286,7 +298,7 @@ fun BottomSheetConfirmCube(
                         containerColor = Color.White,
                         contentColor = FenceGreen
                     ),
-                    onClick = { onClickItem() }
+                    onClick = { onConfirm() }
                 ) {
                     Text(
                         text = stringResource(R.string.accept_request),
@@ -1402,7 +1414,7 @@ private fun BottomSheetCubePreview() {
 @Preview
 @Composable
 private fun BottomSheetConfirmCubePreview() {
-    BottomSheetConfirmCube(whichTeamHasGoal = 0, onClickItem = {}, onDismiss = {})
+    BottomSheetConfirmCube(whichTeamHasGoal = 0, numberCube = 2, onConfirm = {}, onDismiss = {})
 }
 
 //@Preview
