@@ -88,8 +88,10 @@ fun StartGameScreen(
     sharedViewModel: SharedViewModel
 ) {
     var showBottomSheetExitGame by remember { mutableStateOf(false) }
-//    var showBottomSheetCards by remember { mutableStateOf(false) }
-//    val sheetStateCards = rememberModalBottomSheetState()
+    var isToastVisible by remember { mutableStateOf(false) }
+    var toastMessage by remember { mutableStateOf("") }
+    var toastIcon by remember { mutableIntStateOf(0) }
+    var toastColor by remember { mutableIntStateOf(0) }
     var showBottomSheetOpeningDuel by remember { mutableStateOf(true) }
     val sheetStateExitGame = rememberModalBottomSheetState()
     val sheetStateOpeningDuel = rememberModalBottomSheetState(
@@ -133,217 +135,257 @@ fun StartGameScreen(
 
     Scaffold { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            Column(
-                modifier = modifier
-                    .padding(innerPadding)
+            Box(
+                modifier = Modifier
                     .fillMaxSize()
                     .paint(
                         painter = painterResource(R.drawable.main_background),
                         contentScale = ContentScale.Crop
                     )
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                HeaderGame(
-                    scoreTeamOne = teamOne.score,
-                    scoreTeamTwo = teamTwo.score,
-                    whichTeamHasGoal =
-                    if (teamOne.hasGoal) {
-                        0
-                    } else if (teamTwo.hasGoal) {
-                        1
-                    } else {
-                        2
-                    }
-                )
-                TableGame(
-                    whichTeamHasGoal =
-                    if (teamOne.hasGoal) {
-                        0
-                    } else if (teamTwo.hasGoal) {
-                        1
-                    } else {
-                        2
-                    },
-                    remainingTime = remainingTime,
-                    showTimer = isRunning
-                )
-
-//time
-                Button(
+                Column(
                     modifier = modifier
-                        .wrapContentWidth()
-                        .height(50.sdp),
-                    onClick = {
-                        if (isRunning) {
-                            isRunning = false
-                            showBottomSheetResult = true
-                            remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
-                        } else {
-                            isRunning = true
-                            remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
-                    shape = RoundedCornerShape(sizeRound()),
-                    border = BorderStroke(width = 1.sdp, color = Color.White)
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        modifier = modifier.padding(end = paddingRound()),
-                        text = if (!isRunning) stringResource(R.string.start_time)
-                        else stringResource(R.string.result_of_this_round),
-                        fontSize = descriptionSize(),
-                        fontFamily = FontPeydaMedium,
-                        color = Color.White
-                    )
-
-                    Icon(
-                        painter = if (!isRunning) painterResource(R.drawable.time)
-                        else painterResource(R.drawable.result),
-                        contentDescription = "time",
-                        modifier = modifier.size(
-                            sizePicVerySmall()
-                        )
-                    )
-                }
-
-                if (teamOne.hasGoal) {
-                    TeamInfoSection(
-                        team = teamOne,
-                        sharedViewModel = sharedViewModel,
-                        whichTeamHasGoal = 0
-                    )
-                } else if (teamTwo.hasGoal) {
-                    TeamInfoSection(
-                        team = teamTwo,
-                        sharedViewModel = sharedViewModel,
-                        whichTeamHasGoal = 1
-                    )
-                }
-
-
-//BottomSheetExitGame
-                if (showBottomSheetExitGame) {
-                    ModalBottomSheet(
-                        onDismissRequest = { showBottomSheetExitGame = false },
-                        sheetState = sheetStateExitGame,
-                        shape = RoundedCornerShape(
-                            topEnd = sizeRoundBottomSheet(),
-                            topStart = sizeRoundBottomSheet()
-                        ),
-                        containerColor = FenceGreen
-                    ) {
-                        BottomSheetContactExitGame(
-                            onClickExit = {
-                                scope.launch { sheetStateExitGame.hide() }
-                                    .invokeOnCompletion { showBottomSheetExitGame = false }
-                                navController.navigate(Utils.HOME_SCREEN) {
-                                    popUpTo(0) // پاک کردن کل استک
-                                    launchSingleTop = true // جلوگیری از ایجاد دوباره صفحه در استک
-                                }
-                            },
-                            onClickContinueGame = {
-                                scope.launch { sheetStateExitGame.hide() }
-                                    .invokeOnCompletion { showBottomSheetExitGame = false }
-                            }
-                        )
-                    }
-                }
-
-//BottomSheetOpeningDuel
-                if (showBottomSheetOpeningDuel) {
-                    ModalBottomSheet(
-                        onDismissRequest = {
-                            showBottomSheetOpeningDuel = false
-                        },
-                        sheetState = sheetStateOpeningDuel,
-                        shape = RoundedCornerShape(
-                            topEnd = sizeRoundBottomSheet(),
-                            topStart = sizeRoundBottomSheet()
-                        ),
-                        containerColor = FenceGreen,
-                        properties = ModalBottomSheetProperties(
-                            securePolicy = SecureFlagPolicy.SecureOff,
-                            shouldDismissOnBackPress = false
-                        )
-                    ) {
-                        BottomSheetContactTheOpeningDuelOfTheGame(
-                            whichTeamHasGoal = Utils.STARTER_GAME,
-                            onClickItem = { idTeam ->
-                                scope.launch {
-                                    if (idTeam == 0) {
-                                        sharedViewModel.updateTeam(teamId = 0) {
-                                            copy(hasGoal = true)
-                                        }
-                                        sharedViewModel.updateTeam(teamId = 1) {
-                                            copy(hasGoal = false)
-                                        }
-                                    } else if (idTeam == 1) {
-                                        sharedViewModel.updateTeam(teamId = 1) {
-                                            copy(hasGoal = true)
-                                        }
-                                        sharedViewModel.updateTeam(teamId = 0) {
-                                            copy(hasGoal = false)
-                                        }
-                                    }
-                                    sheetStateOpeningDuel.hide()
-                                }.invokeOnCompletion {
-                                    if (!sheetStateOpeningDuel.isVisible) {
-                                        showBottomSheetOpeningDuel = false
-                                    }
-                                }
-                            },
-                            onDismissRequest = {
-                                scope.launch {
-                                    sheetStateOpeningDuel.hide()
-                                }.invokeOnCompletion {
-                                    if (!sheetStateOpeningDuel.isVisible) {
-                                        showBottomSheetOpeningDuel = false
-                                    }
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-
-//BottomSheetResultThisRound
-            if (showBottomSheetResult) {
-                ModalBottomSheet(
-                    onDismissRequest = {
-                        showBottomSheetResult = false
-                    },
-                    sheetState = sheetStateOpeningDuel,
-                    shape = RoundedCornerShape(
-                        topEnd = sizeRoundBottomSheet(),
-                        topStart = sizeRoundBottomSheet()
-                    ),
-                    containerColor = FenceGreen,
-                    properties = ModalBottomSheetProperties(
-                        securePolicy = SecureFlagPolicy.SecureOff,
-                        shouldDismissOnBackPress = false
-                    )
-                ) {
-                    BottomSheetResultOfThisRound(
-                        whichTeamResult =
+                    HeaderGame(
+                        scoreTeamOne = teamOne.score,
+                        scoreTeamTwo = teamTwo.score,
+                        whichTeamHasGoal =
                         if (teamOne.hasGoal) {
-                            1
-                        } else if (teamTwo.hasGoal) {
                             0
+                        } else if (teamTwo.hasGoal) {
+                            1
+                        } else {
+                            2
+                        }
+                    )
+                    TableGame(
+                        whichTeamHasGoal =
+                        if (teamOne.hasGoal) {
+                            0
+                        } else if (teamTwo.hasGoal) {
+                            1
                         } else {
                             2
                         },
-                        sharedViewModel = sharedViewModel,
-                        onClickItem = {
-                            scope.launch {
-                                sheetStateResult.hide()
-                            }.invokeOnCompletion {
-                                if (!sheetStateResult.isVisible) {
-                                    showBottomSheetResult = false
-                                }
+                        remainingTime = remainingTime,
+                        showTimer = isRunning
+                    )
+
+//time
+                    Button(
+                        modifier = modifier
+                            .wrapContentWidth()
+                            .height(50.sdp),
+                        onClick = {
+                            if (isRunning) {
+                                isRunning = false
+                                showBottomSheetResult = true
+                                remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
+                            } else {
+                                isRunning = true
+                                remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
                             }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
+                        shape = RoundedCornerShape(sizeRound()),
+                        border = BorderStroke(width = 1.sdp, color = Color.White)
+                    ) {
+                        Text(
+                            modifier = modifier.padding(end = paddingRound()),
+                            text = if (!isRunning) stringResource(R.string.start_time)
+                            else stringResource(R.string.result_of_this_round),
+                            fontSize = descriptionSize(),
+                            fontFamily = FontPeydaMedium,
+                            color = Color.White
+                        )
+
+                        Icon(
+                            painter = if (!isRunning) painterResource(R.drawable.time)
+                            else painterResource(R.drawable.result),
+                            contentDescription = "time",
+                            modifier = modifier.size(
+                                sizePicVerySmall()
+                            )
+                        )
+                    }
+
+                    if (teamOne.hasGoal) {
+                        TeamInfoSection(
+                            team = teamOne,
+                            sharedViewModel = sharedViewModel,
+                            whichTeamHasGoal = 0,
+                            onShowToast = { message ->
+                                toastMessage = message
+                                isToastVisible = true
+                            }, toastIcon = { icon ->
+                                toastIcon = icon
+                            },
+                            toastColor = { color ->
+                                toastColor = color
+                            }
+                        )
+                    } else if (teamTwo.hasGoal) {
+                        TeamInfoSection(
+                            team = teamTwo,
+                            sharedViewModel = sharedViewModel,
+                            whichTeamHasGoal = 1,
+                            onShowToast = { message ->
+                                toastMessage = message
+                                isToastVisible = true
+                            }, toastIcon = { icon ->
+                                toastIcon = icon
+                            },
+                            toastColor = { color ->
+                                toastColor = color
+                            }
+                        )
+                    }
+
+
+//BottomSheetExitGame
+                    if (showBottomSheetExitGame) {
+                        ModalBottomSheet(
+                            onDismissRequest = { showBottomSheetExitGame = false },
+                            sheetState = sheetStateExitGame,
+                            shape = RoundedCornerShape(
+                                topEnd = sizeRoundBottomSheet(),
+                                topStart = sizeRoundBottomSheet()
+                            ),
+                            containerColor = FenceGreen
+                        ) {
+                            BottomSheetContactExitGame(
+                                onClickExit = {
+                                    Utils.CHOOSE_CARD = false
+                                    Utils.CHOOSE_CUBE = false
+                                    scope.launch { sheetStateExitGame.hide() }
+                                        .invokeOnCompletion { showBottomSheetExitGame = false }
+                                    navController.navigate(Utils.HOME_SCREEN) {
+                                        popUpTo(0) // پاک کردن کل استک
+                                        launchSingleTop =
+                                            true // جلوگیری از ایجاد دوباره صفحه در استک
+                                    }
+                                },
+                                onClickContinueGame = {
+                                    scope.launch { sheetStateExitGame.hide() }
+                                        .invokeOnCompletion { showBottomSheetExitGame = false }
+                                }
+                            )
                         }
+                    }
+
+//BottomSheetOpeningDuel
+                    if (showBottomSheetOpeningDuel) {
+                        ModalBottomSheet(
+                            onDismissRequest = {
+                                showBottomSheetOpeningDuel = false
+                            },
+                            sheetState = sheetStateOpeningDuel,
+                            shape = RoundedCornerShape(
+                                topEnd = sizeRoundBottomSheet(),
+                                topStart = sizeRoundBottomSheet()
+                            ),
+                            containerColor = FenceGreen,
+                            properties = ModalBottomSheetProperties(
+                                securePolicy = SecureFlagPolicy.SecureOff,
+                                shouldDismissOnBackPress = false
+                            )
+                        ) {
+                            BottomSheetContactTheOpeningDuelOfTheGame(
+                                whichTeamHasGoal = Utils.STARTER_GAME,
+                                onClickItem = { idTeam ->
+                                    scope.launch {
+                                        if (idTeam == 0) {
+                                            sharedViewModel.updateTeam(teamId = 0) {
+                                                copy(hasGoal = true)
+                                            }
+                                            sharedViewModel.updateTeam(teamId = 1) {
+                                                copy(hasGoal = false)
+                                            }
+                                        } else if (idTeam == 1) {
+                                            sharedViewModel.updateTeam(teamId = 1) {
+                                                copy(hasGoal = true)
+                                            }
+                                            sharedViewModel.updateTeam(teamId = 0) {
+                                                copy(hasGoal = false)
+                                            }
+                                        }
+                                        sheetStateOpeningDuel.hide()
+                                    }.invokeOnCompletion {
+                                        if (!sheetStateOpeningDuel.isVisible) {
+                                            showBottomSheetOpeningDuel = false
+                                        }
+                                    }
+                                },
+                                onDismissRequest = {
+                                    scope.launch {
+                                        sheetStateOpeningDuel.hide()
+                                    }.invokeOnCompletion {
+                                        if (!sheetStateOpeningDuel.isVisible) {
+                                            showBottomSheetOpeningDuel = false
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+
+
+//BottomSheetResultThisRound
+                    if (showBottomSheetResult) {
+                        ModalBottomSheet(
+                            onDismissRequest = {
+                                showBottomSheetResult = false
+                            },
+                            sheetState = sheetStateOpeningDuel,
+                            shape = RoundedCornerShape(
+                                topEnd = sizeRoundBottomSheet(),
+                                topStart = sizeRoundBottomSheet()
+                            ),
+                            containerColor = FenceGreen,
+                            properties = ModalBottomSheetProperties(
+                                securePolicy = SecureFlagPolicy.SecureOff,
+                                shouldDismissOnBackPress = false
+                            )
+                        ) {
+                            BottomSheetResultOfThisRound(
+                                whichTeamResult =
+                                if (teamOne.hasGoal) {
+                                    1
+                                } else if (teamTwo.hasGoal) {
+                                    0
+                                } else {
+                                    2
+                                },
+                                sharedViewModel = sharedViewModel,
+                                onClickItem = {
+                                    Utils.CHOOSE_CARD = false
+                                    Utils.CHOOSE_CUBE = false
+                                    scope.launch {
+                                        sheetStateResult.hide()
+                                    }.invokeOnCompletion {
+                                        if (!sheetStateResult.isVisible) {
+                                            showBottomSheetResult = false
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+
+                // CustomToast در بالای صفحه
+                if (isToastVisible) {
+                    CustomToast(
+                        message = toastMessage,
+                        isVisible = isToastVisible,
+                        color = toastColor,
+                        icon = toastIcon,
+                        onDismiss = { isToastVisible = false }
                     )
                 }
             }
@@ -357,7 +399,10 @@ fun TeamInfoSection(
     modifier: Modifier = Modifier,
     team: TeamModel,
     sharedViewModel: SharedViewModel,
-    whichTeamHasGoal: Int
+    whichTeamHasGoal: Int,
+    onShowToast: (String) -> Unit,
+    toastIcon: (Int) -> Unit,
+    toastColor: (Int) -> Unit,
 ) {
     var counterEmptyGame by remember { mutableIntStateOf(team.numberOfEmptyGames) }
     val infoTeam = sharedViewModel.getTeam(whichTeamHasGoal)
@@ -370,8 +415,8 @@ fun TeamInfoSection(
     val sheetStateCards = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val sheetStateCube = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val sheetStateConfirmCube = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
     val scope = rememberCoroutineScope()
+
     Row(
         modifier = modifier.padding(
             top = paddingTopMedium(),
@@ -386,14 +431,37 @@ fun TeamInfoSection(
             value = counterEmptyGame.toString(),
             icon = R.drawable.hand,
             label = stringResource(R.string.empty_game),
-            onClickItem = { if (counterEmptyGame != 0) counterEmptyGame-- }
+            onClickItem = {
+                if (counterEmptyGame != 0) {
+                    counterEmptyGame--
+                } else {
+                    onShowToast("موجودی خالی بازی صفر است.")
+                    toastIcon(R.drawable.danger_circle)
+                    toastColor(R.color.yellow)
+                }
+            }
         )
         // تعداد کارت‌ها
         InfoBox(
             value = counterCards.toString(),
             icon = R.drawable.icon_card,
             label = stringResource(R.string.cards),
-            onClickItem = { showBottomSheetCards = true }
+            onClickItem = {
+                showBottomSheetCards = true
+                if (counterCards == 0) {
+                    onShowToast("موجودی کارت صفر است.")
+                    toastIcon(R.drawable.danger_circle)
+                    toastColor(R.color.yellow)
+                } else if (Utils.CHOOSE_CUBE) {
+                    onShowToast("شما مکعب را انتخاب کرده اید.")
+                    toastIcon(R.drawable.danger_circle)
+                    toastColor(R.color.yellow)
+                }else if (Utils.CHOOSE_CARD) {
+                    onShowToast("حداکثر استفاده از کارت 1 بار است")
+                    toastIcon(R.drawable.danger_circle)
+                    toastColor(R.color.yellow)
+                }
+            }
         )
         // تعداد مکعب
         InfoBox(
@@ -402,11 +470,24 @@ fun TeamInfoSection(
             label = stringResource(R.string.cube),
             onClickItem = {
                 showBottomSheetCube = true
+                if (counterCube == 0) {
+                    onShowToast("موجودی مکعب صفر است.")
+                    toastIcon(R.drawable.danger_circle)
+                    toastColor(R.color.yellow)
+                } else if (Utils.CHOOSE_CARD) {
+                    onShowToast("شما کارت را انتخاب کرده اید.")
+                    toastIcon(R.drawable.danger_circle)
+                    toastColor(R.color.yellow)
+                }else if (Utils.CHOOSE_CUBE) {
+                    onShowToast("حداکثر استفاده از مکعب 1 بار است")
+                    toastIcon(R.drawable.danger_circle)
+                    toastColor(R.color.yellow)
+                }
             }
         )
 
         //BottomSheetCards
-        if (showBottomSheetCards && counterCards != 0) {
+        if (showBottomSheetCards && counterCards != 0 && !Utils.CHOOSE_CUBE && !Utils.CHOOSE_CARD) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheetCards = false },
                 sheetState = sheetStateCards,
@@ -422,6 +503,8 @@ fun TeamInfoSection(
                             .invokeOnCompletion { showBottomSheetCards = false }
                     },
                     onClickOk = { idCard ->
+                        Utils.CHOOSE_CARD = true
+                        Utils.CHOOSE_CUBE = false
                         sharedViewModel.disableCardForPlayer(
                             teamId = whichTeamHasGoal,
                             cardId = idCard
@@ -436,7 +519,7 @@ fun TeamInfoSection(
         }
 
         //bottomSheetCube
-        if (showBottomSheetCube && counterCube != 0) {
+        if (showBottomSheetCube && counterCube != 0 && !Utils.CHOOSE_CARD && !Utils.CHOOSE_CUBE) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheetCube = false },
                 sheetState = sheetStateCube,
@@ -453,6 +536,8 @@ fun TeamInfoSection(
                             .invokeOnCompletion { showBottomSheetCube = false }
                     },
                     onConfirm = { numberCubes ->
+                        Utils.CHOOSE_CARD = false
+                        Utils.CHOOSE_CUBE = true
                         Utils.WHICH_SELECT_NUMBER_CUBE = numberCubes
                         scope.launch { sheetStateCube.hide() }
                             .invokeOnCompletion { showBottomSheetCube = false }
@@ -462,7 +547,7 @@ fun TeamInfoSection(
             }
         }
 
-//BottomSheetConfirmCube
+        //BottomSheetConfirmCube
         if (showBottomSheetConfirmCube) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheetConfirmCube = false },

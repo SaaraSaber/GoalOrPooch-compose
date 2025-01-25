@@ -698,22 +698,26 @@ fun BottomSheetResultOfThisRound(
 
             ItemResult(modifier = modifier, item = listResult[0], onClickItem = {
                 if (whichTeamResult == 0) {
-                    sharedViewModel.updateTeam(teamId = 0) {
-                        copy(
-                            score = sharedViewModel.getTeam(0)!!.score + 2,
-                            hasGoal = true
-                        )
-                    }
+//                    sharedViewModel.updateTeam(teamId = 0) {
+//                        copy(
+//                            score = sharedViewModel.getTeam(0)!!.score + 2,
+//                            hasGoal = true
+//                        )
+//                    }
+                    sharedViewModel.updateScoreTeam(teamId = 0, newScore = 2)
+
                     sharedViewModel.updateTeam(teamId = 1) {
                         copy(hasGoal = false)
                     }
                 } else if (whichTeamResult == 1) {
-                    sharedViewModel.updateTeam(teamId = 1) {
-                        copy(
-                            score = sharedViewModel.getTeam(1)!!.score + 2,
-                            hasGoal = true
-                        )
-                    }
+//                    sharedViewModel.updateTeam(teamId = 1) {
+//                        copy(
+//                            score = sharedViewModel.getTeam(1)!!.score + 2,
+//                            hasGoal = true
+//                        )
+//                    }
+                    sharedViewModel.updateScoreTeam(teamId = 1, newScore = 2)
+
                     sharedViewModel.updateTeam(teamId = 0) {
                         copy(hasGoal = false)
                     }
@@ -743,19 +747,23 @@ fun BottomSheetResultOfThisRound(
                     sharedViewModel.updateTeam(teamId = 0) {
                         copy(hasGoal = false)
                     }
-                    sharedViewModel.updateTeam(teamId = 1) {
-                        copy(
-                            score = sharedViewModel.getTeam(1)!!.score + 1,
-                            hasGoal = true
-                        )
-                    }
+                    sharedViewModel.updateScoreTeam(teamId = 1, newScore = 1)
+
+//                    sharedViewModel.updateTeam(teamId = 1) {
+//                        copy(
+//                            score = sharedViewModel.getTeam(1)!!.score + 1,
+//                            hasGoal = true
+//                        )
+//                    }
                 } else if (whichTeamResult == 1) {
-                    sharedViewModel.updateTeam(teamId = 0) {
-                        copy(
-                            score = sharedViewModel.getTeam(0)!!.score + 1,
-                            hasGoal = true
-                        )
-                    }
+//                    sharedViewModel.updateTeam(teamId = 0) {
+//                        copy(
+//                            score = sharedViewModel.getTeam(0)!!.score + 1,
+//                            hasGoal = true
+//                        )
+//                    }
+                    sharedViewModel.updateScoreTeam(teamId = 0, newScore = 1)
+
                     sharedViewModel.updateTeam(teamId = 1) {
                         copy(hasGoal = false)
                     }

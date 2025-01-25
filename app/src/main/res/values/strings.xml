@@ -138,4 +138,10 @@
     <string name="description_intelligence_test">آیا آماده اید ذهن خود را به چالش بکشید؟</string>
     <string name="check_list">چک لیست</string>
     <string name="description_check_list">به راحتی روزهایتان را مدیریت کنید!</string>
+
+
+<!--    toast-->
+    <string name="there_is_no_cube">موجودی مکعب صفر است.</string>
+    <string name="there_is_no_card">موجودی کارت صفر است.</string>
+    <string name="there_is_no_empty_game">موجودی خالی بازی صفر است.</string>
 </resources>

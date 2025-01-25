@@ -62,10 +62,29 @@ import ir.kaaveh.sdpcompose.sdp
 fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     LaunchedEffect(Unit) {
         sharedViewModel.getAllCards()
+        sharedViewModel.updateTeam(teamId = 0) {
+            copy(
+                id = 0,
+                score = 0,
+                hasGoal = false,
+                numberOfEmptyGames = 3,
+                numberCubes = 2,
+                cards = emptyList()
+            )
+        }
+        sharedViewModel.updateTeam(teamId = 1) {
+            copy(
+                id = 1,
+                score = 0,
+                hasGoal = false,
+                numberOfEmptyGames = 3,
+                numberCubes = 2,
+                cards = emptyList()
+            )
+        }
         ManegeGame.team_one_has_card = false
         ManegeGame.team_two_has_card = false
     }
-//    val itemSetting = sharedViewModel.itemSetting
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -135,9 +154,7 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
 @SuppressLint("StateFlowValueCalledInComposition", "UnrememberedMutableState")
 @Composable
 fun ListSettings(sharedViewModel: SharedViewModel) {
-//    val counters = remember { mutableStateListOf(6, 10, 30, 60, 5) }
     val itemSetting = sharedViewModel.itemSetting
-//    var itemSetting by mutableStateOf(SettingModel())
     Column(
         modifier = Modifier
             .padding(
@@ -313,5 +330,11 @@ fun ItemSetting(
 @Preview
 @Composable
 private fun SettingScreenPreview() {
-    ItemSetting(label = "hello", count = 5, minCount = 5, maxCount = 600, onIncrement = {}, onDecrement = {})
+    ItemSetting(
+        label = "hello",
+        count = 5,
+        minCount = 5,
+        maxCount = 600,
+        onIncrement = {},
+        onDecrement = {})
 }

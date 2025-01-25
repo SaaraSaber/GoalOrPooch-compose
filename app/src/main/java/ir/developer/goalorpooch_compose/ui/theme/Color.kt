@@ -12,4 +12,5 @@ val Pink40 = Color(0xFF7D5260)
 
 val HihadaBrown = Color(0xFF7C2927)
 val FenceGreen = Color(0xFF061E1E)
+val FenceGreen1 = Color(0xD0061E1E)
 val FenceGreenLow = Color(0xFF1A4141)

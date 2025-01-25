@@ -8,4 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="hihadaBrown">#7C2927</color>
+
+    <color name="red">#FF0000</color>
+    <color name="blue">#2796F0</color>
+    <color name="green">#4DAF55</color>
+    <color name="yellow">#FEC130</color>
 </resources>

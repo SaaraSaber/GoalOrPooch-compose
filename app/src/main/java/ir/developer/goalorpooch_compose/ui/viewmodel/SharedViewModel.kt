@@ -13,6 +13,7 @@ import ir.developer.goalorpooch_compose.model.GameGuideModel
 import ir.developer.goalorpooch_compose.model.SettingModel
 import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.util.TeamManager
+import ir.developer.goalorpooch_compose.util.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,12 +31,15 @@ class SharedViewModel @Inject constructor(
         // مقداردهی اولیه یا بارگذاری داده‌ها
         initializeTeams()
     }
+
     private val _player = MutableStateFlow(
         listOf(
             TeamModel(id = 0),
             TeamModel(id = 1)
         )
     )
+
+
     private fun initializeTeams() {
         // به‌عنوان مثال، تیم‌ها را از منابع خارجی بارگذاری کن.
         val initialTeams = listOf(
@@ -43,6 +47,11 @@ class SharedViewModel @Inject constructor(
             TeamModel(id = 1, hasGoal = false)
         )
         teamManager.updateTeams(initialTeams)
+    }
+
+    fun updateScoreTeam(teamId: Int, newScore: Int) {
+        val maxScore = itemSetting.value.victoryPoint - 1
+        teamManager.updateScoreTeam(teamId = teamId, newScore = newScore, maxScore = maxScore)
     }
 
     // تیم‌ها
@@ -95,7 +104,6 @@ class SharedViewModel @Inject constructor(
     }
 
 
-
     //...................setting...................
 
     var itemSetting = mutableStateOf(
@@ -105,13 +113,14 @@ class SharedViewModel @Inject constructor(
             victoryPoint = 9,
             getTimeToGetGoal = 90,
             getTimeToGetShahGoal = 180,
-            countOfPlayingCards = 5
+            countOfPlayingCards = Utils.THE_NUMBER_OF_PLAYING_CARDS
         )
     )
         private set
 
     fun updateItemSetting(newSetting: SettingModel) {
         itemSetting.value = newSetting
+        Utils.THE_NUMBER_OF_PLAYING_CARDS = newSetting.countOfPlayingCards
     }
 
     //...................guide............................

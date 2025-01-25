@@ -1,5 +1,6 @@
 package ir.developer.goalorpooch_compose.util
 
+import android.util.Log
 import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.model.TeamModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TeamManager @Inject constructor(){
+class TeamManager @Inject constructor() {
     private val _team = MutableStateFlow(
         listOf(
             TeamModel(id = 0),
@@ -42,6 +43,37 @@ class TeamManager @Inject constructor(){
         }
     }
 
+    // به‌روزرسانی امتیاز از TeamModel
+    fun updateScoreTeam(teamId: Int, newScore: Int, maxScore: Int, update: TeamModel.() -> TeamModel) {
+        _team.value = _team.value.map { team ->
+            if (team.id == teamId) {
+                val updatedScore = team.score + newScore
+                Log.i("updateScoreTeam", "Updated Score: $updatedScore")
+
+                if (maxScore == updatedScore || maxScore > updatedScore) {
+                    team.update()
+                } else if (maxScore < updatedScore) {
+                    team.update(score = maxScore)
+                } else {
+                    team.update(score = updatedScore)
+                }
+
+//                team.update(team.score = when {
+//                        updatedScore > maxScore -> maxScore // اگر از مقدار ماکس بیشتر باشد
+//                        updatedScore == maxScore -> maxScore // اگر از مقدار ماکس بیشتر باشد
+//                        else -> updatedScore // مقدار جدید معتبر است
+//                    }
+//                )
+            } else {
+                team
+            }
+        }
+        _team.value.forEach {
+
+            Log.i("updateScoreTeam", "updateScoreTeam: ${it.score} id: ${it.id}")
+        }
+    }
+
     // گرفتن اطلاعات یک تیم خاص
     fun getInfoTeam(teamId: Int): TeamModel? {
         return _team.value.firstOrNull { it.id == teamId }
@@ -60,7 +92,7 @@ class TeamManager @Inject constructor(){
         }
     }
 
-//اپدیت کلی تیم
+    //اپدیت کلی تیم
     fun updateTeams(newTeams: List<TeamModel>) {
         _team.value = newTeams
     }
