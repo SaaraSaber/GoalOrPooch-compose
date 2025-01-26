@@ -67,6 +67,7 @@ import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
 import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
+import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -667,6 +668,7 @@ fun BottomSheetResultOfThisRound(
                 )
             )
         }
+    val isChooseCube = sharedViewModel.getTeam(whichTeamResult)!!.selectedCube
 
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl
@@ -698,77 +700,161 @@ fun BottomSheetResultOfThisRound(
 
             ItemResult(modifier = modifier, item = listResult[0], onClickItem = {
                 if (whichTeamResult == 0) {
-//                    sharedViewModel.updateTeam(teamId = 0) {
-//                        copy(
-//                            score = sharedViewModel.getTeam(0)!!.score + 2,
-//                            hasGoal = true
-//                        )
-//                    }
-                    sharedViewModel.updateScoreTeam(teamId = 0, newScore = 2)
+                    if (isChooseCube) {
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateScoreTeam(
+                            teamId = 0,
+                            newScore = Utils.WHICH_SELECT_NUMBER_CUBE
+                        )
 
-                    sharedViewModel.updateTeam(teamId = 1) {
-                        copy(hasGoal = false)
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = false)
+                        }
+                    } else {
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateScoreTeam(teamId = 0, newScore = 2)
+
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = false)
+                        }
                     }
                 } else if (whichTeamResult == 1) {
-//                    sharedViewModel.updateTeam(teamId = 1) {
-//                        copy(
-//                            score = sharedViewModel.getTeam(1)!!.score + 2,
-//                            hasGoal = true
-//                        )
-//                    }
-                    sharedViewModel.updateScoreTeam(teamId = 1, newScore = 2)
+                    if (isChooseCube) {
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateScoreTeam(
+                            teamId = 1,
+                            newScore = Utils.WHICH_SELECT_NUMBER_CUBE
+                        )
 
-                    sharedViewModel.updateTeam(teamId = 0) {
-                        copy(hasGoal = false)
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = false)
+                        }
+                    } else {
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateScoreTeam(teamId = 1, newScore = 2)
+
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = false)
+                        }
                     }
+
                 }
                 onClickItem(whichTeamResult)
+                sharedViewModel.updateTeam(teamId = whichTeamResult) {
+                    copy(selectedCube = false)
+                }
             })
             ItemResult(modifier = modifier, item = listResult[1], onClickItem = {
                 if (whichTeamResult == 1) {
-                    sharedViewModel.updateTeam(teamId = 1) {
-                        copy(hasGoal = true)
+                    if (isChooseCube) {
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = false)
+                        }
+                        sharedViewModel.updateScoreTeam(
+                            teamId = 1,
+                            newScore = Utils.WHICH_SELECT_NUMBER_CUBE
+                        )
+                    } else {
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = false)
+                        }
                     }
-                    sharedViewModel.updateTeam(teamId = 0) {
-                        copy(hasGoal = false)
-                    }
+
                 } else if (whichTeamResult == 0) {
-                    sharedViewModel.updateTeam(teamId = 0) {
-                        copy(hasGoal = true)
+                    if (isChooseCube) {
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = false)
+                        }
+                        sharedViewModel.updateScoreTeam(
+                            teamId = 0,
+                            newScore = Utils.WHICH_SELECT_NUMBER_CUBE
+                        )
+                    } else {
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = false)
+                        }
                     }
-                    sharedViewModel.updateTeam(teamId = 1) {
-                        copy(hasGoal = false)
-                    }
+
                 }
                 onClickItem(whichTeamResult)
+                sharedViewModel.updateTeam(teamId = whichTeamResult) {
+                    copy(selectedCube = false)
+                }
             })
             ItemResult(modifier = modifier, item = listResult[2], onClickItem = {
                 if (whichTeamResult == 0) {
-                    sharedViewModel.updateTeam(teamId = 0) {
-                        copy(hasGoal = false)
-                    }
-                    sharedViewModel.updateScoreTeam(teamId = 1, newScore = 1)
+                    if (isChooseCube) {
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = false)
+                        }
+                        sharedViewModel.updateScoreTeam(
+                            teamId = 1,
+                            newScore = Utils.WHICH_SELECT_NUMBER_CUBE
+                        )
 
-//                    sharedViewModel.updateTeam(teamId = 1) {
-//                        copy(
-//                            score = sharedViewModel.getTeam(1)!!.score + 1,
-//                            hasGoal = true
-//                        )
-//                    }
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = true)
+                        }
+                    } else {
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = false)
+                        }
+                        sharedViewModel.updateScoreTeam(teamId = 1, newScore = 1)
+
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = true)
+                        }
+                    }
+
                 } else if (whichTeamResult == 1) {
-//                    sharedViewModel.updateTeam(teamId = 0) {
-//                        copy(
-//                            score = sharedViewModel.getTeam(0)!!.score + 1,
-//                            hasGoal = true
-//                        )
-//                    }
-                    sharedViewModel.updateScoreTeam(teamId = 0, newScore = 1)
+                    if (isChooseCube) {
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateScoreTeam(
+                            teamId = 0,
+                            newScore = Utils.WHICH_SELECT_NUMBER_CUBE
+                        )
 
-                    sharedViewModel.updateTeam(teamId = 1) {
-                        copy(hasGoal = false)
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = false)
+                        }
+                    } else {
+                        sharedViewModel.updateTeam(teamId = 0) {
+                            copy(hasGoal = true)
+                        }
+                        sharedViewModel.updateScoreTeam(teamId = 0, newScore = 1)
+
+                        sharedViewModel.updateTeam(teamId = 1) {
+                            copy(hasGoal = false)
+                        }
                     }
+
                 }
                 onClickItem(whichTeamResult)
+                sharedViewModel.updateTeam(teamId = whichTeamResult) {
+                    copy(selectedCube = false)
+                }
             })
         }
     }

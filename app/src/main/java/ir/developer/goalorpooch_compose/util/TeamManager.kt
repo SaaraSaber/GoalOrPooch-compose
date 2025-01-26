@@ -1,6 +1,5 @@
 package ir.developer.goalorpooch_compose.util
 
-import android.util.Log
 import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.model.TeamModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,33 +43,23 @@ class TeamManager @Inject constructor() {
     }
 
     // به‌روزرسانی امتیاز از TeamModel
-    fun updateScoreTeam(teamId: Int, newScore: Int, maxScore: Int, update: TeamModel.() -> TeamModel) {
+    fun updateScoreTeam(
+        teamId: Int,
+        newScore: Int,
+        maxScore: Int,
+    ) {
         _team.value = _team.value.map { team ->
             if (team.id == teamId) {
                 val updatedScore = team.score + newScore
-                Log.i("updateScoreTeam", "Updated Score: $updatedScore")
 
-                if (maxScore == updatedScore || maxScore > updatedScore) {
-                    team.update()
-                } else if (maxScore < updatedScore) {
-                    team.update(score = maxScore)
+                if (maxScore == updatedScore || maxScore < updatedScore) {
+                    team.copy(score = maxScore, shahGoal = true)
                 } else {
-                    team.update(score = updatedScore)
+                    team.copy(score = updatedScore)
                 }
-
-//                team.update(team.score = when {
-//                        updatedScore > maxScore -> maxScore // اگر از مقدار ماکس بیشتر باشد
-//                        updatedScore == maxScore -> maxScore // اگر از مقدار ماکس بیشتر باشد
-//                        else -> updatedScore // مقدار جدید معتبر است
-//                    }
-//                )
             } else {
                 team
             }
-        }
-        _team.value.forEach {
-
-            Log.i("updateScoreTeam", "updateScoreTeam: ${it.score} id: ${it.id}")
         }
     }
 

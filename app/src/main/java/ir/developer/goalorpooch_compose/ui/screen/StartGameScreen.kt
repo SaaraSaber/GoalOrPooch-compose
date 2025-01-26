@@ -408,7 +408,8 @@ fun TeamInfoSection(
     val infoTeam = sharedViewModel.getTeam(whichTeamHasGoal)
     val listCard = infoTeam!!.cards.filter { !it.disable }
     val counterCards = listCard.size
-    val counterCube = team.numberCubes
+    val counterCube = infoTeam.numberCubes
+//    val counterCube = team.numberCubes
     var showBottomSheetCards by remember { mutableStateOf(false) }
     var showBottomSheetCube by remember { mutableStateOf(false) }
     var showBottomSheetConfirmCube by remember { mutableStateOf(false) }
@@ -456,7 +457,7 @@ fun TeamInfoSection(
                     onShowToast("شما مکعب را انتخاب کرده اید.")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
-                }else if (Utils.CHOOSE_CARD) {
+                } else if (Utils.CHOOSE_CARD) {
                     onShowToast("حداکثر استفاده از کارت 1 بار است")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
@@ -478,7 +479,7 @@ fun TeamInfoSection(
                     onShowToast("شما کارت را انتخاب کرده اید.")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
-                }else if (Utils.CHOOSE_CUBE) {
+                } else if (Utils.CHOOSE_CUBE) {
                     onShowToast("حداکثر استفاده از مکعب 1 بار است")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
@@ -566,8 +567,17 @@ fun TeamInfoSection(
                             .invokeOnCompletion { showBottomSheetConfirmCube = false }
                     },
                     onConfirm = {
+                        if (whichTeamHasGoal == 0) {
+                            sharedViewModel.updateTeam(teamId = 1) {
+                                copy(selectedCube = true)
+                            }
+                        } else if (whichTeamHasGoal == 1) {
+                            sharedViewModel.updateTeam(teamId = 0) {
+                                copy(selectedCube = true)
+                            }
+                        }
                         sharedViewModel.updateTeam(teamId = whichTeamHasGoal) {
-                            copy(numberCubes = infoTeam.numberCubes - 1)
+                            copy(numberCubes = counterCube - 1)
                         }
                         scope.launch { sheetStateConfirmCube.hide() }
                             .invokeOnCompletion { showBottomSheetConfirmCube = false }
