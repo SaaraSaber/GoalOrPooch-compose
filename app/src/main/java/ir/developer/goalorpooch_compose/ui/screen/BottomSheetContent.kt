@@ -334,14 +334,14 @@ fun BottomSheetConfirmCube(
 fun BottomSheetCards(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
-    onClickOk: (Int) -> Unit,
+    onClickOk: (Int, Int) -> Unit,
     whichTeamHasGoal: Int,
     sharedViewModel: SharedViewModel
 ) {
     val card: TeamModel? = if (whichTeamHasGoal == 0) {
-        sharedViewModel.getTeam(0)
-    } else {
         sharedViewModel.getTeam(1)
+    } else {
+        sharedViewModel.getTeam(0)
     }
     val availableCards = card?.cards?.filter { !it.disable }
     // کارت انتخاب شده
@@ -388,7 +388,7 @@ fun BottomSheetCards(
                 horizontalArrangement = Arrangement.spacedBy(paddingRoundMini())
             ) {
                 Image(
-                    painter = if (whichTeamHasGoal == 0) painterResource(R.drawable.pic_team_one)
+                    painter = if (whichTeamHasGoal == 1) painterResource(R.drawable.pic_team_one)
                     else painterResource(R.drawable.pic_team_two),
                     contentDescription = null,
                     modifier = modifier.size(
@@ -400,7 +400,7 @@ fun BottomSheetCards(
                         top = paddingTopMedium(),
                         bottom = paddingTopMedium()
                     ),
-                    text = if (whichTeamHasGoal == 0) stringResource(R.string.description_choose_card_team_one)
+                    text = if (whichTeamHasGoal == 1) stringResource(R.string.description_choose_card_team_one)
                     else stringResource(R.string.description_choose_card_team_two),
                     color = Color.White,
                     fontFamily = FontPeydaMedium,
@@ -436,7 +436,11 @@ fun BottomSheetCards(
                     ),
                     enabled = selectedCardId != null,
                     onClick = {
-                        onClickOk(selectedCardId!!)
+                        if (whichTeamHasGoal == 0) {
+                            onClickOk(selectedCardId!!, 1)
+                        } else {
+                            onClickOk(selectedCardId!!, 0)
+                        }
                     }
                 ) {
                     Text(
@@ -628,6 +632,7 @@ fun BottomSheetResultOfThisRound(
     modifier: Modifier = Modifier,
     whichTeamResult: Int,
     onClickItem: (Int) -> Unit,
+    onDismiss: () -> Unit,
     sharedViewModel: SharedViewModel
 ) {
     val listResult: List<ResultThisRoundModel> =
@@ -690,6 +695,16 @@ fun BottomSheetResultOfThisRound(
                     fontFamily = FontPeydaBold,
                     fontSize = titleSize()
                 )
+                Spacer(modifier = modifier.weight(1f))
+                IconButton(
+                    onClick = { onDismiss() }
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.close_circle),
+                        contentDescription = "btn_close",
+                        modifier = modifier.size(20.sdp)
+                    )
+                }
             }
             HorizontalDivider(
                 modifier = modifier.padding(

@@ -54,6 +54,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
@@ -111,8 +112,10 @@ fun StartGameScreen(
     }
     //timer
     var isRunning by remember { mutableStateOf(false) }
-    var remainingTime by remember { mutableIntStateOf(sharedViewModel.itemSetting.value.getTimeToGetGoal) }
+    var remainingTimeGoal by remember { mutableIntStateOf(sharedViewModel.itemSetting.value.getTimeToGetGoal) }
+    var remainingTimeShahGoal by remember { mutableIntStateOf(sharedViewModel.itemSetting.value.getTimeToGetGoal) }
     var showBottomSheetResult by remember { mutableStateOf(false) }
+
     val sheetStateResult = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
         skipPartiallyExpanded = false,
@@ -120,16 +123,26 @@ fun StartGameScreen(
     )
 
     LaunchedEffect(isRunning) {
-        if (isRunning) {
-            while (remainingTime > 0) {
+        if (isRunning && !teamOne.shahGoal && !teamTwo.shahGoal) {
+            while (remainingTimeGoal > 0) {
                 delay(1000L)
-                remainingTime -= 1
+                remainingTimeGoal -= 1
             }
-            if (remainingTime == 0) {
+            if (remainingTimeGoal == 0) {
                 showBottomSheetResult = true
             }
             isRunning = false
-//            remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
+
+        } else if (isRunning && (teamOne.shahGoal || teamTwo.shahGoal)) {
+
+            while (remainingTimeShahGoal > 0) {
+                delay(1000L)
+                remainingTimeShahGoal -= 1
+            }
+            if (remainingTimeShahGoal == 0) {
+                showBottomSheetResult = true
+            }
+            isRunning = false
         }
     }
 
@@ -172,11 +185,12 @@ fun StartGameScreen(
                         } else {
                             2
                         },
-                        remainingTime = remainingTime,
-                        showTimer = isRunning
+                        remainingTime = if (teamOne.hasGoal || teamTwo.shahGoal) remainingTimeShahGoal else remainingTimeGoal,
+                        showTimer = isRunning,
+                        isVisibility = teamOne.shahGoal || teamTwo.shahGoal
                     )
 
-//time
+//...............time
                     Button(
                         modifier = modifier
                             .wrapContentWidth()
@@ -185,10 +199,22 @@ fun StartGameScreen(
                             if (isRunning) {
                                 isRunning = false
                                 showBottomSheetResult = true
-                                remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
+                                if (teamOne.hasGoal || teamTwo.shahGoal) {
+                                    remainingTimeShahGoal =
+                                        sharedViewModel.itemSetting.value.getTimeToGetShahGoal
+                                } else {
+                                    remainingTimeGoal =
+                                        sharedViewModel.itemSetting.value.getTimeToGetGoal
+                                }
                             } else {
                                 isRunning = true
-                                remainingTime = sharedViewModel.itemSetting.value.getTimeToGetGoal
+                                if (teamOne.hasGoal || teamTwo.shahGoal) {
+                                    remainingTimeShahGoal =
+                                        sharedViewModel.itemSetting.value.getTimeToGetShahGoal
+                                } else {
+                                    remainingTimeGoal =
+                                        sharedViewModel.itemSetting.value.getTimeToGetGoal
+                                }
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
@@ -227,7 +253,8 @@ fun StartGameScreen(
                             },
                             toastColor = { color ->
                                 toastColor = color
-                            }
+                            },
+                            enableShahGoal = teamOne.shahGoal || teamTwo.shahGoal
                         )
                     } else if (teamTwo.hasGoal) {
                         TeamInfoSection(
@@ -242,10 +269,10 @@ fun StartGameScreen(
                             },
                             toastColor = { color ->
                                 toastColor = color
-                            }
+                            },
+                            enableShahGoal = teamOne.shahGoal || teamTwo.shahGoal
                         )
                     }
-
 
 //BottomSheetExitGame
                     if (showBottomSheetExitGame) {
@@ -372,6 +399,15 @@ fun StartGameScreen(
                                             showBottomSheetResult = false
                                         }
                                     }
+                                },
+                                onDismiss = {
+                                    scope.launch {
+                                        sheetStateResult.hide()
+                                    }.invokeOnCompletion {
+                                        if (!sheetStateResult.isVisible) {
+                                            showBottomSheetResult = false
+                                        }
+                                    }
                                 }
                             )
                         }
@@ -403,13 +439,14 @@ fun TeamInfoSection(
     onShowToast: (String) -> Unit,
     toastIcon: (Int) -> Unit,
     toastColor: (Int) -> Unit,
+    enableShahGoal: Boolean
 ) {
-    var counterEmptyGame by remember { mutableIntStateOf(team.numberOfEmptyGames) }
+    var counterEmptyGame by remember { mutableIntStateOf(0) }
+    counterEmptyGame = if (enableShahGoal) { 6 } else { 3 }
     val infoTeam = sharedViewModel.getTeam(whichTeamHasGoal)
     val listCard = infoTeam!!.cards.filter { !it.disable }
     val counterCards = listCard.size
     val counterCube = infoTeam.numberCubes
-//    val counterCube = team.numberCubes
     var showBottomSheetCards by remember { mutableStateOf(false) }
     var showBottomSheetCube by remember { mutableStateOf(false) }
     var showBottomSheetConfirmCube by remember { mutableStateOf(false) }
@@ -429,6 +466,7 @@ fun TeamInfoSection(
     ) {
         // تعداد خالی بازی
         InfoBox(
+            isVisibility = true,
             value = counterEmptyGame.toString(),
             icon = R.drawable.hand,
             label = stringResource(R.string.empty_game),
@@ -444,6 +482,7 @@ fun TeamInfoSection(
         )
         // تعداد کارت‌ها
         InfoBox(
+            isVisibility = !infoTeam.shahGoal,
             value = counterCards.toString(),
             icon = R.drawable.icon_card,
             label = stringResource(R.string.cards),
@@ -466,6 +505,7 @@ fun TeamInfoSection(
         )
         // تعداد مکعب
         InfoBox(
+            isVisibility = !infoTeam.shahGoal,
             value = counterCube.toString(),
             icon = R.drawable.cube,
             label = stringResource(R.string.cube),
@@ -503,11 +543,11 @@ fun TeamInfoSection(
                         scope.launch { sheetStateCards.hide() }
                             .invokeOnCompletion { showBottomSheetCards = false }
                     },
-                    onClickOk = { idCard ->
+                    onClickOk = { idCard, goal ->
                         Utils.CHOOSE_CARD = true
                         Utils.CHOOSE_CUBE = false
                         sharedViewModel.disableCardForPlayer(
-                            teamId = whichTeamHasGoal,
+                            teamId = goal,
                             cardId = idCard
                         )
                         scope.launch { sheetStateCards.hide() }
@@ -590,6 +630,7 @@ fun TeamInfoSection(
 
 @Composable
 fun InfoBox(
+    isVisibility: Boolean = true,
     modifier: Modifier = Modifier,
     value: String,
     icon: Int,
@@ -603,8 +644,9 @@ fun InfoBox(
                 color = FenceGreen,
                 shape = RoundedCornerShape(sizeRound())
             )
+            .alpha(if (isVisibility) 1f else .5f)
             .padding(8.sdp)
-            .clickable { onClickItem() },
+            .clickable(enabled = isVisibility) { onClickItem() },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -639,7 +681,8 @@ fun TableGame(
     modifier: Modifier = Modifier,
     whichTeamHasGoal: Int,
     remainingTime: Int,
-    showTimer: Boolean
+    showTimer: Boolean,
+    isVisibility: Boolean
 ) {
     Row(
         modifier = modifier
@@ -684,6 +727,16 @@ fun TableGame(
                 modifier = modifier.width(135.sdp),
                 contentScale = ContentScale.FillWidth
             )
+            if (isVisibility) {
+                Text(
+                    modifier = modifier.padding(bottom = 100.sdp),
+                    text = "شاه گل",
+                    fontSize = titleSize(),
+                    fontFamily = FontPeydaBold,
+                    color = Color.Red,
+                    textAlign = TextAlign.Center
+                )
+            }
             Text(
                 modifier = modifier.width(100.sdp),
                 text = buildAnnotatedString {
@@ -800,4 +853,10 @@ fun HeaderGame(
                 .alpha(if (whichTeamHasGoal == 1) 1f else mediumAlpha())
         )
     }
+}
+
+@Preview
+@Composable
+private fun TableGameP() {
+    TableGame(whichTeamHasGoal = 0, remainingTime = 120, showTimer = true, isVisibility = true)
 }

@@ -1,5 +1,6 @@
 package ir.developer.goalorpooch_compose.model
 
+
 data class TeamModel(
     val id: Int,
     var score: Int = 0,
@@ -10,4 +11,5 @@ data class TeamModel(
     var selectedCube: Boolean = false,
     var selectedCard: Boolean = false,
     var shahGoal: Boolean = false,
+    var cuntShahGoal: Int = 0
 )

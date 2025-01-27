@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -34,6 +35,7 @@ import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingRoundMini
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.sizeIcon
 import ir.developer.goalorpooch_compose.ui.theme.toastSize
 import ir.kaaveh.sdpcompose.sdp
 
@@ -70,6 +72,7 @@ fun CustomToast(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
+                            modifier=modifier.size(sizeIcon()),
                             painter = painterResource(icon),
                             contentDescription = null,
                             tint = colorResource(color)
@@ -81,7 +84,7 @@ fun CustomToast(
                         )
                         Text(
                             text = message,
-                            color = Color.White,
+                            color = Color.Black,
                             fontSize = toastSize(),
                             fontFamily = FontPeydaMedium,
                             maxLines = 1,
@@ -107,7 +110,7 @@ private fun CustomToastPreview() {
     CustomToast(
         message = "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صن",
         isVisible = true,
-        color = R.color.hihadaBrown,
-        icon = R.drawable.close_circle,
+        color = R.color.yellow,
+        icon = R.drawable.danger_circle,
         onDismiss = {})
 }

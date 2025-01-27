@@ -72,7 +72,8 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                 cards = emptyList(),
                 selectedCube = false,
                 selectedCard = false,
-                shahGoal = false
+                shahGoal = false,
+                cuntShahGoal = 0
             )
         }
         sharedViewModel.updateTeam(teamId = 1) {
@@ -85,7 +86,8 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                 cards = emptyList(),
                 selectedCube = false,
                 selectedCard = false,
-                shahGoal = false
+                shahGoal = false,
+                cuntShahGoal = 0
             )
         }
         ManegeGame.team_one_has_card = false

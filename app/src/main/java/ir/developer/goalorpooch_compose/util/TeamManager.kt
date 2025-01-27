@@ -53,7 +53,11 @@ class TeamManager @Inject constructor() {
                 val updatedScore = team.score + newScore
 
                 if (maxScore == updatedScore || maxScore < updatedScore) {
-                    team.copy(score = maxScore, shahGoal = true)
+                    team.copy(
+                        score = maxScore,
+                        shahGoal = true,
+                        cuntShahGoal = team.cuntShahGoal + 1
+                    )
                 } else {
                     team.copy(score = updatedScore)
                 }
