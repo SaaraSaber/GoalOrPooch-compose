@@ -673,7 +673,8 @@ fun BottomSheetResultOfThisRound(
                 )
             )
         }
-    val isChooseCube = sharedViewModel.getTeam(whichTeamResult)!!.selectedCube
+    val teamInfo = sharedViewModel.getTeam(whichTeamResult)
+//    val teamInfo = if (whichTeamResult == 0) teams[0] else teams[1]
 
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl
@@ -715,7 +716,7 @@ fun BottomSheetResultOfThisRound(
 
             ItemResult(modifier = modifier, item = listResult[0], onClickItem = {
                 if (whichTeamResult == 0) {
-                    if (isChooseCube) {
+                    if (teamInfo!!.selectedCube) {
                         sharedViewModel.updateTeam(teamId = 0) {
                             copy(hasGoal = true)
                         }
@@ -738,7 +739,7 @@ fun BottomSheetResultOfThisRound(
                         }
                     }
                 } else if (whichTeamResult == 1) {
-                    if (isChooseCube) {
+                    if (teamInfo!!.selectedCube) {
                         sharedViewModel.updateTeam(teamId = 1) {
                             copy(hasGoal = true)
                         }
@@ -760,7 +761,6 @@ fun BottomSheetResultOfThisRound(
                             copy(hasGoal = false)
                         }
                     }
-
                 }
                 onClickItem(whichTeamResult)
                 sharedViewModel.updateTeam(teamId = whichTeamResult) {
@@ -769,7 +769,7 @@ fun BottomSheetResultOfThisRound(
             })
             ItemResult(modifier = modifier, item = listResult[1], onClickItem = {
                 if (whichTeamResult == 1) {
-                    if (isChooseCube) {
+                    if (teamInfo!!.selectedCube) {
                         sharedViewModel.updateTeam(teamId = 1) {
                             copy(hasGoal = true)
                         }
@@ -790,7 +790,7 @@ fun BottomSheetResultOfThisRound(
                     }
 
                 } else if (whichTeamResult == 0) {
-                    if (isChooseCube) {
+                    if (teamInfo!!.selectedCube) {
                         sharedViewModel.updateTeam(teamId = 0) {
                             copy(hasGoal = true)
                         }
@@ -809,7 +809,6 @@ fun BottomSheetResultOfThisRound(
                             copy(hasGoal = false)
                         }
                     }
-
                 }
                 onClickItem(whichTeamResult)
                 sharedViewModel.updateTeam(teamId = whichTeamResult) {
@@ -818,7 +817,7 @@ fun BottomSheetResultOfThisRound(
             })
             ItemResult(modifier = modifier, item = listResult[2], onClickItem = {
                 if (whichTeamResult == 0) {
-                    if (isChooseCube) {
+                    if (teamInfo!!.selectedCube) {
                         sharedViewModel.updateTeam(teamId = 0) {
                             copy(hasGoal = false)
                         }
@@ -826,7 +825,6 @@ fun BottomSheetResultOfThisRound(
                             teamId = 1,
                             newScore = Utils.WHICH_SELECT_NUMBER_CUBE
                         )
-
                         sharedViewModel.updateTeam(teamId = 1) {
                             copy(hasGoal = true)
                         }
@@ -840,9 +838,8 @@ fun BottomSheetResultOfThisRound(
                             copy(hasGoal = true)
                         }
                     }
-
                 } else if (whichTeamResult == 1) {
-                    if (isChooseCube) {
+                    if (teamInfo!!.selectedCube) {
                         sharedViewModel.updateTeam(teamId = 0) {
                             copy(hasGoal = true)
                         }
@@ -864,13 +861,87 @@ fun BottomSheetResultOfThisRound(
                             copy(hasGoal = false)
                         }
                     }
-
                 }
                 onClickItem(whichTeamResult)
                 sharedViewModel.updateTeam(teamId = whichTeamResult) {
                     copy(selectedCube = false)
                 }
             })
+        }
+    }
+}
+
+@Composable
+fun BottomSheetResultShahGoal(
+    modifier: Modifier = Modifier,
+    whichTeamResult: Int,
+    onClickItem: (Boolean) -> Unit,
+) {
+    val listResult: List<ResultThisRoundModel> =
+        if (whichTeamResult == 0) {
+            listOf(
+                ResultThisRoundModel(
+                    id = 1,
+                    image = R.drawable.tick,
+                    text = stringResource(R.string.first_team_scored_shah_goal)
+                ),
+                ResultThisRoundModel(
+                    id = 0,
+                    image = R.drawable.square_cross,
+                    text = stringResource(R.string.first_team_did_not_scored_shah_goal)
+                )
+            )
+        } else {
+            listOf(
+                ResultThisRoundModel(
+                    id = 0,
+                    image = R.drawable.tick,
+                    text = stringResource(R.string.second_team_scored_shah_goal)
+                ),
+                ResultThisRoundModel(
+                    id = 0,
+                    image = R.drawable.square_cross,
+                    text = stringResource(R.string.second_team_did_not_scored_shah_goal)
+                )
+            )
+        }
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl
+    ) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.result_of_this_round),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+                Spacer(modifier = modifier.weight(1f))
+            }
+            HorizontalDivider(
+                modifier = modifier.padding(
+                    top = paddingTop(),
+                    bottom = paddingTop()
+                )
+            )
+
+            ItemResult(modifier = modifier,
+                item = listResult[0],
+                onClickItem = { onClickItem(true) }
+            )
+            ItemResult(modifier = modifier,
+                item = listResult[1],
+                onClickItem = { onClickItem(false) }
+            )
         }
     }
 }

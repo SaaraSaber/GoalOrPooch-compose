@@ -1,7 +1,6 @@
 package ir.developer.goalorpooch_compose.ui.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +16,8 @@ import ir.developer.goalorpooch_compose.util.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -92,7 +93,6 @@ class SharedViewModel @Inject constructor(
                 id = id,
                 name = name,
                 description = description,
-//                isSelect = false,
                 disable = false
             )
             cardRepository.addCard(cardModel = cardModel)
@@ -106,20 +106,22 @@ class SharedViewModel @Inject constructor(
 
     //...................setting...................
 
-    var itemSetting = mutableStateOf(
+    private val _itemSetting = MutableStateFlow(
         SettingModel(
             id = 0,
             playerNumber = 6,
             victoryPoint = 9,
             getTimeToGetGoal = 90,
             getTimeToGetShahGoal = 180,
-            countOfPlayingCards = Utils.THE_NUMBER_OF_PLAYING_CARDS
+            countOfPlayingCards = Utils.THE_NUMBER_OF_PLAYING_CARDS,
+            shahGoal = false,
+            countShahGoal = 0
         )
     )
-        private set
+    val itemSetting: StateFlow<SettingModel> = _itemSetting.asStateFlow()
 
     fun updateItemSetting(newSetting: SettingModel) {
-        itemSetting.value = newSetting
+        _itemSetting.update { newSetting }
         Utils.THE_NUMBER_OF_PLAYING_CARDS = newSetting.countOfPlayingCards
     }
 

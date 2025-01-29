@@ -10,6 +10,6 @@ data class TeamModel(
     var cards: List<CardModel> = emptyList(),
     var selectedCube: Boolean = false,
     var selectedCard: Boolean = false,
-    var shahGoal: Boolean = false,
-    var cuntShahGoal: Int = 0
+//    var shahGoal: Boolean = false,
+//    var cuntShahGoal: Int = 0
 )

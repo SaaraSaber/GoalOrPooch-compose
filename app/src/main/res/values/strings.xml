@@ -90,6 +90,10 @@
     <string name="final_result">نتیجه نهایی</string>
     <string name="first_team_scored_a_single_goal">تیم اول گل را تک ضرب گرفت.</string>
     <string name="first_team_scored">تیم اول گل را گرفت.</string>
+    <string name="first_team_scored_shah_goal">تیم اول شاه گل را گرفت.</string>
+    <string name="first_team_did_not_scored_shah_goal">تیم اول شاه گل را نگرفت.</string>
+    <string name="second_team_did_not_scored_shah_goal">تیم دوم شاه گل را نگرفت.</string>
+    <string name="second_team_scored_shah_goal">تیم دوم شاه گل را گرفت.</string>
     <string name="first_team_did_not_score">تیم اول گل را نگرفت.</string>
     <string name="second_team_scored_a_single_goal">تیم دوم گل را تک ضرب گرفت.</string>
     <string name="second_team_scored">تیم دوم گل را گرفت.</string>

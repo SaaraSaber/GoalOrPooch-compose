@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -72,8 +74,8 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                 cards = emptyList(),
                 selectedCube = false,
                 selectedCard = false,
-                shahGoal = false,
-                cuntShahGoal = 0
+//                shahGoal = false,
+//                cuntShahGoal = 0
             )
         }
         sharedViewModel.updateTeam(teamId = 1) {
@@ -86,8 +88,8 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                 cards = emptyList(),
                 selectedCube = false,
                 selectedCard = false,
-                shahGoal = false,
-                cuntShahGoal = 0
+//                shahGoal = false,
+//                cuntShahGoal = 0
             )
         }
         ManegeGame.team_one_has_card = false
@@ -162,7 +164,7 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
 @SuppressLint("StateFlowValueCalledInComposition", "UnrememberedMutableState")
 @Composable
 fun ListSettings(sharedViewModel: SharedViewModel) {
-    val itemSetting = sharedViewModel.itemSetting
+    val itemSetting by sharedViewModel.itemSetting.collectAsState()
     Column(
         modifier = Modifier
             .padding(
@@ -173,81 +175,81 @@ fun ListSettings(sharedViewModel: SharedViewModel) {
     ) {
         ItemSetting(
             label = stringResource(R.string.number_player),
-            count = itemSetting.value.playerNumber,
+            count = itemSetting.playerNumber,
             minCount = 4,
             maxCount = 10,
             onIncrement = {
                 sharedViewModel.updateItemSetting(
-                    itemSetting.value.copy(playerNumber = itemSetting.value.playerNumber + 2)
+                    itemSetting.copy(playerNumber = itemSetting.playerNumber + 2)
                 )
             },
             onDecrement = {
-                if (itemSetting.value.playerNumber > 4) {
-                    sharedViewModel.updateItemSetting(itemSetting.value.copy(playerNumber = itemSetting.value.playerNumber - 2))
+                if (itemSetting.playerNumber > 4) {
+                    sharedViewModel.updateItemSetting(itemSetting.copy(playerNumber = itemSetting.playerNumber - 2))
                 }
             }
         )
         ItemSetting(
             label = stringResource(R.string.victory_points),
-            count = itemSetting.value.victoryPoint,
+            count = itemSetting.victoryPoint,
             minCount = 4,
             maxCount = 21,
             onIncrement = {
                 sharedViewModel.updateItemSetting(
-                    itemSetting.value.copy(victoryPoint = itemSetting.value.victoryPoint + 1)
+                    itemSetting.copy(victoryPoint = itemSetting.victoryPoint + 1)
                 )
             },
             onDecrement = {
-                if (itemSetting.value.victoryPoint > 4) {
-                    sharedViewModel.updateItemSetting(itemSetting.value.copy(victoryPoint = itemSetting.value.victoryPoint - 1))
+                if (itemSetting.victoryPoint > 4) {
+                    sharedViewModel.updateItemSetting(itemSetting.copy(victoryPoint = itemSetting.victoryPoint - 1))
                 }
             }
         )
         ItemSetting(
             label = stringResource(R.string.time_get_goal),
-            count = itemSetting.value.getTimeToGetGoal,
+            count = itemSetting.getTimeToGetGoal,
             minCount = 30,
             maxCount = 600,
             onIncrement = {
                 sharedViewModel.updateItemSetting(
-                    itemSetting.value.copy(getTimeToGetGoal = itemSetting.value.getTimeToGetGoal + 10)
+                    itemSetting.copy(getTimeToGetGoal = itemSetting.getTimeToGetGoal + 10)
                 )
             },
             onDecrement = {
-                if (itemSetting.value.getTimeToGetGoal > 30) {
-                    sharedViewModel.updateItemSetting(itemSetting.value.copy(getTimeToGetGoal = itemSetting.value.getTimeToGetGoal - 10))
+                if (itemSetting.getTimeToGetGoal > 30) {
+                    sharedViewModel.updateItemSetting(itemSetting.copy(getTimeToGetGoal = itemSetting.getTimeToGetGoal - 10))
                 }
             }
         )
         ItemSetting(
             label = stringResource(R.string.time_get_king_goal),
-            count = itemSetting.value.getTimeToGetShahGoal,
+            count = itemSetting.getTimeToGetShahGoal,
             minCount = 30,
             maxCount = 600,
             onIncrement = {
                 sharedViewModel.updateItemSetting(
-                    itemSetting.value.copy(getTimeToGetShahGoal = itemSetting.value.getTimeToGetShahGoal + 10)
+                    itemSetting.copy(getTimeToGetShahGoal = itemSetting.getTimeToGetShahGoal + 10)
                 )
             },
             onDecrement = {
-                if (itemSetting.value.getTimeToGetShahGoal > 30) {
-                    sharedViewModel.updateItemSetting(itemSetting.value.copy(getTimeToGetShahGoal = itemSetting.value.getTimeToGetShahGoal - 10))
+                if (itemSetting.getTimeToGetShahGoal > 30) {
+                    sharedViewModel.updateItemSetting(itemSetting.copy(getTimeToGetShahGoal = itemSetting.getTimeToGetShahGoal - 10))
                 }
             }
         )
         ItemSetting(
             label = stringResource(R.string.number_cards),
-            count = itemSetting.value.countOfPlayingCards,
+            count = itemSetting.countOfPlayingCards,
             minCount = 5,
             maxCount = 9,
             onIncrement = {
                 sharedViewModel.updateItemSetting(
-                    itemSetting.value.copy(countOfPlayingCards = itemSetting.value.countOfPlayingCards + 1)
+                    itemSetting.copy(countOfPlayingCards = itemSetting.countOfPlayingCards + 1)
                 )
             },
             onDecrement = {
-                if (itemSetting.value.countOfPlayingCards > 5) {
-                    sharedViewModel.updateItemSetting(itemSetting.value.copy(countOfPlayingCards = itemSetting.value.countOfPlayingCards - 1))
+                if (itemSetting.countOfPlayingCards > 5) {
+                    sharedViewModel.updateItemSetting(itemSetting.copy(countOfPlayingCards = itemSetting.countOfPlayingCards - 1))
                 }
             }
         )

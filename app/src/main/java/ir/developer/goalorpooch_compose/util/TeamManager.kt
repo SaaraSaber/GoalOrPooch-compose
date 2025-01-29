@@ -55,8 +55,8 @@ class TeamManager @Inject constructor() {
                 if (maxScore == updatedScore || maxScore < updatedScore) {
                     team.copy(
                         score = maxScore,
-                        shahGoal = true,
-                        cuntShahGoal = team.cuntShahGoal + 1
+//                        shahGoal = true,
+//                        cuntShahGoal = team.cuntShahGoal + 1
                     )
                 } else {
                     team.copy(score = updatedScore)
