@@ -1592,12 +1592,18 @@ fun BottomSheetFinalResult(
     onClickRepeatGame: () -> Unit,
     onClickExit: () -> Unit
 ) {
-    val team = if (whichTeamHasGoal == 0) "اول" else "دوم"
+    val team = if (whichTeamHasGoal == 0) {
+        "اول"
+    } else {
+        "دوم"
+    }
+
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = modifier
                 .padding(start = paddingRound(), end = paddingRound())
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 modifier = modifier
@@ -1614,9 +1620,12 @@ fun BottomSheetFinalResult(
             HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
 
             Image(
+                modifier = modifier
+                    .padding(paddingTopMedium())
+                    .size(sizePicMedium()),
                 painter = if (whichTeamHasGoal == 0) painterResource(R.drawable.pic_team_one)
                 else painterResource(R.drawable.pic_team_two),
-                contentDescription = null, modifier = modifier.size(sizePicMedium())
+                contentDescription = null
             )
 
             Text(
@@ -1672,7 +1681,7 @@ fun BottomSheetFinalResult(
 @Preview
 @Composable
 private fun BottomSheetFinalResultPreview() {
-    BottomSheetFinalResult(whichTeamHasGoal = 1, onClickRepeatGame = {}, onClickExit = {})
+    BottomSheetFinalResult(whichTeamHasGoal = 0, onClickRepeatGame = {}, onClickExit = {})
 }
 
 @Preview
