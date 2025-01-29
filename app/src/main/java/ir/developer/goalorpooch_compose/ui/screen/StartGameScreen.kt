@@ -59,7 +59,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
@@ -185,7 +184,7 @@ fun StartGameScreen(
                         } else {
                             2
                         },
-                        remainingTime = if (teamOne.hasGoal || teamTwo.shahGoal) remainingTimeShahGoal else remainingTimeGoal,
+                        remainingTime = if (teamOne.shahGoal || teamTwo.shahGoal) remainingTimeShahGoal else remainingTimeGoal,
                         showTimer = isRunning,
                         isVisibility = teamOne.shahGoal || teamTwo.shahGoal
                     )
@@ -242,7 +241,7 @@ fun StartGameScreen(
 
                     if (teamOne.hasGoal) {
                         TeamInfoSection(
-                            team = teamOne,
+                            startTime = isRunning,
                             sharedViewModel = sharedViewModel,
                             whichTeamHasGoal = 0,
                             onShowToast = { message ->
@@ -258,7 +257,7 @@ fun StartGameScreen(
                         )
                     } else if (teamTwo.hasGoal) {
                         TeamInfoSection(
-                            team = teamTwo,
+                            startTime = isRunning,
                             sharedViewModel = sharedViewModel,
                             whichTeamHasGoal = 1,
                             onShowToast = { message ->
@@ -432,8 +431,8 @@ fun StartGameScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TeamInfoSection(
+    startTime: Boolean,
     modifier: Modifier = Modifier,
-    team: TeamModel,
     sharedViewModel: SharedViewModel,
     whichTeamHasGoal: Int,
     onShowToast: (String) -> Unit,
@@ -441,12 +440,24 @@ fun TeamInfoSection(
     toastColor: (Int) -> Unit,
     enableShahGoal: Boolean
 ) {
-    var counterEmptyGame by remember { mutableIntStateOf(0) }
-    counterEmptyGame = if (enableShahGoal) { 6 } else { 3 }
+    var counterEmptyGame by remember {
+        mutableIntStateOf(
+            if (enableShahGoal) {
+                6
+            } else {
+                3
+            }
+        )
+    }
     val infoTeam = sharedViewModel.getTeam(whichTeamHasGoal)
-    val listCard = infoTeam!!.cards.filter { !it.disable }
+    val oppositeTeamInfo = if (whichTeamHasGoal == 0) {
+        sharedViewModel.getTeam(1)
+    } else {
+        sharedViewModel.getTeam(0)
+    }
+    val listCard = oppositeTeamInfo!!.cards.filter { !it.disable }
     val counterCards = listCard.size
-    val counterCube = infoTeam.numberCubes
+    val counterCube = infoTeam!!.numberCubes
     var showBottomSheetCards by remember { mutableStateOf(false) }
     var showBottomSheetCube by remember { mutableStateOf(false) }
     var showBottomSheetConfirmCube by remember { mutableStateOf(false) }
@@ -471,10 +482,16 @@ fun TeamInfoSection(
             icon = R.drawable.hand,
             label = stringResource(R.string.empty_game),
             onClickItem = {
-                if (counterEmptyGame != 0) {
-                    counterEmptyGame--
+                if (startTime) {
+                    if (counterEmptyGame != 0) {
+                        counterEmptyGame--
+                    } else {
+                        onShowToast("موجودی خالی بازی صفر است.")
+                        toastIcon(R.drawable.danger_circle)
+                        toastColor(R.color.yellow)
+                    }
                 } else {
-                    onShowToast("موجودی خالی بازی صفر است.")
+                    onShowToast("ابتدا زمان را بزنید.")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
                 }
