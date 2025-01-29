@@ -920,7 +920,7 @@ fun BottomSheetResultShahGoal(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(R.string.result_of_this_round),
+                    text = stringResource(R.string.result_of_shah_goal),
                     color = Color.White,
                     fontFamily = FontPeydaBold,
                     fontSize = titleSize()
@@ -1583,6 +1583,96 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
             )
         }
     }
+}
+
+@Composable
+fun BottomSheetFinalResult(
+    modifier: Modifier = Modifier,
+    whichTeamHasGoal: Int,
+    onClickRepeatGame: () -> Unit,
+    onClickExit: () -> Unit
+) {
+    val team = if (whichTeamHasGoal == 0) "اول" else "دوم"
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Column(
+            modifier = modifier
+                .padding(start = paddingRound(), end = paddingRound())
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.final_result),
+                    color = Color.White,
+                    fontFamily = FontPeydaBold,
+                    fontSize = titleSize()
+                )
+            }
+            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
+
+            Image(
+                painter = if (whichTeamHasGoal == 0) painterResource(R.drawable.pic_team_one)
+                else painterResource(R.drawable.pic_team_two),
+                contentDescription = null, modifier = modifier.size(sizePicMedium())
+            )
+
+            Text(
+                modifier = modifier.padding(top = paddingTop(), bottom = paddingTopMedium()),
+                text = stringResource(R.string.description_final_game, team),
+                color = Color.White,
+                fontFamily = FontPeydaMedium,
+                fontSize = descriptionSize(),
+                textAlign = TextAlign.Justify
+            )
+
+            Row(modifier = Modifier.padding(top = paddingTopLarge(), bottom = paddingRound())) {
+                Button(
+                    modifier = Modifier
+                        .padding(end = 5.sdp)
+                        .height(heightButton())
+                        .weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = FenceGreen
+                    ),
+                    onClick = { onClickRepeatGame() }
+                ) {
+                    Text(
+                        text = stringResource(R.string.repeat_game),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = FenceGreen
+                    )
+                }
+
+                OutlinedButton(
+                    modifier = Modifier
+                        .padding(start = 5.sdp)
+                        .height(heightButton())
+                        .weight(1f),
+                    border = BorderStroke(1.sdp, Color.White),
+                    onClick = onClickExit
+                ) {
+                    Text(
+                        text = stringResource(R.string.exit),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = Color.White
+                    )
+                }
+            }
+        }
+    }
+
+}
+
+@Preview
+@Composable
+private fun BottomSheetFinalResultPreview() {
+    BottomSheetFinalResult(whichTeamHasGoal = 1, onClickRepeatGame = {}, onClickExit = {})
 }
 
 @Preview

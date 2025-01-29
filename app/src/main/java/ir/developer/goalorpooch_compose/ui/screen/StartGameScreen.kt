@@ -87,12 +87,14 @@ fun StartGameScreen(
     sharedViewModel: SharedViewModel
 ) {
     var showBottomSheetExitGame by remember { mutableStateOf(false) }
+    var showBottomSheetShahGoal by remember { mutableStateOf(false) }
     var isToastVisible by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
     var toastIcon by remember { mutableIntStateOf(0) }
     var toastColor by remember { mutableIntStateOf(0) }
     var showBottomSheetOpeningDuel by remember { mutableStateOf(true) }
     val sheetStateExitGame = rememberModalBottomSheetState()
+    val sheetStateShahGoal = rememberModalBottomSheetState()
     val sheetStateOpeningDuel = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
         skipPartiallyExpanded = true,
@@ -134,23 +136,20 @@ fun StartGameScreen(
             isRunning = false
 
         } else if (isRunning && itemSetting.shahGoal) {
-
             while (remainingTimeShahGoal > 0) {
                 delay(1000L)
                 remainingTimeShahGoal -= 1
             }
             if (remainingTimeShahGoal == 0) {
-                showBottomSheetResult = true
+                showBottomSheetShahGoal = true
             }
             isRunning = false
         }
     }
 
-//    LaunchedEffect(itemSetting) {
     if ((teamOne.score == itemSetting.victoryPoint - 1) || (teamTwo.score == itemSetting.victoryPoint - 1)) {
         sharedViewModel.updateItemSetting(itemSetting.copy(shahGoal = true))
     }
-//    }
 
     Scaffold { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -204,11 +203,13 @@ fun StartGameScreen(
                         onClick = {
                             if (isRunning) {
                                 isRunning = false
-                                showBottomSheetResult = true
+
                                 if (itemSetting.shahGoal) {
+                                    showBottomSheetShahGoal = true
                                     remainingTimeShahGoal =
                                         sharedViewModel.itemSetting.value.getTimeToGetShahGoal
                                 } else {
+                                    showBottomSheetResult = true
                                     remainingTimeGoal =
                                         sharedViewModel.itemSetting.value.getTimeToGetGoal
                                 }
@@ -424,6 +425,51 @@ fun StartGameScreen(
                                 }
                             )
                         }
+                    }
+                }
+
+//BottomSheetResultThisRound
+                if (showBottomSheetShahGoal) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            showBottomSheetShahGoal = false
+                        },
+                        sheetState = sheetStateShahGoal,
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
+                        containerColor = FenceGreen,
+                        properties = ModalBottomSheetProperties(
+                            securePolicy = SecureFlagPolicy.SecureOff,
+                            shouldDismissOnBackPress = false
+                        )
+                    ) {
+                        BottomSheetResultShahGoal(
+                            whichTeamResult =
+                            if (teamOne.hasGoal) {
+                                1
+                            } else if (teamTwo.hasGoal) {
+                                0
+                            } else {
+                                2
+                            }, onClickItem = { goal ->
+                                if (goal) {
+                                    //سه امتیاز کم و گل بره دست تیم حریف
+
+                                } else {
+                                    //باتن شیت برنده بازی باا بیاد
+                                    scope.launch {
+                                        sheetStateShahGoal.hide()
+                                    }.invokeOnCompletion {
+                                        if (!sheetStateShahGoal.isVisible) {
+                                            showBottomSheetShahGoal = false
+                                        }
+                                    }
+
+                                }
+                            }
+                        )
                     }
                 }
 

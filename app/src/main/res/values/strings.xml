@@ -45,6 +45,7 @@
     <string name="btn_ok">تایید( %1$d )</string>
     <string name="choose_card">انتخاب کارت</string>
     <string name="continue_game">ادامه بازی</string>
+    <string name="repeat_game">تکرار بازی</string>
     <string name="cansel">انصراف</string>
     <string name="start">شروع</string>
     <string name="about_us">درباره ما</string>
@@ -86,7 +87,9 @@
     <string name="description_exit_app">لطفاً برای حمایت از ما  ۵ ستاره بدهید! حمایت شما برای ما بسیار ارزشمند است.️</string>
     <string name="description_exit_game">اگر اکنون از بازی خارج شوید، باید بازی را از ابتدا شروع کنید. آیا مطمئن هستید که می‌خواهید ادامه دهید؟️</string>
     <string name="rate">امتیاز دهید</string>
+    <string name="description_final_game">تیم %d موفق به کسب قهرمانی شد.</string>
     <string name="result_of_this_round">نتیجه این دور</string>
+    <string name="result_of_shah_goal">نتیجه شاه گل</string>
     <string name="final_result">نتیجه نهایی</string>
     <string name="first_team_scored_a_single_goal">تیم اول گل را تک ضرب گرفت.</string>
     <string name="first_team_scored">تیم اول گل را گرفت.</string>
