@@ -87,7 +87,8 @@
     <string name="description_exit_app">لطفاً برای حمایت از ما  ۵ ستاره بدهید! حمایت شما برای ما بسیار ارزشمند است.️</string>
     <string name="description_exit_game">اگر اکنون از بازی خارج شوید، باید بازی را از ابتدا شروع کنید. آیا مطمئن هستید که می‌خواهید ادامه دهید؟️</string>
     <string name="rate">امتیاز دهید</string>
-    <string name="description_final_game">تیم %d موفق به کسب قهرمانی شد.</string>
+    <string name="description_final_game_team_one">تیم اول موفق به کسب قهرمانی شد.</string>
+    <string name="description_final_game_team_two">تیم دوم موفق به کسب قهرمانی شد.</string>
     <string name="result_of_this_round">نتیجه این دور</string>
     <string name="result_of_shah_goal">نتیجه شاه گل</string>
     <string name="final_result">نتیجه نهایی</string>

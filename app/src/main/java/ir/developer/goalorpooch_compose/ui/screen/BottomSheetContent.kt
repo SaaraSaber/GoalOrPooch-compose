@@ -632,7 +632,6 @@ fun BottomSheetResultOfThisRound(
     modifier: Modifier = Modifier,
     whichTeamResult: Int,
     onClickItem: (Int) -> Unit,
-    onDismiss: () -> Unit,
     sharedViewModel: SharedViewModel
 ) {
     val listResult: List<ResultThisRoundModel> =
@@ -697,15 +696,15 @@ fun BottomSheetResultOfThisRound(
                     fontSize = titleSize()
                 )
                 Spacer(modifier = modifier.weight(1f))
-                IconButton(
-                    onClick = { onDismiss() }
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.close_circle),
-                        contentDescription = "btn_close",
-                        modifier = modifier.size(20.sdp)
-                    )
-                }
+//                IconButton(
+//                    onClick = { onDismiss() }
+//                ) {
+//                    Image(
+//                        painter = painterResource(R.drawable.close_circle),
+//                        contentDescription = "btn_close",
+//                        modifier = modifier.size(20.sdp)
+//                    )
+//                }
             }
             HorizontalDivider(
                 modifier = modifier.padding(
@@ -1586,18 +1585,12 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
 }
 
 @Composable
-fun BottomSheetFinalResult(
+fun BottomSheetWinner(
     modifier: Modifier = Modifier,
     whichTeamHasGoal: Int,
     onClickRepeatGame: () -> Unit,
     onClickExit: () -> Unit
 ) {
-    val team = if (whichTeamHasGoal == 0) {
-        "اول"
-    } else {
-        "دوم"
-    }
-
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = modifier
@@ -1630,7 +1623,8 @@ fun BottomSheetFinalResult(
 
             Text(
                 modifier = modifier.padding(top = paddingTop(), bottom = paddingTopMedium()),
-                text = stringResource(R.string.description_final_game, team),
+                text = if (whichTeamHasGoal == 0) stringResource(R.string.description_final_game_team_one)
+                else stringResource(R.string.description_final_game_team_two),
                 color = Color.White,
                 fontFamily = FontPeydaMedium,
                 fontSize = descriptionSize(),
@@ -1681,7 +1675,7 @@ fun BottomSheetFinalResult(
 @Preview
 @Composable
 private fun BottomSheetFinalResultPreview() {
-    BottomSheetFinalResult(whichTeamHasGoal = 0, onClickRepeatGame = {}, onClickExit = {})
+    BottomSheetWinner(whichTeamHasGoal = 0, onClickRepeatGame = {}, onClickExit = {})
 }
 
 @Preview

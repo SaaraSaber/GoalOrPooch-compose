@@ -88,6 +88,7 @@ fun StartGameScreen(
 ) {
     var showBottomSheetExitGame by remember { mutableStateOf(false) }
     var showBottomSheetShahGoal by remember { mutableStateOf(false) }
+    var showBottomSheetWinner by remember { mutableStateOf(false) }
     var isToastVisible by remember { mutableStateOf(false) }
     var toastMessage by remember { mutableStateOf("") }
     var toastIcon by remember { mutableIntStateOf(0) }
@@ -95,6 +96,7 @@ fun StartGameScreen(
     var showBottomSheetOpeningDuel by remember { mutableStateOf(true) }
     val sheetStateExitGame = rememberModalBottomSheetState()
     val sheetStateShahGoal = rememberModalBottomSheetState()
+    val sheetStateWinner = rememberModalBottomSheetState()
     val sheetStateOpeningDuel = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
         skipPartiallyExpanded = true,
@@ -413,22 +415,13 @@ fun StartGameScreen(
                                             showBottomSheetResult = false
                                         }
                                     }
-                                },
-                                onDismiss = {
-                                    scope.launch {
-                                        sheetStateResult.hide()
-                                    }.invokeOnCompletion {
-                                        if (!sheetStateResult.isVisible) {
-                                            showBottomSheetResult = false
-                                        }
-                                    }
                                 }
                             )
                         }
                     }
                 }
 
-//BottomSheetResultThisRound
+//BottomSheetResultShahGoal
                 if (showBottomSheetShahGoal) {
                     ModalBottomSheet(
                         onDismissRequest = {
@@ -456,8 +449,45 @@ fun StartGameScreen(
                             }, onClickItem = { goal ->
                                 if (goal) {
                                     //سه امتیاز کم و گل بره دست تیم حریف
+                                    if (teamOne.hasGoal) {
+                                        val score = sharedViewModel.getTeam(0)!!.score
+                                        sharedViewModel.updateTeam(0) {
+                                            copy(hasGoal = false, score = score - 3)
+                                        }
+                                        sharedViewModel.updateTeam(1) {
+                                            copy(hasGoal = true)
+                                        }
+                                        sharedViewModel.updateItemSetting(
+                                            itemSetting.copy(
+                                                shahGoal = false,
+                                                countShahGoal = itemSetting.countShahGoal + 1
+                                            )
+                                        )
+                                    } else {
+                                        val score = sharedViewModel.getTeam(1)!!.score
+                                        sharedViewModel.updateTeam(1) {
+                                            copy(hasGoal = false, score = score - 3)
+                                        }
+                                        sharedViewModel.updateTeam(0) {
+                                            copy(hasGoal = true)
+                                        }
+                                        sharedViewModel.updateItemSetting(
+                                            itemSetting.copy(
+                                                shahGoal = false,
+                                                countShahGoal = itemSetting.countShahGoal + 1
+                                            )
+                                        )
+                                    }
+                                    scope.launch {
+                                        sheetStateShahGoal.hide()
+                                    }.invokeOnCompletion {
+                                        if (!sheetStateShahGoal.isVisible) {
+                                            showBottomSheetShahGoal = false
+                                        }
+                                    }
 
                                 } else {
+                                    showBottomSheetWinner = true
                                     //باتن شیت برنده بازی باا بیاد
                                     scope.launch {
                                         sheetStateShahGoal.hide()
@@ -467,6 +497,79 @@ fun StartGameScreen(
                                         }
                                     }
 
+                                }
+                            }
+                        )
+                    }
+                }
+
+//BottomSheetWinner
+                if (showBottomSheetWinner) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            showBottomSheetWinner = false
+                        },
+                        sheetState = sheetStateWinner,
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
+                        containerColor = FenceGreen,
+                        properties = ModalBottomSheetProperties(
+                            securePolicy = SecureFlagPolicy.SecureOff,
+                            shouldDismissOnBackPress = false
+                        )
+                    ) {
+                        BottomSheetWinner(
+                            whichTeamHasGoal = if (teamOne.hasGoal) {
+                                0
+                            } else if (teamTwo.hasGoal) {
+                                1
+                            } else {
+                                2
+                            },
+                            onClickRepeatGame = {
+                                Utils.CHOOSE_CARD = false
+                                Utils.CHOOSE_CUBE = false
+                                sharedViewModel.updateItemSetting(
+                                    itemSetting.copy(
+                                        shahGoal = false,
+                                        countShahGoal = 0
+                                    )
+                                )
+                                scope.launch {
+                                    sheetStateWinner.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetStateWinner.isVisible) {
+                                        showBottomSheetWinner = false
+                                    }
+                                }
+                                navController.navigate(Utils.HOME_SCREEN) {
+                                    popUpTo(0) // پاک کردن کل استک
+                                    launchSingleTop =
+                                        true // جلوگیری از ایجاد دوباره صفحه در استک
+                                }
+                            },
+                            onClickExit = {
+                                Utils.CHOOSE_CARD = false
+                                Utils.CHOOSE_CUBE = false
+                                sharedViewModel.updateItemSetting(
+                                    itemSetting.copy(
+                                        shahGoal = false,
+                                        countShahGoal = 0
+                                    )
+                                )
+                                scope.launch {
+                                    sheetStateWinner.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetStateWinner.isVisible) {
+                                        showBottomSheetWinner = false
+                                    }
+                                }
+                                navController.navigate(Utils.HOME_SCREEN) {
+                                    popUpTo(0) // پاک کردن کل استک
+                                    launchSingleTop =
+                                        true // جلوگیری از ایجاد دوباره صفحه در استک
                                 }
                             }
                         )
