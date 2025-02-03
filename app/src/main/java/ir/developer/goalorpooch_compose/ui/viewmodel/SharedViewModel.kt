@@ -9,6 +9,7 @@ import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.database.repository.CardRepository
 import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.model.GameGuideModel
+import ir.developer.goalorpooch_compose.model.ResultType
 import ir.developer.goalorpooch_compose.model.SettingModel
 import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.util.TeamManager
@@ -27,7 +28,6 @@ class SharedViewModel @Inject constructor(
     private val teamManager: TeamManager, // حالا از طریق Hilt مقداردهی می‌شود
     @ApplicationContext private val context: Context
 ) : ViewModel() {
-
     init {
         // مقداردهی اولیه یا بارگذاری داده‌ها
         initializeTeams()
@@ -103,6 +103,19 @@ class SharedViewModel @Inject constructor(
         teamManager.disableCardForTeam(teamId, cardId)
     }
 
+    // مدیریت نتایج دوئل
+    fun updateDuelResult(teamId: Int, playerId: Int, result: ResultType) {
+        teamManager.updateDuelResult(teamId, playerId, result)
+    }
+
+    fun getDuelWinner(): String {
+        val winnerId = teamManager.calculateDuelWinner()
+        return when (winnerId) {
+            0 -> "تیم اول برنده است!"
+            1 -> "تیم دوم برنده است!"
+            else -> "بازی مساوی شد!"
+        }
+    }
 
     //...................setting...................
 
@@ -115,7 +128,8 @@ class SharedViewModel @Inject constructor(
             getTimeToGetShahGoal = 180,
             countOfPlayingCards = Utils.THE_NUMBER_OF_PLAYING_CARDS,
             shahGoal = false,
-            countShahGoal = 0
+            countShahGoal = 0,
+            duel = false
         )
     )
     val itemSetting: StateFlow<SettingModel> = _itemSetting.asStateFlow()

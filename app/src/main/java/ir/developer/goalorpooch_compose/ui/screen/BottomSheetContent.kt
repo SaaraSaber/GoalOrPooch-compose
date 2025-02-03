@@ -1103,7 +1103,8 @@ fun BottomSheetContactTheOpeningDuelOfTheGame(
 fun BottomSheetContactResultDuel(
     modifier: Modifier = Modifier,
     onClickItem: (Int) -> Unit,
-    onDismissRequest: () -> Unit // مدیریت بسته شدن Bottom Sheet
+    onDismissRequest: () -> Unit, // مدیریت بسته شدن Bottom Sheet
+    whichTeamHasGoal: Int
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
@@ -1143,7 +1144,7 @@ fun BottomSheetContactResultDuel(
                     .clip(RoundedCornerShape(sizeRound()))
                     .fillMaxWidth()
                     .clickable {
-                        onClickItem(0)
+                        onClickItem(whichTeamHasGoal)
                         onDismissRequest()
                     },
                 verticalAlignment = Alignment.CenterVertically
@@ -1152,12 +1153,14 @@ fun BottomSheetContactResultDuel(
                     modifier = Modifier
                         .padding(paddingRound())
                         .size(sizePicMedium()),
-                    painter = painterResource(id = R.drawable.pic_team_one),
+                    painter = if (whichTeamHasGoal == 0) painterResource(id = R.drawable.pic_team_one)
+                    else painterResource(R.drawable.pic_team_two),
                     contentDescription = null
                 )
 
                 Text(
-                    text = stringResource(R.string.first_team_scored),
+                    text = if (whichTeamHasGoal == 0) "تیم اول گل را حفظ کرد."
+                    else "تیم دوم گل را حفظ کرد.",
                     fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
@@ -1171,7 +1174,7 @@ fun BottomSheetContactResultDuel(
                     .clip(RoundedCornerShape(sizeRound()))
                     .fillMaxWidth()
                     .clickable {
-                        onClickItem(1)
+                        onClickItem(whichTeamHasGoal)
                         onDismissRequest()
                     },
                 verticalAlignment = Alignment.CenterVertically
@@ -1180,11 +1183,12 @@ fun BottomSheetContactResultDuel(
                     modifier = Modifier
                         .padding(paddingRound())
                         .size(sizePicMedium()),
-                    painter = painterResource(id = R.drawable.pic_team_two),
+                    painter = if (whichTeamHasGoal == 0) painterResource(id = R.drawable.pic_team_one)
+                    else painterResource(R.drawable.pic_team_two),
                     contentDescription = null
                 )
                 Text(
-                    text = stringResource(R.string.second_team_scored),
+                    text = if (whichTeamHasGoal == 0) "تیم اول گل را از دست داد." else "تیم دوم گل را از دست داد.",
                     fontSize = descriptionSize(),
                     fontFamily = FontPeydaMedium,
                     color = Color.White,
@@ -1690,12 +1694,6 @@ private fun BottomSheetConfirmCubePreview() {
     BottomSheetConfirmCube(whichTeamHasGoal = 0, numberCube = 2, onConfirm = {}, onDismiss = {})
 }
 
-//@Preview
-//@Composable
-//private fun BottomSheetCardsPreview() {
-//    BottomSheetCards(onDismiss = {}, onClickItem = {})
-//}
-
 @Preview
 @Composable
 private fun TheOpeningDuelOfTheGamePreview() {
@@ -1709,9 +1707,9 @@ private fun TheOpeningDuelOfTheGamePreview() {
 @Composable
 private fun BottomSheetContactResultDuelPreview() {
     BottomSheetContactResultDuel(
-//        whichTeamHasGoal = 1,
         onClickItem = {},
-        onDismissRequest = {})
+        onDismissRequest = {}, whichTeamHasGoal = 1
+    )
 }
 
 @Preview
@@ -1750,9 +1748,4 @@ private fun ExitGamePreview() {
     )
 }
 
-//@Preview
-//@Composable
-//private fun ResultOfThisRoundPreview() {
-//    BottomSheetResultOfThisRound(whichTeamResult = 0, onClickItem = {})
-//}
 

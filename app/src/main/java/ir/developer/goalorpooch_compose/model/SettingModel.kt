@@ -13,5 +13,6 @@ data class SettingModel(
     var getTimeToGetShahGoal: Int = 180,
     var countOfPlayingCards: Int = 5,
     var shahGoal: Boolean = false,
-    var countShahGoal: Int = 0
+    var countShahGoal: Int = 0,
+    var duel: Boolean = false
 )

@@ -1,6 +1,7 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -64,6 +65,7 @@ import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.mediumAlpha
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium_two
 import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
@@ -119,8 +121,14 @@ fun StartGameScreen(
     var remainingTimeGoal by remember { mutableIntStateOf(sharedViewModel.itemSetting.value.getTimeToGetGoal) }
     var remainingTimeShahGoal by remember { mutableIntStateOf(sharedViewModel.itemSetting.value.getTimeToGetGoal) }
     var showBottomSheetResult by remember { mutableStateOf(false) }
+    var showBottomSheetDuelResult by remember { mutableStateOf(false) }
 
     val sheetStateResult = rememberModalBottomSheetState(
+        //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
+        skipPartiallyExpanded = false,
+        confirmValueChange = { false }
+    )
+    val sheetStateDuel = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
         skipPartiallyExpanded = false,
         confirmValueChange = { false }
@@ -149,6 +157,10 @@ fun StartGameScreen(
         }
     }
 
+    if (itemSetting.countShahGoal == 2) {
+        sharedViewModel.updateItemSetting(itemSetting.copy(duel = true))
+    }
+
     if ((teamOne.score == itemSetting.victoryPoint - 1) || (teamTwo.score == itemSetting.victoryPoint - 1)) {
         sharedViewModel.updateItemSetting(itemSetting.copy(shahGoal = true))
     }
@@ -171,253 +183,322 @@ fun StartGameScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    HeaderGame(
-                        scoreTeamOne = teamOne.score,
-                        scoreTeamTwo = teamTwo.score,
-                        whichTeamHasGoal =
-                        if (teamOne.hasGoal) {
-                            0
-                        } else if (teamTwo.hasGoal) {
-                            1
-                        } else {
-                            2
-                        }
-                    )
-                    TableGame(
-                        whichTeamHasGoal =
-                        if (teamOne.hasGoal) {
-                            0
-                        } else if (teamTwo.hasGoal) {
-                            1
-                        } else {
-                            2
-                        },
-                        remainingTime = if (itemSetting.shahGoal) remainingTimeShahGoal else remainingTimeGoal,
-                        showTimer = isRunning,
-                        isVisibility = itemSetting.shahGoal
-                    )
-
-//...............time
-                    Button(
-                        modifier = modifier
-                            .wrapContentWidth()
-                            .height(50.sdp),
-                        onClick = {
-                            if (isRunning) {
-                                isRunning = false
-
-                                if (itemSetting.shahGoal) {
-                                    showBottomSheetShahGoal = true
-                                    remainingTimeShahGoal =
-                                        sharedViewModel.itemSetting.value.getTimeToGetShahGoal
-                                } else {
-                                    showBottomSheetResult = true
-                                    remainingTimeGoal =
-                                        sharedViewModel.itemSetting.value.getTimeToGetGoal
-                                }
+//...............head
+                    if (itemSetting.duel) {
+                        HeaderGame(
+                            duel = true,
+                            scoreTeamOne = teamOne.score,
+                            scoreTeamTwo = teamTwo.score,
+                            whichTeamHasGoal =
+                            if (teamOne.hasGoal) {
+                                0
+                            } else if (teamTwo.hasGoal) {
+                                1
                             } else {
-                                isRunning = true
-                                if (itemSetting.shahGoal) {
-                                    remainingTimeShahGoal =
-                                        sharedViewModel.itemSetting.value.getTimeToGetShahGoal
-                                } else {
-                                    remainingTimeGoal =
-                                        sharedViewModel.itemSetting.value.getTimeToGetGoal
-                                }
+                                2
                             }
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
-                        shape = RoundedCornerShape(sizeRound()),
-                        border = BorderStroke(width = 1.sdp, color = Color.White)
-                    ) {
-                        Text(
-                            modifier = modifier.padding(end = paddingRound()),
-                            text = if (!isRunning) stringResource(R.string.start_time)
-                            else stringResource(R.string.result_of_this_round),
-                            fontSize = descriptionSize(),
-                            fontFamily = FontPeydaMedium,
-                            color = Color.White
                         )
+                    } else {
+                        HeaderGame(
+                            duel = false,
+                            scoreTeamOne = teamOne.score,
+                            scoreTeamTwo = teamTwo.score,
+                            whichTeamHasGoal =
+                            if (teamOne.hasGoal) {
+                                0
+                            } else if (teamTwo.hasGoal) {
+                                1
+                            } else {
+                                2
+                            }
+                        )
+                    }
 
-                        Icon(
-                            painter = if (!isRunning) painterResource(R.drawable.time)
-                            else painterResource(R.drawable.result),
-                            contentDescription = "time",
-                            modifier = modifier.size(
-                                sizePicVerySmall()
+//...............table
+                    if (itemSetting.duel) {
+                        Log.i("StartGameScreen", "StartGameScreen1: ${teamOne.hasGoal}")
+                        Log.i("StartGameScreen", "StartGameScreen2: ${teamTwo.hasGoal}")
+                        TableDuel(
+                            whichTeamHasGoal =
+                            if (teamOne.hasGoal) {
+                                0
+                            } else if (teamTwo.hasGoal) {
+                                1
+                            } else {
+                                2
+                            }
+                        )
+                    } else {
+                        TableGame(
+                            whichTeamHasGoal =
+                            if (teamOne.hasGoal) {
+                                0
+                            } else if (teamTwo.hasGoal) {
+                                1
+                            } else {
+                                2
+                            },
+                            remainingTime = if (itemSetting.shahGoal) remainingTimeShahGoal else remainingTimeGoal,
+                            showTimer = isRunning,
+                            isVisibilityShahGoal = itemSetting.shahGoal
+                        )
+                    }
+
+//...............timeButton
+                    if (!itemSetting.duel) {
+                        Button(
+                            modifier = modifier
+                                .wrapContentWidth()
+                                .height(50.sdp),
+                            onClick = {
+                                if (isRunning) {
+                                    isRunning = false
+
+                                    if (itemSetting.shahGoal) {
+                                        showBottomSheetShahGoal = true
+                                        remainingTimeShahGoal =
+                                            sharedViewModel.itemSetting.value.getTimeToGetShahGoal
+                                    } else {
+                                        showBottomSheetResult = true
+                                        remainingTimeGoal =
+                                            sharedViewModel.itemSetting.value.getTimeToGetGoal
+                                    }
+                                } else {
+                                    isRunning = true
+                                    if (itemSetting.shahGoal) {
+                                        remainingTimeShahGoal =
+                                            sharedViewModel.itemSetting.value.getTimeToGetShahGoal
+                                    } else {
+                                        remainingTimeGoal =
+                                            sharedViewModel.itemSetting.value.getTimeToGetGoal
+                                    }
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
+                            shape = RoundedCornerShape(sizeRound()),
+                            border = BorderStroke(width = 1.sdp, color = Color.White)
+                        ) {
+                            Text(
+                                modifier = modifier.padding(end = paddingRound()),
+                                text = if (!isRunning) stringResource(R.string.start_time)
+                                else stringResource(R.string.result_of_this_round),
+                                fontSize = descriptionSize(),
+                                fontFamily = FontPeydaMedium,
+                                color = Color.White
                             )
-                        )
+
+                            Icon(
+                                painter = if (!isRunning) painterResource(R.drawable.time)
+                                else painterResource(R.drawable.result),
+                                contentDescription = "time",
+                                modifier = modifier.size(
+                                    sizePicVerySmall()
+                                )
+                            )
+                        }
                     }
 
-                    if (teamOne.hasGoal) {
-                        TeamInfoSection(
-                            startTime = isRunning,
-                            sharedViewModel = sharedViewModel,
-                            whichTeamHasGoal = 0,
-                            onShowToast = { message ->
-                                toastMessage = message
-                                isToastVisible = true
-                            }, toastIcon = { icon ->
-                                toastIcon = icon
-                            },
-                            toastColor = { color ->
-                                toastColor = color
-                            },
-                            enableShahGoal = itemSetting.shahGoal
-                        )
-                    } else if (teamTwo.hasGoal) {
-                        TeamInfoSection(
-                            startTime = isRunning,
-                            sharedViewModel = sharedViewModel,
-                            whichTeamHasGoal = 1,
-                            onShowToast = { message ->
-                                toastMessage = message
-                                isToastVisible = true
-                            }, toastIcon = { icon ->
-                                toastIcon = icon
-                            },
-                            toastColor = { color ->
-                                toastColor = color
-                            },
-                            enableShahGoal = itemSetting.shahGoal
-                        )
+//...................duelButton
+                    if (itemSetting.duel) {
+                        Button(
+                            modifier = modifier
+                                .padding(bottom = paddingTopLarge())
+                                .wrapContentWidth()
+                                .height(50.sdp),
+                            onClick = { showBottomSheetDuelResult = true },
+                            colors = ButtonDefaults.buttonColors(containerColor = FenceGreen),
+                            shape = RoundedCornerShape(sizeRound()),
+                            border = BorderStroke(width = 1.sdp, color = Color.White)
+                        ) {
+                            Text(
+                                modifier = modifier.padding(end = paddingRound()),
+                                text = stringResource(R.string.result_duel),
+                                fontSize = descriptionSize(),
+                                fontFamily = FontPeydaMedium,
+                                color = Color.White
+                            )
+                            Icon(
+                                painter = painterResource(R.drawable.note),
+                                contentDescription = "note",
+                                modifier = modifier.size(
+                                    sizePicVerySmall()
+                                )
+                            )
+                        }
                     }
+
+//.................box
+                    if (!itemSetting.duel) {
+                        if (teamOne.hasGoal) {
+                            TeamInfoSection(
+                                startTime = isRunning,
+                                sharedViewModel = sharedViewModel,
+                                whichTeamHasGoal = 0,
+                                onShowToast = { message ->
+                                    toastMessage = message
+                                    isToastVisible = true
+                                }, toastIcon = { icon ->
+                                    toastIcon = icon
+                                },
+                                toastColor = { color ->
+                                    toastColor = color
+                                },
+                                enableShahGoal = itemSetting.shahGoal
+                            )
+                        } else if (teamTwo.hasGoal) {
+                            TeamInfoSection(
+                                startTime = isRunning,
+                                sharedViewModel = sharedViewModel,
+                                whichTeamHasGoal = 1,
+                                onShowToast = { message ->
+                                    toastMessage = message
+                                    isToastVisible = true
+                                }, toastIcon = { icon ->
+                                    toastIcon = icon
+                                },
+                                toastColor = { color ->
+                                    toastColor = color
+                                },
+                                enableShahGoal = itemSetting.shahGoal
+                            )
+                        }
+                    }
+                }
 
 //BottomSheetExitGame
-                    if (showBottomSheetExitGame) {
-                        ModalBottomSheet(
-                            onDismissRequest = { showBottomSheetExitGame = false },
-                            sheetState = sheetStateExitGame,
-                            shape = RoundedCornerShape(
-                                topEnd = sizeRoundBottomSheet(),
-                                topStart = sizeRoundBottomSheet()
-                            ),
-                            containerColor = FenceGreen
-                        ) {
-                            BottomSheetContactExitGame(
-                                onClickExit = {
-                                    Utils.CHOOSE_CARD = false
-                                    Utils.CHOOSE_CUBE = false
-                                    sharedViewModel.updateItemSetting(
-                                        itemSetting.copy(
-                                            shahGoal = false,
-                                            countShahGoal = 0
-                                        )
+                if (showBottomSheetExitGame) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheetExitGame = false },
+                        sheetState = sheetStateExitGame,
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
+                        containerColor = FenceGreen
+                    ) {
+                        BottomSheetContactExitGame(
+                            onClickExit = {
+                                Utils.CHOOSE_CARD = false
+                                Utils.CHOOSE_CUBE = false
+                                sharedViewModel.updateItemSetting(
+                                    itemSetting.copy(
+                                        shahGoal = false,
+                                        countShahGoal = 0,
+                                        duel = false
                                     )
-                                    scope.launch { sheetStateExitGame.hide() }
-                                        .invokeOnCompletion { showBottomSheetExitGame = false }
-                                    navController.navigate(Utils.HOME_SCREEN) {
-                                        popUpTo(0) // پاک کردن کل استک
-                                        launchSingleTop =
-                                            true // جلوگیری از ایجاد دوباره صفحه در استک
-                                    }
-                                },
-                                onClickContinueGame = {
-                                    scope.launch { sheetStateExitGame.hide() }
-                                        .invokeOnCompletion { showBottomSheetExitGame = false }
+                                )
+                                scope.launch { sheetStateExitGame.hide() }
+                                    .invokeOnCompletion { showBottomSheetExitGame = false }
+                                navController.navigate(Utils.HOME_SCREEN) {
+                                    popUpTo(0) // پاک کردن کل استک
+                                    launchSingleTop =
+                                        true // جلوگیری از ایجاد دوباره صفحه در استک
                                 }
-                            )
-                        }
+                            },
+                            onClickContinueGame = {
+                                scope.launch { sheetStateExitGame.hide() }
+                                    .invokeOnCompletion { showBottomSheetExitGame = false }
+                            }
+                        )
                     }
+                }
 
 //BottomSheetOpeningDuel
-                    if (showBottomSheetOpeningDuel) {
-                        ModalBottomSheet(
-                            onDismissRequest = {
-                                showBottomSheetOpeningDuel = false
-                            },
-                            sheetState = sheetStateOpeningDuel,
-                            shape = RoundedCornerShape(
-                                topEnd = sizeRoundBottomSheet(),
-                                topStart = sizeRoundBottomSheet()
-                            ),
-                            containerColor = FenceGreen,
-                            properties = ModalBottomSheetProperties(
-                                securePolicy = SecureFlagPolicy.SecureOff,
-                                shouldDismissOnBackPress = false
-                            )
-                        ) {
-                            BottomSheetContactTheOpeningDuelOfTheGame(
-                                whichTeamHasGoal = Utils.STARTER_GAME,
-                                onClickItem = { idTeam ->
-                                    scope.launch {
-                                        if (idTeam == 0) {
-                                            sharedViewModel.updateTeam(teamId = 0) {
-                                                copy(hasGoal = true)
-                                            }
-                                            sharedViewModel.updateTeam(teamId = 1) {
-                                                copy(hasGoal = false)
-                                            }
-                                        } else if (idTeam == 1) {
-                                            sharedViewModel.updateTeam(teamId = 1) {
-                                                copy(hasGoal = true)
-                                            }
-                                            sharedViewModel.updateTeam(teamId = 0) {
-                                                copy(hasGoal = false)
-                                            }
+                if (showBottomSheetOpeningDuel) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            showBottomSheetOpeningDuel = false
+                        },
+                        sheetState = sheetStateOpeningDuel,
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
+                        containerColor = FenceGreen,
+                        properties = ModalBottomSheetProperties(
+                            securePolicy = SecureFlagPolicy.SecureOff,
+                            shouldDismissOnBackPress = false
+                        )
+                    ) {
+                        BottomSheetContactTheOpeningDuelOfTheGame(
+                            whichTeamHasGoal = Utils.STARTER_GAME,
+                            onClickItem = { idTeam ->
+                                scope.launch {
+                                    if (idTeam == 0) {
+                                        sharedViewModel.updateTeam(teamId = 0) {
+                                            copy(hasGoal = true)
                                         }
-                                        sheetStateOpeningDuel.hide()
-                                    }.invokeOnCompletion {
-                                        if (!sheetStateOpeningDuel.isVisible) {
-                                            showBottomSheetOpeningDuel = false
+                                        sharedViewModel.updateTeam(teamId = 1) {
+                                            copy(hasGoal = false)
+                                        }
+                                    } else if (idTeam == 1) {
+                                        sharedViewModel.updateTeam(teamId = 1) {
+                                            copy(hasGoal = true)
+                                        }
+                                        sharedViewModel.updateTeam(teamId = 0) {
+                                            copy(hasGoal = false)
                                         }
                                     }
-                                },
-                                onDismissRequest = {
-                                    scope.launch {
-                                        sheetStateOpeningDuel.hide()
-                                    }.invokeOnCompletion {
-                                        if (!sheetStateOpeningDuel.isVisible) {
-                                            showBottomSheetOpeningDuel = false
-                                        }
+                                    sheetStateOpeningDuel.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetStateOpeningDuel.isVisible) {
+                                        showBottomSheetOpeningDuel = false
                                     }
                                 }
-                            )
-                        }
+                            },
+                            onDismissRequest = {
+                                scope.launch {
+                                    sheetStateOpeningDuel.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetStateOpeningDuel.isVisible) {
+                                        showBottomSheetOpeningDuel = false
+                                    }
+                                }
+                            }
+                        )
                     }
-
+                }
 
 //BottomSheetResultThisRound
-                    if (showBottomSheetResult) {
-                        ModalBottomSheet(
-                            onDismissRequest = {
-                                showBottomSheetResult = false
+                if (showBottomSheetResult) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            showBottomSheetResult = false
+                        },
+                        sheetState = sheetStateOpeningDuel,
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
+                        containerColor = FenceGreen,
+                        properties = ModalBottomSheetProperties(
+                            securePolicy = SecureFlagPolicy.SecureOff,
+                            shouldDismissOnBackPress = false
+                        )
+                    ) {
+                        BottomSheetResultOfThisRound(
+                            whichTeamResult =
+                            if (teamOne.hasGoal) {
+                                1
+                            } else if (teamTwo.hasGoal) {
+                                0
+                            } else {
+                                2
                             },
-                            sheetState = sheetStateOpeningDuel,
-                            shape = RoundedCornerShape(
-                                topEnd = sizeRoundBottomSheet(),
-                                topStart = sizeRoundBottomSheet()
-                            ),
-                            containerColor = FenceGreen,
-                            properties = ModalBottomSheetProperties(
-                                securePolicy = SecureFlagPolicy.SecureOff,
-                                shouldDismissOnBackPress = false
-                            )
-                        ) {
-                            BottomSheetResultOfThisRound(
-                                whichTeamResult =
-                                if (teamOne.hasGoal) {
-                                    1
-                                } else if (teamTwo.hasGoal) {
-                                    0
-                                } else {
-                                    2
-                                },
-                                sharedViewModel = sharedViewModel,
-                                onClickItem = {
-                                    Utils.CHOOSE_CARD = false
-                                    Utils.CHOOSE_CUBE = false
+                            sharedViewModel = sharedViewModel,
+                            onClickItem = {
+                                Utils.CHOOSE_CARD = false
+                                Utils.CHOOSE_CUBE = false
 
-                                    scope.launch {
-                                        sheetStateResult.hide()
-                                    }.invokeOnCompletion {
-                                        if (!sheetStateResult.isVisible) {
-                                            showBottomSheetResult = false
-                                        }
+                                scope.launch {
+                                    sheetStateResult.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetStateResult.isVisible) {
+                                        showBottomSheetResult = false
                                     }
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 }
 
@@ -534,7 +615,8 @@ fun StartGameScreen(
                                 sharedViewModel.updateItemSetting(
                                     itemSetting.copy(
                                         shahGoal = false,
-                                        countShahGoal = 0
+                                        countShahGoal = 0,
+                                        duel = false
                                     )
                                 )
                                 scope.launch {
@@ -556,7 +638,8 @@ fun StartGameScreen(
                                 sharedViewModel.updateItemSetting(
                                     itemSetting.copy(
                                         shahGoal = false,
-                                        countShahGoal = 0
+                                        countShahGoal = 0,
+                                        duel = false
                                     )
                                 )
                                 scope.launch {
@@ -570,6 +653,48 @@ fun StartGameScreen(
                                     popUpTo(0) // پاک کردن کل استک
                                     launchSingleTop =
                                         true // جلوگیری از ایجاد دوباره صفحه در استک
+                                }
+                            }
+                        )
+                    }
+                }
+
+//BottomSheetDuelResult
+                if (showBottomSheetDuelResult) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            showBottomSheetOpeningDuel = false
+                        },
+                        sheetState = sheetStateOpeningDuel,
+                        shape = RoundedCornerShape(
+                            topEnd = sizeRoundBottomSheet(),
+                            topStart = sizeRoundBottomSheet()
+                        ),
+                        containerColor = FenceGreen,
+                        properties = ModalBottomSheetProperties(
+                            securePolicy = SecureFlagPolicy.SecureOff,
+                            shouldDismissOnBackPress = false
+                        )
+                    ) {
+                        BottomSheetContactResultDuel(
+                            whichTeamHasGoal =
+                            if (teamOne.hasGoal) {
+                                0
+                            } else if (teamTwo.hasGoal) {
+                                1
+                            } else {
+                                2
+                            },
+                            onClickItem = { team ->
+
+                            },
+                            onDismissRequest = {
+                                scope.launch {
+                                    sheetStateDuel.hide()
+                                }.invokeOnCompletion {
+                                    if (!sheetStateDuel.isVisible) {
+                                        showBottomSheetDuelResult = false
+                                    }
                                 }
                             }
                         )
@@ -858,7 +983,7 @@ fun TableGame(
     whichTeamHasGoal: Int,
     remainingTime: Int,
     showTimer: Boolean,
-    isVisibility: Boolean
+    isVisibilityShahGoal: Boolean,
 ) {
     Row(
         modifier = modifier
@@ -903,7 +1028,7 @@ fun TableGame(
                 modifier = modifier.width(135.sdp),
                 contentScale = ContentScale.FillWidth
             )
-            if (isVisibility) {
+            if (isVisibilityShahGoal) {
                 Text(
                     modifier = modifier.padding(bottom = 100.sdp),
                     text = "شاه گل",
@@ -965,19 +1090,85 @@ fun TableGame(
     }
 }
 
+@SuppressLint("DefaultLocale")
+@Composable
+fun TableDuel(
+    modifier: Modifier = Modifier,
+    whichTeamHasGoal: Int,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(320.sdp)
+            .padding(paddingRound()),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Icon(
+            modifier = modifier.alpha(if (whichTeamHasGoal == 0) 1f else mediumAlpha()),
+            painter = painterResource(R.drawable.line),
+            contentDescription = "line",
+            tint = Color.White
+        )
+        Image(
+            painterResource(R.drawable.person_three),
+            contentDescription = null,
+            modifier = modifier
+                .size(
+                    sizePicMedium_two()
+                )
+                .alpha(if (whichTeamHasGoal == 0) 1f else mediumAlpha())
+        )
+        Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxHeight()) {
+            Image(
+                painter = painterResource(R.drawable.table),
+                contentDescription = "table",
+                modifier = modifier.width(135.sdp),
+                contentScale = ContentScale.FillWidth
+            )
+            Text(
+                text = "دوئل",
+                fontSize = titleSize(),
+                fontFamily = FontPeydaBold,
+                color = Color.Red,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        Image(
+            painterResource(R.drawable.person_six),
+            contentDescription = null,
+            modifier = modifier
+                .size(
+                    sizePicMedium_two()
+                )
+                .alpha(if (whichTeamHasGoal == 1) 1f else mediumAlpha())
+        )
+        Icon(
+            modifier = modifier.alpha(if (whichTeamHasGoal == 1) 1f else mediumAlpha()),
+            painter = painterResource(R.drawable.line),
+            contentDescription = "line",
+            tint = Color.White
+        )
+
+    }
+}
+
 @Composable
 fun HeaderGame(
     modifier: Modifier = Modifier,
-    scoreTeamOne: Int,
+    duel: Boolean,
     scoreTeamTwo: Int,
-    whichTeamHasGoal: Int
+    whichTeamHasGoal: Int,
+    scoreTeamOne: Int
 ) {
     Row(
         modifier = modifier
             .padding(paddingRound())
             .fillMaxWidth()
             .height(50.sdp)
-            .background(color = FenceGreen, shape = RoundedCornerShape(sizeRound())),
+            .background(color = FenceGreen, shape = RoundedCornerShape(sizeRound()))
+            .alpha(if (duel) mediumAlpha() else 1f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
