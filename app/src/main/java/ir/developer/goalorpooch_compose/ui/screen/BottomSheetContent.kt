@@ -1102,7 +1102,8 @@ fun BottomSheetContactTheOpeningDuelOfTheGame(
 @Composable
 fun BottomSheetContactResultDuel(
     modifier: Modifier = Modifier,
-    onClickItem: (Int) -> Unit,
+    onClickItemUp: (Int) -> Unit,
+    onClickItemDown: (Int) -> Unit,
     onDismissRequest: () -> Unit, // مدیریت بسته شدن Bottom Sheet
     whichTeamHasGoal: Int
 ) {
@@ -1144,7 +1145,7 @@ fun BottomSheetContactResultDuel(
                     .clip(RoundedCornerShape(sizeRound()))
                     .fillMaxWidth()
                     .clickable {
-                        onClickItem(whichTeamHasGoal)
+                        onClickItemUp(whichTeamHasGoal)
                         onDismissRequest()
                     },
                 verticalAlignment = Alignment.CenterVertically
@@ -1174,7 +1175,7 @@ fun BottomSheetContactResultDuel(
                     .clip(RoundedCornerShape(sizeRound()))
                     .fillMaxWidth()
                     .clickable {
-                        onClickItem(whichTeamHasGoal)
+                        onClickItemDown(whichTeamHasGoal)
                         onDismissRequest()
                     },
                 verticalAlignment = Alignment.CenterVertically
@@ -1707,8 +1708,10 @@ private fun TheOpeningDuelOfTheGamePreview() {
 @Composable
 private fun BottomSheetContactResultDuelPreview() {
     BottomSheetContactResultDuel(
-        onClickItem = {},
-        onDismissRequest = {}, whichTeamHasGoal = 1
+        onClickItemUp = {},
+        onClickItemDown = {},
+        onDismissRequest = {},
+        whichTeamHasGoal = 1
     )
 }
 

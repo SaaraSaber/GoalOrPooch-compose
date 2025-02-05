@@ -9,7 +9,6 @@ import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.database.repository.CardRepository
 import ir.developer.goalorpooch_compose.model.CardModel
 import ir.developer.goalorpooch_compose.model.GameGuideModel
-import ir.developer.goalorpooch_compose.model.ResultType
 import ir.developer.goalorpooch_compose.model.SettingModel
 import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.util.TeamManager
@@ -103,19 +102,6 @@ class SharedViewModel @Inject constructor(
         teamManager.disableCardForTeam(teamId, cardId)
     }
 
-    // مدیریت نتایج دوئل
-    fun updateDuelResult(teamId: Int, playerId: Int, result: ResultType) {
-        teamManager.updateDuelResult(teamId, playerId, result)
-    }
-
-    fun getDuelWinner(): String {
-        val winnerId = teamManager.calculateDuelWinner()
-        return when (winnerId) {
-            0 -> "تیم اول برنده است!"
-            1 -> "تیم دوم برنده است!"
-            else -> "بازی مساوی شد!"
-        }
-    }
 
     //...................setting...................
 

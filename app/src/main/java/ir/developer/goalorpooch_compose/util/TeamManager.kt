@@ -1,8 +1,6 @@
 package ir.developer.goalorpooch_compose.util
 
 import ir.developer.goalorpooch_compose.model.CardModel
-import ir.developer.goalorpooch_compose.model.DuelResult
-import ir.developer.goalorpooch_compose.model.ResultType
 import ir.developer.goalorpooch_compose.model.TeamModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -89,41 +87,5 @@ class TeamManager @Inject constructor() {
     fun updateTeams(newTeams: List<TeamModel>) {
         _team.value = newTeams
     }
-
-    //آپدیت نتایج دوئل برای هر بازیکن
-    fun updateDuelResult(teamId: Int, playerId: Int, result: ResultType) {
-        _team.value = _team.value.map { team ->
-            if (team.id == teamId) {
-                val updatedResults = team.duelResults.toMutableList()
-                val existingResult = updatedResults.find { it.playerId == playerId }
-
-                if (existingResult != null) {
-                    existingResult.result = result
-                } else {
-                    updatedResults.add(DuelResult(playerId, result))
-                }
-
-                team.copy(duelResults = updatedResults)
-            } else {
-                team
-            }
-        }
-    }
-
-    //محاسبه برنده نهایی دوئل
-    fun calculateDuelWinner(): Int? {
-        val teamScores = _team.value.map { team ->
-            team.id to team.duelResults.count { it.result == ResultType.WIN }
-        }
-
-        val (team1Score, team2Score) = teamScores[0].second to teamScores[1].second
-
-        return when {
-            team1Score > team2Score -> teamScores[0].first
-            team2Score > team1Score -> teamScores[1].first
-            else -> null // بازی مساوی شد
-        }
-    }
-
 
 }

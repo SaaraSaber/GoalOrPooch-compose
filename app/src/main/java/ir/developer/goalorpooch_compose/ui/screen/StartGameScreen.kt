@@ -1,7 +1,6 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -59,6 +58,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
+import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
@@ -157,13 +157,33 @@ fun StartGameScreen(
         }
     }
 
+    //duel
     if (itemSetting.countShahGoal == 2) {
         sharedViewModel.updateItemSetting(itemSetting.copy(duel = true))
+
+        val halfPlayer = itemSetting.playerNumber / 2
+        val teamOneSun = teamOne.gotGoalDuel + teamOne.notGotGoalDuel
+        val teamTwoSun = teamTwo.gotGoalDuel + teamTwo.notGotGoalDuel
+
+        if (teamOneSun == halfPlayer && teamTwoSun == halfPlayer) {
+            //چک بشه که چه کسی برده
+            if (teamOne.gotGoalDuel > teamTwo.gotGoalDuel) {
+                //تیم اول برنده است
+
+            } else if (teamOne.gotGoalDuel < teamTwo.gotGoalDuel) {
+                //تیم دوم برنده است
+
+            } else if (teamOne.gotGoalDuel == teamTwo.gotGoalDuel) {
+                //مساوی شد حالا میره به تک دوئل
+
+            }
+        }
     }
 
     if ((teamOne.score == itemSetting.victoryPoint - 1) || (teamTwo.score == itemSetting.victoryPoint - 1)) {
         sharedViewModel.updateItemSetting(itemSetting.copy(shahGoal = true))
     }
+
 
     Scaffold { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -216,8 +236,6 @@ fun StartGameScreen(
 
 //...............table
                     if (itemSetting.duel) {
-                        Log.i("StartGameScreen", "StartGameScreen1: ${teamOne.hasGoal}")
-                        Log.i("StartGameScreen", "StartGameScreen2: ${teamTwo.hasGoal}")
                         TableDuel(
                             whichTeamHasGoal =
                             if (teamOne.hasGoal) {
@@ -226,7 +244,9 @@ fun StartGameScreen(
                                 1
                             } else {
                                 2
-                            }
+                            },
+                            viewModel = sharedViewModel,
+                            team = teamTwo
                         )
                     } else {
                         TableGame(
@@ -685,8 +705,51 @@ fun StartGameScreen(
                             } else {
                                 2
                             },
-                            onClickItem = { team ->
-
+                            onClickItemUp = { team ->
+                                if (team == 0) {
+                                    sharedViewModel.updateTeam(0) {
+                                        copy(
+                                            hasGoal = false,
+                                            gotGoalDuel = teamOne.gotGoalDuel + 1
+                                        )
+                                    }
+                                    sharedViewModel.updateTeam(1) {
+                                        copy(hasGoal = true)
+                                    }
+                                } else {
+                                    sharedViewModel.updateTeam(1) {
+                                        copy(
+                                            hasGoal = false,
+                                            gotGoalDuel = teamTwo.gotGoalDuel + 1
+                                        )
+                                    }
+                                    sharedViewModel.updateTeam(0) {
+                                        copy(hasGoal = true)
+                                    }
+                                }
+                            },
+                            onClickItemDown = { team ->
+                                if (team == 0) {
+                                    sharedViewModel.updateTeam(0) {
+                                        copy(
+                                            hasGoal = false,
+                                            notGotGoalDuel =  teamOne.notGotGoalDuel + 1
+                                        )
+                                    }
+                                    sharedViewModel.updateTeam(1) {
+                                        copy(hasGoal = true)
+                                    }
+                                } else {
+                                    sharedViewModel.updateTeam(1) {
+                                        copy(
+                                            hasGoal = false,
+                                            notGotGoalDuel = teamTwo.notGotGoalDuel + 1
+                                        )
+                                    }
+                                    sharedViewModel.updateTeam(0) {
+                                        copy(hasGoal = true)
+                                    }
+                                }
                             },
                             onDismissRequest = {
                                 scope.launch {
@@ -1095,7 +1158,10 @@ fun TableGame(
 fun TableDuel(
     modifier: Modifier = Modifier,
     whichTeamHasGoal: Int,
+    viewModel: SharedViewModel,
+    team: TeamModel
 ) {
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -1134,7 +1200,6 @@ fun TableDuel(
                 textAlign = TextAlign.Center
             )
         }
-
         Image(
             painterResource(R.drawable.person_six),
             contentDescription = null,
@@ -1150,7 +1215,6 @@ fun TableDuel(
             contentDescription = "line",
             tint = Color.White
         )
-
     }
 }
 

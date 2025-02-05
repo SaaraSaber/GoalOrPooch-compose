@@ -10,16 +10,7 @@ data class TeamModel(
     var cards: List<CardModel> = emptyList(),
     var selectedCube: Boolean = false,
     var selectedCard: Boolean = false,
-    var duelResults: List<DuelResult> = emptyList() // اضافه کردن نتایج دوئل
+    var gotGoalDuel: Int = 0,
+    var notGotGoalDuel: Int = 0,
 )
 
-data class DuelResult(
-    val playerId: Int,
-    var result: ResultType = ResultType.PENDING
-)
-
-enum class ResultType {
-    PENDING, // هنوز دوئل انجام نشده
-    WIN,     // گل حفظ شده (چراغ سبز)
-    LOSE     // گل از دست رفته (چراغ قرمز)
-}
