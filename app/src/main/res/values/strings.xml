@@ -87,8 +87,8 @@
     <string name="description_exit_app">لطفاً برای حمایت از ما  ۵ ستاره بدهید! حمایت شما برای ما بسیار ارزشمند است.️</string>
     <string name="description_exit_game">اگر اکنون از بازی خارج شوید، باید بازی را از ابتدا شروع کنید. آیا مطمئن هستید که می‌خواهید ادامه دهید؟️</string>
     <string name="rate">امتیاز دهید</string>
-    <string name="description_final_game_team_one">تیم اول موفق به کسب قهرمانی شد.</string>
-    <string name="description_final_game_team_two">تیم دوم موفق به کسب قهرمانی شد.</string>
+    <string name="description_final_game_team_one">تیم اول \n موفق به کسب قهرمانی شد.</string>
+    <string name="description_final_game_team_two">تیم دوم \n موفق به کسب قهرمانی شد.</string>
     <string name="result_of_this_round">نتیجه این دور</string>
     <string name="result_of_shah_goal">نتیجه شاه گل</string>
     <string name="final_result">نتیجه نهایی</string>
@@ -123,7 +123,7 @@
     <string name="free_stone_free_sparrow">سنگ مفت گنجشک مفت</string>
     <string name="description_free_stone_free_sparrow">این کارت به تیم حدس زننده کمک میکند که اگر یکبار اشتباه کند و گل را درست حدس نزند یک دست دیگر را که به آن مشکوک است باز کند.از این کارت برای هر تیم دو عدد وجود دارد.</string>
     <string name="big_ball">گوی بزرگ</string>
-    <string name="description_bid_ball">           این کارت به تیم حدس زننده کمک می\u200Cکند تا به تیم مقابل دستور دهد تا به جای بازی با گوی معمولی با گوی بزرگتر بازی کند. در واقع بازی با گوی بزرگتر سخت\u200Cتر می\u200Cشود و گل زودتر لو می\u200Cرود.</string>
+    <string name="description_bid_ball"> این کارت به تیم حدس زننده کمک می\u200Cکند تا به تیم مقابل دستور دهد تا به جای بازی با گوی معمولی با گوی بزرگتر بازی کند. در واقع بازی با گوی بزرگتر سخت\u200Cتر می\u200Cشود و گل زودتر لو می\u200Cرود.</string>
     <string name="sound_ball">گوی صدا دار</string>
     <string name="description_sound_ball"> کارت گوی صدا دار یکی از هیجان\u200Cانگیزترین کارت\u200Cهای بازی است. چون به تیم حدس زننده کمک می\u200Cکند تا گل را از تیم مقابل راحت\u200Cتر پس بگیرد چرا که تیم مقابل مجبور از با گویی بازی کند که با هر حرکت صدا می\u200Cدهد!</string>
     <string name="one_arrow_and_two_badges">یک تیر و دو نشان</string>

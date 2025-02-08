@@ -62,6 +62,7 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizeIcon
+import ir.developer.goalorpooch_compose.ui.theme.sizePicLarge
 import ir.developer.goalorpooch_compose.ui.theme.sizePicMedium
 import ir.developer.goalorpooch_compose.ui.theme.sizePicSmall
 import ir.developer.goalorpooch_compose.ui.theme.sizeRound
@@ -1593,15 +1594,15 @@ fun ItemApps(modifier: Modifier = Modifier, item: AppModel, onClickItem: () -> U
 fun BottomSheetWinner(
     modifier: Modifier = Modifier,
     whichTeamHasGoal: Int,
-    onClickRepeatGame: () -> Unit,
-    onClickExit: () -> Unit
+    onClickExit: () -> Unit,
+    onClickRepeatGame: () -> Unit
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = modifier
-                .padding(start = paddingRound(), end = paddingRound())
+                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment . CenterHorizontally
         ) {
             Row(
                 modifier = modifier
@@ -1620,7 +1621,7 @@ fun BottomSheetWinner(
             Image(
                 modifier = modifier
                     .padding(paddingTopMedium())
-                    .size(sizePicMedium()),
+                    .size(sizePicLarge()),
                 painter = if (whichTeamHasGoal == 0) painterResource(R.drawable.pic_team_one)
                 else painterResource(R.drawable.pic_team_two),
                 contentDescription = null
@@ -1632,11 +1633,11 @@ fun BottomSheetWinner(
                 else stringResource(R.string.description_final_game_team_two),
                 color = Color.White,
                 fontFamily = FontPeydaMedium,
-                fontSize = descriptionSize(),
-                textAlign = TextAlign.Justify
+                fontSize = titleSize(),
+                textAlign = TextAlign.Center
             )
 
-            Row(modifier = Modifier.padding(top = paddingTopLarge(), bottom = paddingRound())) {
+            Row(modifier = Modifier.padding(top = paddingTopMedium())) {
                 Button(
                     modifier = Modifier
                         .padding(end = 5.sdp)
@@ -1674,14 +1675,8 @@ fun BottomSheetWinner(
             }
         }
     }
-
 }
 
-@Preview
-@Composable
-private fun BottomSheetFinalResultPreview() {
-    BottomSheetWinner(whichTeamHasGoal = 0, onClickRepeatGame = {}, onClickExit = {})
-}
 
 @Preview
 @Composable

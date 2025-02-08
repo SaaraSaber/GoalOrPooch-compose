@@ -98,7 +98,10 @@ fun StartGameScreen(
     var showBottomSheetOpeningDuel by remember { mutableStateOf(true) }
     val sheetStateExitGame = rememberModalBottomSheetState()
     val sheetStateShahGoal = rememberModalBottomSheetState()
-    val sheetStateWinner = rememberModalBottomSheetState()
+    val sheetStateWinner = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { false }
+    )
     val sheetStateOpeningDuel = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
         skipPartiallyExpanded = true,
@@ -122,6 +125,7 @@ fun StartGameScreen(
     var remainingTimeShahGoal by remember { mutableIntStateOf(sharedViewModel.itemSetting.value.getTimeToGetGoal) }
     var showBottomSheetResult by remember { mutableStateOf(false) }
     var showBottomSheetDuelResult by remember { mutableStateOf(false) }
+
 
     val sheetStateResult = rememberModalBottomSheetState(
         //برای زمانی که روی صفحه کلیک کرد باتشیت دیس میس نشه
@@ -169,9 +173,13 @@ fun StartGameScreen(
             //چک بشه که چه کسی برده
             if (teamOne.gotGoalDuel > teamTwo.gotGoalDuel) {
                 //تیم اول برنده است
+                Utils.WIN_TEAM_ONE = true
+                showBottomSheetWinner = true
 
             } else if (teamOne.gotGoalDuel < teamTwo.gotGoalDuel) {
                 //تیم دوم برنده است
+                Utils.WIN_TEAM_TWO = true
+                showBottomSheetWinner = true
 
             } else if (teamOne.gotGoalDuel == teamTwo.gotGoalDuel) {
                 //مساوی شد حالا میره به تک دوئل
@@ -183,7 +191,6 @@ fun StartGameScreen(
     if ((teamOne.score == itemSetting.victoryPoint - 1) || (teamTwo.score == itemSetting.victoryPoint - 1)) {
         sharedViewModel.updateItemSetting(itemSetting.copy(shahGoal = true))
     }
-
 
     Scaffold { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -588,7 +595,13 @@ fun StartGameScreen(
                                     }
 
                                 } else {
-                                    showBottomSheetWinner = true
+                                    if (teamOne.hasGoal) {
+                                        Utils.WIN_TEAM_ONE = true
+                                        showBottomSheetWinner = true
+                                    } else if (teamTwo.hasGoal) {
+                                        Utils.WIN_TEAM_TWO = true
+                                        showBottomSheetWinner = true
+                                    }
                                     //باتن شیت برنده بازی باا بیاد
                                     scope.launch {
                                         sheetStateShahGoal.hide()
@@ -622,9 +635,9 @@ fun StartGameScreen(
                         )
                     ) {
                         BottomSheetWinner(
-                            whichTeamHasGoal = if (teamOne.hasGoal) {
+                            whichTeamHasGoal = if (Utils.WIN_TEAM_ONE) {
                                 0
-                            } else if (teamTwo.hasGoal) {
+                            } else if (Utils.WIN_TEAM_TWO) {
                                 1
                             } else {
                                 2
@@ -733,7 +746,7 @@ fun StartGameScreen(
                                     sharedViewModel.updateTeam(0) {
                                         copy(
                                             hasGoal = false,
-                                            notGotGoalDuel =  teamOne.notGotGoalDuel + 1
+                                            notGotGoalDuel = teamOne.notGotGoalDuel + 1
                                         )
                                     }
                                     sharedViewModel.updateTeam(1) {

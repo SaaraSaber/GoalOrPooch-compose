@@ -26,4 +26,7 @@ object Utils {
     var CHOOSE_CARD = false
     var CHOOSE_CUBE = false
 
+    var WIN_TEAM_ONE = false
+    var WIN_TEAM_TWO = false
+
 }
