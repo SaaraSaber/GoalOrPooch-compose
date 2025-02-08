@@ -58,7 +58,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
-import ir.developer.goalorpooch_compose.model.TeamModel
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
@@ -252,8 +251,8 @@ fun StartGameScreen(
                             } else {
                                 2
                             },
-                            viewModel = sharedViewModel,
-                            team = teamTwo
+//                            viewModel = sharedViewModel,
+//                            team = teamTwo
                         )
                     } else {
                         TableGame(
@@ -1171,8 +1170,6 @@ fun TableGame(
 fun TableDuel(
     modifier: Modifier = Modifier,
     whichTeamHasGoal: Int,
-    viewModel: SharedViewModel,
-    team: TeamModel
 ) {
 
     Row(
