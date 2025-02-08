@@ -180,9 +180,17 @@ fun StartGameScreen(
                 Utils.WIN_TEAM_TWO = true
                 showBottomSheetWinner = true
 
-            } else if (teamOne.gotGoalDuel == teamTwo.gotGoalDuel) {
-                //مساوی شد حالا میره به تک دوئل
+            }
+        } else if (teamOneSun > halfPlayer && teamTwoSun > halfPlayer && teamTwoSun == teamOneSun) {
+            if (teamOne.gotGoalDuel > teamTwo.gotGoalDuel) {
+                //تیم اول برنده است
+                Utils.WIN_TEAM_ONE = true
+                showBottomSheetWinner = true
 
+            } else if (teamOne.gotGoalDuel < teamTwo.gotGoalDuel) {
+                //تیم دوم برنده است
+                Utils.WIN_TEAM_TWO = true
+                showBottomSheetWinner = true
             }
         }
     }

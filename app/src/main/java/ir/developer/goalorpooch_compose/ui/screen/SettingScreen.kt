@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
+import ir.developer.goalorpooch_compose.model.SettingModel
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreenLow
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -62,6 +63,7 @@ import ir.kaaveh.sdpcompose.sdp
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+    val itemSetting by sharedViewModel.itemSetting.collectAsState()
     LaunchedEffect(Unit) {
         sharedViewModel.getAllCards()
         sharedViewModel.updateTeam(teamId = 0) {
@@ -74,8 +76,8 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                 cards = emptyList(),
                 selectedCube = false,
                 selectedCard = false,
-//                shahGoal = false,
-//                cuntShahGoal = 0
+                gotGoalDuel = 0,
+                notGotGoalDuel = 0
             )
         }
         sharedViewModel.updateTeam(teamId = 1) {
@@ -88,12 +90,21 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                 cards = emptyList(),
                 selectedCube = false,
                 selectedCard = false,
-//                shahGoal = false,
-//                cuntShahGoal = 0
+                gotGoalDuel = 0,
+                notGotGoalDuel = 0
             )
         }
         ManegeGame.team_one_has_card = false
         ManegeGame.team_two_has_card = false
+        Utils.WIN_TEAM_TWO = false
+        Utils.WIN_TEAM_ONE = false
+        sharedViewModel.updateItemSetting(
+            itemSetting.copy(
+                shahGoal = false,
+                countShahGoal = 0,
+                duel = false
+            )
+        )
     }
 
     Scaffold(
@@ -128,7 +139,7 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                     textAlign = TextAlign.Justify
                 )
 
-                ListSettings(sharedViewModel = sharedViewModel)
+                ListSettings(sharedViewModel = sharedViewModel, itemSetting = itemSetting)
 
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -163,8 +174,8 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition", "UnrememberedMutableState")
 @Composable
-fun ListSettings(sharedViewModel: SharedViewModel) {
-    val itemSetting by sharedViewModel.itemSetting.collectAsState()
+fun ListSettings(sharedViewModel: SharedViewModel, itemSetting: SettingModel) {
+//    val itemSetting by sharedViewModel.itemSetting.collectAsState()
     Column(
         modifier = Modifier
             .padding(
