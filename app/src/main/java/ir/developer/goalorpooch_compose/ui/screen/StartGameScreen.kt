@@ -849,12 +849,12 @@ fun TeamInfoSection(
                     if (counterEmptyGame != 0) {
                         counterEmptyGame--
                     } else {
-                        onShowToast("موجودی خالی بازی صفر است.")
+                        onShowToast("تعداد خالی‌ بازی در این دور تمام شد")
                         toastIcon(R.drawable.danger_circle)
                         toastColor(R.color.yellow)
                     }
                 } else {
-                    onShowToast("ابتدا زمان را بزنید.")
+                    onShowToast("ابتدا دکمه زمان را بزنید")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
                 }
@@ -869,15 +869,15 @@ fun TeamInfoSection(
             onClickItem = {
                 showBottomSheetCards = true
                 if (counterCards == 0) {
-                    onShowToast("موجودی کارت صفر است.")
+                    onShowToast("تمام کارت ها را استفاده کرده‌اید")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
                 } else if (Utils.CHOOSE_CUBE) {
-                    onShowToast("شما مکعب را انتخاب کرده اید.")
+                    onShowToast("شما مکعب را انتخاب کرده‌اید")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
                 } else if (Utils.CHOOSE_CARD) {
-                    onShowToast("حداکثر استفاده از کارت 1 بار است")
+                    onShowToast("حداکثر استفاده از کارت در این دور 1 بار است")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
                 }
@@ -892,15 +892,15 @@ fun TeamInfoSection(
             onClickItem = {
                 showBottomSheetCube = true
                 if (counterCube == 0) {
-                    onShowToast("موجودی مکعب صفر است.")
+                    onShowToast("تمام مکعب های خد را استفاده کرده‌اید")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
                 } else if (Utils.CHOOSE_CARD) {
-                    onShowToast("شما کارت را انتخاب کرده اید.")
+                    onShowToast("شما کارت را انتخاب کرده‌اید")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
                 } else if (Utils.CHOOSE_CUBE) {
-                    onShowToast("حداکثر استفاده از مکعب 1 بار است")
+                    onShowToast("حداکثر استفاده از مکعب در این دور 1 بار است")
                     toastIcon(R.drawable.danger_circle)
                     toastColor(R.color.yellow)
                 }
@@ -1110,7 +1110,7 @@ fun TableGame(
             if (isVisibilityShahGoal) {
                 Text(
                     modifier = modifier.padding(bottom = 100.sdp),
-                    text = "شاه گل",
+                    text = stringResource(R.string.shah_goal),
                     fontSize = titleSize(),
                     fontFamily = FontPeydaBold,
                     color = Color.Red,
@@ -1175,7 +1175,6 @@ fun TableDuel(
     modifier: Modifier = Modifier,
     whichTeamHasGoal: Int,
 ) {
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -1207,7 +1206,7 @@ fun TableDuel(
                 contentScale = ContentScale.FillWidth
             )
             Text(
-                text = "دوئل",
+                text = stringResource(R.string.duel),
                 fontSize = titleSize(),
                 fontFamily = FontPeydaBold,
                 color = Color.Red,
