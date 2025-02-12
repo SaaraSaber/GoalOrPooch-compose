@@ -7,14 +7,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -1426,8 +1429,10 @@ fun BottomSheetContactExitApp(
 @Composable
 fun BottomSheetContactApps(
     modifier: Modifier = Modifier,
+    onShowToast: () -> Unit,
     onDismiss: () -> Unit,
 ) {
+    var showToast by remember { mutableStateOf(false) }
     val listApps = listOf(
         AppModel(
             id = 0,
@@ -1455,82 +1460,81 @@ fun BottomSheetContactApps(
         )
     )
     val context = LocalContext.current
-
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Column(
-            modifier = modifier
-                .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
-                .fillMaxWidth()
-        ) {
-            Row(
+    Box(modifier = Modifier.wrapContentHeight()) {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            Column(
                 modifier = modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = stringResource(R.string.apps),
-                    color = Color.White,
-                    fontFamily = FontPeydaBold,
-                    fontSize = titleSize()
-                )
-                Spacer(modifier = modifier.weight(1f))
-                IconButton(
-                    onClick = { onDismiss() }
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.close_circle),
-                        contentDescription = "btn_close",
-                        modifier = modifier.size(20.sdp)
+                    Text(
+                        text = stringResource(R.string.apps),
+                        color = Color.White,
+                        fontFamily = FontPeydaBold,
+                        fontSize = titleSize()
                     )
-                }
-
-            }
-            HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
-
-            Text(
-                modifier = modifier.padding(top = paddingTop(), bottom = paddingTop()),
-                text = stringResource(R.string.description_apps),
-                color = Color.White,
-                fontFamily = FontPeydaMedium,
-                fontSize = descriptionSize(),
-                textAlign = TextAlign.Justify
-            )
-            listApps.forEach { item ->
-                ItemApps(item = item, onClickItem = {
-                    when (item.id) {
-                        0 -> {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data =
-                                    Uri.parse("https://cafebazaar.ir/app/ir.developre.chistangame")
-                            }
-                            context.startActivity(intent)
-                        }
-
-                        1 -> {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data =
-                                    Uri.parse("https://cafebazaar.ir/app/ir.forrtestt.wall1")
-                            }
-                            context.startActivity(intent)
-                        }
-
-                        2 -> {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data =
-                                    Uri.parse("https://cafebazaar.ir/app/com.example.challenginquestions")
-                            }
-                            context.startActivity(intent)
-                        }
-
-                        3 -> {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data =
-                                    Uri.parse("https://cafebazaar.ir/app/ir.developer.todolist")
-                            }
-                            context.startActivity(intent)
-                        }
+                    Spacer(modifier = modifier.weight(1f))
+                    IconButton(
+                        onClick = { onDismiss() }
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.close_circle),
+                            contentDescription = "btn_close",
+                            modifier = modifier.size(20.sdp)
+                        )
                     }
-                })
+
+                }
+                HorizontalDivider(modifier = modifier.padding(top = paddingTop()))
+
+                Text(
+                    modifier = modifier.padding(top = paddingTop(), bottom = paddingTop()),
+                    text = stringResource(R.string.description_apps),
+                    color = Color.White,
+                    fontFamily = FontPeydaMedium,
+                    fontSize = descriptionSize(),
+                    textAlign = TextAlign.Justify
+                )
+                listApps.forEach { item ->
+                    ItemApps(item = item, onClickItem = {
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                data = when (item.id) {
+                                    0 -> Uri.parse("https://cafebazaar.ir/app/ir.developre.chistangame")
+                                    1 -> Uri.parse("https://cafebazaar.ir/app/ir.forrtestt.wall1")
+                                    2 -> Uri.parse("https://cafebazaar.ir/app/com.example.challenginquestions")
+                                    3 -> Uri.parse("https://cafebazaar.ir/app/ir.developer.todolist")
+                                    else -> null
+                                }
+                            }
+                            context.startActivity(intent)
+                        } catch (t: Throwable) {
+                            onShowToast()
+                        }
+                    })
+                }
+            }
+        }
+
+        if (showToast) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 16.sdp), // فاصله از بالای صفحه
+                contentAlignment = Alignment.TopCenter // قرارگیری در بالای صفحه
+            ) {
+                CustomToast(
+                    message = stringResource(R.string.message_catch),
+                    isVisible = true,
+                    color = R.color.yellow,
+                    icon = R.drawable.danger_circle,
+                    onDismiss = { showToast = false }
+                )
             }
         }
     }
@@ -1602,7 +1606,7 @@ fun BottomSheetWinner(
             modifier = modifier
                 .padding(start = paddingRound(), end = paddingRound(), bottom = paddingRound())
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment . CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 modifier = modifier
@@ -1723,6 +1727,7 @@ private fun BottomSheetContentPreview() {
 @Composable
 private fun BottomSheetContactAppsPreview() {
     BottomSheetContactApps(
+        onShowToast = {},
         onDismiss = {}
     )
 }

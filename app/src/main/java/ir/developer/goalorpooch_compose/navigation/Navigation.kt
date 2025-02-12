@@ -40,7 +40,6 @@ fun Navigation(sharedViewModel: SharedViewModel) {
         ) {
             HomeScreen(
                 navController
-//                ,sharedViewModel
             )
         }
 

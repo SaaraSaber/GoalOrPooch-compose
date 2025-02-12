@@ -42,9 +42,9 @@ import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.SettingModel
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
-import ir.developer.goalorpooch_compose.ui.theme.FenceGreenLow
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
+import ir.developer.goalorpooch_compose.ui.theme.GrayDisable
 import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
 import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
 import ir.developer.goalorpooch_compose.ui.theme.fontSizeButton
@@ -297,8 +297,8 @@ fun ItemSetting(
                 colors = ButtonColors(
                     containerColor = FenceGreen,
                     contentColor = Color.White,
-                    disabledContainerColor = FenceGreenLow,
-                    disabledContentColor = FenceGreenLow
+                    disabledContainerColor = GrayDisable,
+                    disabledContentColor = GrayDisable
                 ),
                 shape = CircleShape,
                 contentPadding = PaddingValues(4.dp),
@@ -329,8 +329,8 @@ fun ItemSetting(
                 colors = ButtonColors(
                     containerColor = FenceGreen,
                     contentColor = Color.White,
-                    disabledContainerColor = FenceGreenLow,
-                    disabledContentColor = FenceGreenLow
+                    disabledContainerColor = GrayDisable,
+                    disabledContentColor = GrayDisable
                 ),
                 shape = CircleShape,
                 contentPadding = PaddingValues(4.dp),

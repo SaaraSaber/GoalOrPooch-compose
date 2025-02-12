@@ -258,9 +258,7 @@ fun StartGameScreen(
                                 1
                             } else {
                                 2
-                            },
-//                            viewModel = sharedViewModel,
-//                            team = teamTwo
+                            }
                         )
                     } else {
                         TableGame(
@@ -666,10 +664,8 @@ fun StartGameScreen(
                                         showBottomSheetWinner = false
                                     }
                                 }
-                                navController.navigate(Utils.HOME_SCREEN) {
-                                    popUpTo(0) // پاک کردن کل استک
-                                    launchSingleTop =
-                                        true // جلوگیری از ایجاد دوباره صفحه در استک
+                                navController.navigate(Utils.SETTING_SCREEN) {
+                                    popUpTo(Utils.SETTING_SCREEN) { inclusive = true }  // همه صفحات قبلی حذف میشن
                                 }
                             },
                             onClickExit = {

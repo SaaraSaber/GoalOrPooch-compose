@@ -82,7 +82,7 @@
     <string name="description_choose_card_team_two">تیم دوم کارت مورد نظر خود را انتخاب کند.</string>
     <string name="start_random">انتخاب تصادفی آغازکننده</string>
     <string name="starter_description">به دو تیم تقسیم شوید و سپس تیم آغاز کننده بازی را مشخص کنید.</string>
-    <string name="description_setting">در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.</string>
+    <string name="description_setting">در این بخش می توانید بازی را برای خود شخصی سازی کنید، تنظیمات اولیه ی بازی را مشخص کنید.\nزمان به ثانیه است.</string>
     <string name="description_apps">منتخب برنامه‌های ما را ببینید! برای دانلود، کافیست روی برنامه دلخواهتان کلیک کنید.</string>
     <string name="description_exit_app">لطفاً برای حمایت از ما  ۵ ستاره بدهید! حمایت شما برای ما بسیار ارزشمند است.️</string>
     <string name="description_exit_game">اگر اکنون از بازی خارج شوید، باید بازی را از ابتدا شروع کنید. آیا مطمئن هستید که می‌خواهید ادامه دهید؟️</string>
@@ -113,11 +113,12 @@
     <string name="time_get_goal">زمان گرفتن گل</string>
     <string name="time_get_king_goal">زمان گرفتن شاه گل</string>
     <string name="number_cards">تعداد کارت های بازی</string>
-    <string name="description_about_us">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت.</string>
+    <string name="description_about_us">تیم ما با طراحی یک بازی تیمی کاملاً ایرانی، شور و هیجان یک رقابت نفس‌گیر را به گوشی‌های شما آورده است!\nگل یا پوچ فقط یک بازی نیست، بلکه یک چالش واقعی برای سرعت، دقت و زیرکی شماست!\nدوستان و خانواده را به میدان دعوت کنید، فریب دهید، حدس بزنید و پیروز شوید!</string>
     <string name="contact_support">ارتباط با پشتیبانی</string>
     <string name="description_contact_support">برای ارسال انتقادات و پیشنهادات، لطفاً اینجا کلیک کنید.</string>
     <string name="support">بازی گل یا پوچ</string>
     <string name="address_email">saraaasaber77@gmail.com</string>
+    <string name="message_catch">متاسفانه مشکلی پیش آمده است.</string>
 
     <!--    cards   -->
     <string name="free_stone_free_sparrow">سنگ مفت گنجشک مفت</string>

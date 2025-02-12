@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -56,6 +57,7 @@ import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundMax
 import ir.developer.goalorpooch_compose.ui.theme.widthButton
 import ir.developer.goalorpooch_compose.util.Utils
+import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +71,7 @@ fun HomeScreen(navController: NavController) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val activity = context as? Activity
+    var showToast by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -272,6 +275,9 @@ fun HomeScreen(navController: NavController) {
                     containerColor = FenceGreen
                 ) {
                     BottomSheetContactApps(
+                        onShowToast = {
+                            showToast = true
+                        },
                         onDismiss = {
                             scope.launch {
                                 sheetState.hide()
@@ -299,14 +305,24 @@ fun HomeScreen(navController: NavController) {
                     )
                 }
             }
+
+        }
+// ✅ نمایش Toast به‌صورت جداگانه
+        if (showToast) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 16.sdp),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                CustomToast(
+                    message = stringResource(R.string.message_catch),
+                    isVisible = true,
+                    color = R.color.yellow,
+                    icon = R.drawable.danger_circle,
+                    onDismiss = { showToast = false }
+                )
+            }
         }
     }
 }
-
-
-//@Preview
-//@Composable
-//private fun HomeScreenPreview() {
-//    val navController = rememberNavController()
-//    HomeScreen(navController = navController)
-//}
