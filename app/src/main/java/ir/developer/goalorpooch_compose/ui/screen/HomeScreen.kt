@@ -6,9 +6,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +39,11 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -62,7 +67,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "QueryPermissionsNeeded")
 @Composable
-fun HomeScreen(navController: NavController,viewModelMusic:MusicPlayerViewModel) {
+fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewModel) {
     var showBottomSheetAboutUs by remember { mutableStateOf(false) }
     var showBottomSheetApps by remember { mutableStateOf(false) }
     var showBottomSheetExit by remember { mutableStateOf(false) }
@@ -75,253 +80,246 @@ fun HomeScreen(navController: NavController,viewModelMusic:MusicPlayerViewModel)
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .paint(
-                    painterResource(id = R.drawable.main_background),
-                    contentScale = ContentScale.Crop
-                )
-        ) {
-//            Button(
-//                modifier = Modifier
-//                    .padding(paddingRound())
-//                    .size(40.dp),
-//                colors = ButtonColors(
-//                    containerColor = FenceGreen,
-//                    contentColor = Color.White,
-//                    disabledContainerColor = HihadaBrown,
-//                    disabledContentColor = HihadaBrown
-//                ),
-//                shape = RoundedCornerShape(sizeRound()),
-//                contentPadding = PaddingValues(0.dp),
-//                onClick = { }) {
-//                Icon(
-//                    modifier = Modifier.size(20.dp),
-//                    painter = painterResource(id = R.drawable.volume_loud),
-//                    contentDescription = "volume_loud"
-//                )
-//            }
-            MusicControlButton(viewModel = viewModelMusic)
-
-            Image(
-                modifier = Modifier
-                    .padding(paddingTopLarge())
-                    .size(140.dp)
-                    .align(Alignment.CenterHorizontally),
-                painter = painterResource(id = R.drawable.logo), contentDescription = "logo"
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Button(
-                modifier = Modifier
-                    .width(widthButton())
-                    .height(heightButton())
-                    .align(Alignment.CenterHorizontally),
-                colors = ButtonColors(
-                    containerColor = FenceGreen,
-                    contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
-                ),
-                border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(sizeRoundMax()),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate(Utils.SETTING_SCREEN) }
-            ) {
-                Text(
-                    text = stringResource(R.string.start),
-                    fontSize = fontSizeButton(),
-                    fontFamily = FontPeydaBold
-                )
-            }
-            Button(
-                modifier = Modifier
-                    .padding(top = paddingTop())
-                    .width(widthButton())
-                    .height(heightButton())
-                    .align(Alignment.CenterHorizontally),
-                colors = ButtonColors(
-                    containerColor = FenceGreen,
-                    contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
-                ),
-                border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(sizeRoundMax()),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate(Utils.GAME_GUIDE_SCREEN) }) {
-                Text(
-                    text = stringResource(R.string.guide),
-                    fontSize = fontSizeButton(),
-                    fontFamily = FontPeydaBold
-                )
-            }
-            Button(
-                modifier = Modifier
-                    .padding(top = paddingTop())
-                    .width(widthButton())
-                    .height(heightButton())
-                    .align(Alignment.CenterHorizontally),
-                colors = ButtonColors(
-                    containerColor = FenceGreen,
-                    contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
-                ),
-                border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(sizeRoundMax()),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { showBottomSheetAboutUs = true }) {
-                Text(
-                    text = stringResource(R.string.about_us),
-                    fontSize = fontSizeButton(),
-                    fontFamily = FontPeydaBold
-                )
-            }
-            Button(
-                modifier = Modifier
-                    .padding(top = paddingTop())
-                    .width(widthButton())
-                    .height(heightButton())
-                    .align(Alignment.CenterHorizontally),
-                colors = ButtonColors(
-                    containerColor = FenceGreen,
-                    contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
-                ),
-                border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(sizeRoundMax()),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { showBottomSheetApps = true }) {
-                Text(
-                    text = stringResource(R.string.apps),
-                    fontSize = fontSizeButton(),
-                    fontFamily = FontPeydaBold
-                )
-            }
-            Button(
-                modifier = Modifier
-                    .padding(top = 5.dp)
-                    .width(widthButton())
-                    .height(heightButton())
-                    .align(Alignment.CenterHorizontally),
-                colors = ButtonColors(
-                    containerColor = FenceGreen,
-                    contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
-                ),
-                border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(sizeRoundMax()),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { showBottomSheetExit = true }) {
-                Text(
-                    text = stringResource(R.string.exit),
-                    fontSize = fontSizeButton(),
-                    fontFamily = FontPeydaBold
-                )
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                modifier = Modifier
-                    .padding(bottom = paddingRound())
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                text = stringResource(R.string.version_app),
-                color = Color.White,
-                fontSize = 15.sp,
-                fontFamily = FontPeydaBold
-            )
-
-            if (showBottomSheetAboutUs) {
-                ModalBottomSheet(
-                    onDismissRequest = { showBottomSheetAboutUs = false },
-                    sheetState = sheetState,
-                    shape = RoundedCornerShape(sizeRoundBottomSheet()),
-                    containerColor = FenceGreen
-                ) {
-                    BottomSheetContentAboutUs(
-                        onDismiss = {
-                            scope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion { showBottomSheetAboutUs = false }
-                        },
-                        onItemClick = {
-                            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                data = Uri.parse("mailto:")
-                                putExtra(
-                                    Intent.EXTRA_EMAIL,
-                                    arrayOf(context.getString(R.string.address_email))
-                                )
-                                putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.support))
-                            }
-                            context.startActivity(intent)
-
-                        }
-                    )
-                }
-            }
-
-            if (showBottomSheetApps) {
-                ModalBottomSheet(
-                    onDismissRequest = { showBottomSheetApps = false },
-                    sheetState = sheetState,
-                    shape = RoundedCornerShape(sizeRoundBottomSheet()),
-                    containerColor = FenceGreen
-                ) {
-                    BottomSheetContactApps(
-                        onShowToast = {
-                            showToast = true
-                        },
-                        onDismiss = {
-                            scope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion { showBottomSheetApps = false }
-                        }
-                    )
-                }
-            }
-
-            if (showBottomSheetExit) {
-                ModalBottomSheet(
-                    onDismissRequest = { showBottomSheetExit = false },
-                    sheetState = sheetState,
-                    shape = RoundedCornerShape(sizeRoundBottomSheet()),
-                    containerColor = FenceGreen
-                ) {
-                    BottomSheetContactExitApp(
-                        onDismiss = {
-                            scope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion { showBottomSheetExit = false }
-                        },
-                        onClickStar = {},
-                        onClickExit = { activity?.finishAffinity() }
-                    )
-                }
-            }
-
-        }
-// ✅ نمایش Toast به‌صورت جداگانه
-        if (showToast) {
-            Box(
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 16.sdp),
-                contentAlignment = Alignment.TopCenter
+                    .padding(innerPadding)
+                    .paint(
+                        painterResource(id = R.drawable.main_background),
+                        contentScale = ContentScale.Crop
+                    )
             ) {
-                CustomToast(
-                    message = stringResource(R.string.message_catch),
-                    isVisible = true,
-                    color = R.color.yellow,
-                    icon = R.drawable.danger_circle,
-                    onDismiss = { showToast = false }
+
+                Row(
+                    modifier = Modifier
+                        .padding(paddingRound())
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) { MusicControlButton(viewModel = viewModelMusic) }
+
+                Image(
+                    modifier = Modifier
+                        .padding(paddingTopLarge())
+                        .size(140.dp)
+                        .align(Alignment.CenterHorizontally),
+                    painter = painterResource(id = R.drawable.logo), contentDescription = "logo"
                 )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Button(
+                    modifier = Modifier
+                        .width(widthButton())
+                        .height(heightButton())
+                        .align(Alignment.CenterHorizontally),
+                    colors = ButtonColors(
+                        containerColor = FenceGreen,
+                        contentColor = Color.White,
+                        disabledContainerColor = HihadaBrown,
+                        disabledContentColor = HihadaBrown
+                    ),
+                    border = BorderStroke(1.dp, Color.White),
+                    shape = RoundedCornerShape(sizeRoundMax()),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { navController.navigate(Utils.SETTING_SCREEN) }
+                ) {
+                    Text(
+                        text = stringResource(R.string.start),
+                        fontSize = fontSizeButton(),
+                        fontFamily = FontPeydaBold
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(top = paddingTop())
+                        .width(widthButton())
+                        .height(heightButton())
+                        .align(Alignment.CenterHorizontally),
+                    colors = ButtonColors(
+                        containerColor = FenceGreen,
+                        contentColor = Color.White,
+                        disabledContainerColor = HihadaBrown,
+                        disabledContentColor = HihadaBrown
+                    ),
+                    border = BorderStroke(1.dp, Color.White),
+                    shape = RoundedCornerShape(sizeRoundMax()),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { navController.navigate(Utils.GAME_GUIDE_SCREEN) }) {
+                    Text(
+                        text = stringResource(R.string.guide),
+                        fontSize = fontSizeButton(),
+                        fontFamily = FontPeydaBold
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(top = paddingTop())
+                        .width(widthButton())
+                        .height(heightButton())
+                        .align(Alignment.CenterHorizontally),
+                    colors = ButtonColors(
+                        containerColor = FenceGreen,
+                        contentColor = Color.White,
+                        disabledContainerColor = HihadaBrown,
+                        disabledContentColor = HihadaBrown
+                    ),
+                    border = BorderStroke(1.dp, Color.White),
+                    shape = RoundedCornerShape(sizeRoundMax()),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { showBottomSheetAboutUs = true }) {
+                    Text(
+                        text = stringResource(R.string.about_us),
+                        fontSize = fontSizeButton(),
+                        fontFamily = FontPeydaBold
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(top = paddingTop())
+                        .width(widthButton())
+                        .height(heightButton())
+                        .align(Alignment.CenterHorizontally),
+                    colors = ButtonColors(
+                        containerColor = FenceGreen,
+                        contentColor = Color.White,
+                        disabledContainerColor = HihadaBrown,
+                        disabledContentColor = HihadaBrown
+                    ),
+                    border = BorderStroke(1.dp, Color.White),
+                    shape = RoundedCornerShape(sizeRoundMax()),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { showBottomSheetApps = true }) {
+                    Text(
+                        text = stringResource(R.string.apps),
+                        fontSize = fontSizeButton(),
+                        fontFamily = FontPeydaBold
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                        .width(widthButton())
+                        .height(heightButton())
+                        .align(Alignment.CenterHorizontally),
+                    colors = ButtonColors(
+                        containerColor = FenceGreen,
+                        contentColor = Color.White,
+                        disabledContainerColor = HihadaBrown,
+                        disabledContentColor = HihadaBrown
+                    ),
+                    border = BorderStroke(1.dp, Color.White),
+                    shape = RoundedCornerShape(sizeRoundMax()),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { showBottomSheetExit = true }) {
+                    Text(
+                        text = stringResource(R.string.exit),
+                        fontSize = fontSizeButton(),
+                        fontFamily = FontPeydaBold
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    modifier = Modifier
+                        .padding(bottom = paddingRound())
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally),
+                    textAlign = TextAlign.Center,
+                    text = stringResource(R.string.version_app),
+                    color = Color.White,
+                    fontSize = 15.sp,
+                    fontFamily = FontPeydaBold
+                )
+
+                if (showBottomSheetAboutUs) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheetAboutUs = false },
+                        sheetState = sheetState,
+                        shape = RoundedCornerShape(sizeRoundBottomSheet()),
+                        containerColor = FenceGreen
+                    ) {
+                        BottomSheetContentAboutUs(
+                            onDismiss = {
+                                scope.launch {
+                                    sheetState.hide()
+                                }.invokeOnCompletion { showBottomSheetAboutUs = false }
+                            },
+                            onItemClick = {
+                                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                    data = Uri.parse("mailto:")
+                                    putExtra(
+                                        Intent.EXTRA_EMAIL,
+                                        arrayOf(context.getString(R.string.address_email))
+                                    )
+                                    putExtra(
+                                        Intent.EXTRA_SUBJECT,
+                                        context.getString(R.string.support)
+                                    )
+                                }
+                                context.startActivity(intent)
+
+                            }
+                        )
+                    }
+                }
+
+                if (showBottomSheetApps) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheetApps = false },
+                        sheetState = sheetState,
+                        shape = RoundedCornerShape(sizeRoundBottomSheet()),
+                        containerColor = FenceGreen
+                    ) {
+                        BottomSheetContactApps(
+                            onShowToast = {
+                                showToast = true
+                            },
+                            onDismiss = {
+                                scope.launch {
+                                    sheetState.hide()
+                                }.invokeOnCompletion { showBottomSheetApps = false }
+                            }
+                        )
+                    }
+                }
+
+                if (showBottomSheetExit) {
+                    ModalBottomSheet(
+                        onDismissRequest = { showBottomSheetExit = false },
+                        sheetState = sheetState,
+                        shape = RoundedCornerShape(sizeRoundBottomSheet()),
+                        containerColor = FenceGreen
+                    ) {
+                        BottomSheetContactExitApp(
+                            onDismiss = {
+                                scope.launch {
+                                    sheetState.hide()
+                                }.invokeOnCompletion { showBottomSheetExit = false }
+                            },
+                            onClickStar = {},
+                            onClickExit = { activity?.finishAffinity() }
+                        )
+                    }
+                }
+
+            }
+// ✅ نمایش Toast به‌صورت جداگانه
+            if (showToast) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 16.sdp),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    CustomToast(
+                        message = stringResource(R.string.message_catch),
+                        isVisible = true,
+                        color = R.color.yellow,
+                        icon = R.drawable.danger_circle,
+                        onDismiss = { showToast = false }
+                    )
+                }
             }
         }
     }

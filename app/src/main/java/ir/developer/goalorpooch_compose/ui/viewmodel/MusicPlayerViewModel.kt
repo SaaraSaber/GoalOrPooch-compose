@@ -25,10 +25,6 @@ class MusicPlayerViewModel @Inject constructor(
             mediaPlayer = MediaPlayer.create(context, R.raw.music).apply {
                 isLooping = true
             }
-
-//            mediaPlayer?.setOnCompletionListener {
-//                _isPlaying.value = false
-//            }
         }
         mediaPlayer?.start()
         _isPlaying.value = true

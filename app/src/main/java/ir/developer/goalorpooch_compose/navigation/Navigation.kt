@@ -27,7 +27,7 @@ import ir.developer.goalorpooch_compose.util.Utils.STARTER_SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navigation(sharedViewModel: SharedViewModel,viewModelMusic: MusicPlayerViewModel) {
+fun Navigation(sharedViewModel: SharedViewModel, viewModelMusic: MusicPlayerViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = HOME_SCREEN, builder = {
         composable(
@@ -40,8 +40,8 @@ fun Navigation(sharedViewModel: SharedViewModel,viewModelMusic: MusicPlayerViewM
             }
         ) {
             HomeScreen(
-                navController,
-                viewModelMusic
+                navController = navController,
+                viewModelMusic = viewModelMusic
             )
         }
 
@@ -63,7 +63,10 @@ fun Navigation(sharedViewModel: SharedViewModel,viewModelMusic: MusicPlayerViewM
             }
         )
         {
-            SettingScreen(navController, sharedViewModel)
+            SettingScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
 
         composable(
@@ -84,7 +87,7 @@ fun Navigation(sharedViewModel: SharedViewModel,viewModelMusic: MusicPlayerViewM
             }
         )
         {
-            DeterminingGameStarter(navController)
+            DeterminingGameStarter(navController = navController)
         }
 
         composable(route = Utils.SELECT_CARD_SCREEN + "/{idItem}",
@@ -121,6 +124,12 @@ fun Navigation(sharedViewModel: SharedViewModel,viewModelMusic: MusicPlayerViewM
                 sharedViewModel = sharedViewModel
             )
         }
-        composable(route = Utils.START_GAME_SCREEN) { StartGameScreen(navController = navController, sharedViewModel = sharedViewModel) }
+        composable(route = Utils.START_GAME_SCREEN) {
+            StartGameScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel,
+                viewModelMusic = viewModelMusic
+            )
+        }
     })
 }

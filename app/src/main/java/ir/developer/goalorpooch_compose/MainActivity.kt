@@ -15,7 +15,6 @@ import ir.developer.goalorpooch_compose.navigation.Navigation
 import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 
-
 @AndroidEntryPoint
 @SuppressLint("RestrictedApi")
 class MainActivity : ComponentActivity() {

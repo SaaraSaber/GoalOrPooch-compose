@@ -1,7 +1,6 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -17,7 +16,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.HihadaBrown
-import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 
@@ -29,7 +27,6 @@ fun MusicControlButton(viewModel: MusicPlayerViewModel) {
 
     Button(
         modifier = Modifier
-            .padding(paddingRound())
             .size(40.dp),
         colors = ButtonColors(
             containerColor = FenceGreen,
