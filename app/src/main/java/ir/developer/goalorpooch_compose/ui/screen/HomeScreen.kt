@@ -297,14 +297,19 @@ fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewMode
                                     sheetState.hide()
                                 }.invokeOnCompletion { showBottomSheetExit = false }
                             },
-                            onClickStar = {},
+                            onClickStar = {
+                                val intent = Intent(Intent.ACTION_EDIT)
+                                intent.setData(Uri.parse("bazaar://details?id=" + Utils.PACKAGE_NAME))
+                                intent.setPackage("com.farsitel.bazaar")
+                                context.startActivity(intent)
+                            },
                             onClickExit = { activity?.finishAffinity() }
                         )
                     }
                 }
 
             }
-// ✅ نمایش Toast به‌صورت جداگانه
+//  نمایش Toast به‌صورت جداگانه
             if (showToast) {
                 Box(
                     modifier = Modifier

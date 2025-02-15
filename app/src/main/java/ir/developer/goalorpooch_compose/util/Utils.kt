@@ -12,10 +12,6 @@ object Utils {
 
     //......................................................................................
 //setting
-//    var COUNT_PLAYER = 6
-//    var VICTORY_POINTS = 10
-//    var TIME_TO_GET_GOAL = 30
-//    var TIME_TO_GET_SHAH_GOAL = 60
     var THE_NUMBER_OF_PLAYING_CARDS = 5
     //......................................................................................
 
@@ -28,5 +24,7 @@ object Utils {
 
     var WIN_TEAM_ONE = false
     var WIN_TEAM_TWO = false
+
+    const val PACKAGE_NAME = "ir.developer.goalorpooch_compose"
 
 }
