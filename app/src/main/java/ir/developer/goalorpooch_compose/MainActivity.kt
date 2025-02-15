@@ -1,14 +1,18 @@
 package ir.developer.goalorpooch_compose
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ir.developer.goalorpooch_compose.navigation.Navigation
+import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 
 
@@ -16,8 +20,9 @@ import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 @SuppressLint("RestrictedApi")
 class MainActivity : ComponentActivity() {
     private val sharedViewModel: SharedViewModel by viewModels()
+    private val musicPlayerViewModel: MusicPlayerViewModel by viewModels()
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,7 +33,11 @@ class MainActivity : ComponentActivity() {
         insertCards()
 
         setContent {
-            Navigation(sharedViewModel = sharedViewModel)
+//lock orientation
+            val context = LocalContext.current
+            (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+            Navigation(sharedViewModel = sharedViewModel, viewModelMusic = musicPlayerViewModel)
         }
     }
 

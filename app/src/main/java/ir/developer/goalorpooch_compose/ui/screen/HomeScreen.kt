@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -52,10 +51,10 @@ import ir.developer.goalorpooch_compose.ui.theme.heightButton
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
 import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
-import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundMax
 import ir.developer.goalorpooch_compose.ui.theme.widthButton
+import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 import kotlinx.coroutines.launch
@@ -63,7 +62,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "QueryPermissionsNeeded")
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController,viewModelMusic:MusicPlayerViewModel) {
     var showBottomSheetAboutUs by remember { mutableStateOf(false) }
     var showBottomSheetApps by remember { mutableStateOf(false) }
     var showBottomSheetExit by remember { mutableStateOf(false) }
@@ -85,25 +84,26 @@ fun HomeScreen(navController: NavController) {
                     contentScale = ContentScale.Crop
                 )
         ) {
-            Button(
-                modifier = Modifier
-                    .padding(paddingRound())
-                    .size(40.dp),
-                colors = ButtonColors(
-                    containerColor = FenceGreen,
-                    contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
-                ),
-                shape = RoundedCornerShape(sizeRound()),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { }) {
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.volume_loud),
-                    contentDescription = "volume_loud"
-                )
-            }
+//            Button(
+//                modifier = Modifier
+//                    .padding(paddingRound())
+//                    .size(40.dp),
+//                colors = ButtonColors(
+//                    containerColor = FenceGreen,
+//                    contentColor = Color.White,
+//                    disabledContainerColor = HihadaBrown,
+//                    disabledContentColor = HihadaBrown
+//                ),
+//                shape = RoundedCornerShape(sizeRound()),
+//                contentPadding = PaddingValues(0.dp),
+//                onClick = { }) {
+//                Icon(
+//                    modifier = Modifier.size(20.dp),
+//                    painter = painterResource(id = R.drawable.volume_loud),
+//                    contentDescription = "volume_loud"
+//                )
+//            }
+            MusicControlButton(viewModel = viewModelMusic)
 
             Image(
                 modifier = Modifier
