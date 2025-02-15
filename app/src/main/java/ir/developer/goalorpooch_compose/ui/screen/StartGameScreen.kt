@@ -848,6 +848,9 @@ fun TeamInfoSection(
                 if (startTime) {
                     if (counterEmptyGame != 0) {
                         counterEmptyGame--
+                        onShowToast("شما یک خالی بازی استفاده کردید")
+                        toastIcon(R.drawable.check_circle)
+                        toastColor(R.color.green)
                     } else {
                         onShowToast("تعداد خالی‌ بازی در این دور تمام شد")
                         toastIcon(R.drawable.danger_circle)
