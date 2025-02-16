@@ -188,7 +188,7 @@ fun ListSettings(sharedViewModel: SharedViewModel, itemSetting: SettingModel) {
             label = stringResource(R.string.number_player),
             count = itemSetting.playerNumber,
             minCount = 4,
-            maxCount = 10,
+            maxCount = 50,
             onIncrement = {
                 sharedViewModel.updateItemSetting(
                     itemSetting.copy(playerNumber = itemSetting.playerNumber + 2)

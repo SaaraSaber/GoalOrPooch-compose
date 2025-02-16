@@ -205,28 +205,28 @@ fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewMode
                         fontFamily = FontPeydaBold
                     )
                 }
-                Button(
-                    modifier = Modifier
-                        .padding(top = 5.dp)
-                        .width(widthButton())
-                        .height(heightButton())
-                        .align(Alignment.CenterHorizontally),
-                    colors = ButtonColors(
-                        containerColor = FenceGreen,
-                        contentColor = Color.White,
-                        disabledContainerColor = HihadaBrown,
-                        disabledContentColor = HihadaBrown
-                    ),
-                    border = BorderStroke(1.dp, Color.White),
-                    shape = RoundedCornerShape(sizeRoundMax()),
-                    contentPadding = PaddingValues(0.dp),
-                    onClick = { showBottomSheetExit = true }) {
-                    Text(
-                        text = stringResource(R.string.exit),
-                        fontSize = fontSizeButton(),
-                        fontFamily = FontPeydaBold
-                    )
-                }
+//                Button(
+//                    modifier = Modifier
+//                        .padding(top = 5.dp)
+//                        .width(widthButton())
+//                        .height(heightButton())
+//                        .align(Alignment.CenterHorizontally),
+//                    colors = ButtonColors(
+//                        containerColor = FenceGreen,
+//                        contentColor = Color.White,
+//                        disabledContainerColor = HihadaBrown,
+//                        disabledContentColor = HihadaBrown
+//                    ),
+//                    border = BorderStroke(1.dp, Color.White),
+//                    shape = RoundedCornerShape(sizeRoundMax()),
+//                    contentPadding = PaddingValues(0.dp),
+//                    onClick = { showBottomSheetExit = true }) {
+//                    Text(
+//                        text = stringResource(R.string.exit),
+//                        fontSize = fontSizeButton(),
+//                        fontFamily = FontPeydaBold
+//                    )
+//                }
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     modifier = Modifier
