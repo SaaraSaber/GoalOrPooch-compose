@@ -35,6 +35,7 @@ import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.paddingRound
 import ir.developer.goalorpooch_compose.ui.theme.paddingRoundMini
 import ir.developer.goalorpooch_compose.ui.theme.paddingTop
+import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.sizeIcon
 import ir.developer.goalorpooch_compose.ui.theme.toastSize
 import ir.kaaveh.sdpcompose.sdp
@@ -52,7 +53,7 @@ fun CustomToast(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = paddingRound()), // فاصله از بالای صفحه
+            .padding(top = paddingTopLarge()), // فاصله از بالای صفحه
         contentAlignment = Alignment.TopCenter // قرارگیری در بالای صفحه
     ) {
         AnimatedVisibility(visible = isVisible, enter = fadeIn(), exit = fadeOut()) {

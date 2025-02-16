@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -46,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
@@ -76,6 +79,11 @@ fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewMode
     val context = LocalContext.current
     val activity = context as? Activity
     var showToast by remember { mutableStateOf(false) }
+
+    // هندل کردن بک وقتی شیت بسته است
+    BackHandler(enabled = !showBottomSheetExit) {
+        showBottomSheetExit = true
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -289,8 +297,17 @@ fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewMode
                         onDismissRequest = { showBottomSheetExit = false },
                         sheetState = sheetState,
                         shape = RoundedCornerShape(sizeRoundBottomSheet()),
-                        containerColor = FenceGreen
+                        containerColor = FenceGreen,
+                        properties = ModalBottomSheetProperties(
+                            securePolicy = SecureFlagPolicy.SecureOff,
+                            shouldDismissOnBackPress = false
+                        )
                     ) {
+                        // اینجا بک هندلر موقعی که شیت بازه
+                        BackHandler {
+                            activity?.finishAffinity()
+                        }
+
                         BottomSheetContactExitApp(
                             onDismiss = {
                                 scope.launch {
