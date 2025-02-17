@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.3"
+datastorePreferences = "1.1.2"
 kotlin = "2.0.20"
 core-ktx = "1.15.0"
 junit = "4.13.2"
@@ -12,10 +13,12 @@ navigation = "2.8.5"
 daggerHilt = "2.51.1"
 roomRuntime = "2.6.1"
 sdpCompose = "1.1.0"
+lifecycleProcess = "2.8.7"
 
 
 
 [libraries]
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
@@ -40,6 +43,7 @@ dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref 
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerHilt" }
 #sdp
 sdp-compose = { module = "com.github.Kaaveh:sdp-compose", version.ref = "sdpCompose" }
+androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
