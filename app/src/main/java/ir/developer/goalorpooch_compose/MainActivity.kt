@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-            Navigation(sharedViewModel = sharedViewModel, viewModelMusic = musicPlayerViewModel)
+            Navigation(sharedViewModel = sharedViewModel, viewModelMusic = musicPlayerViewModel, activity = this)
         }
     }
 

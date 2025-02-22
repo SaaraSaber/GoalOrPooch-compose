@@ -27,4 +27,7 @@ object Utils {
 
     const val PACKAGE_NAME = "ir.developer.goalorpooch_compose"
 
+    //...........................tapsell
+    const val KEY_TAPSELL = "abjlmfqhakieikggdnoqfholsqcqsfhlhqleferpadlfrrqbljpjaisbrctkdntmjcmtlh"
+    const val TAPSELL_GIFT_VIDEO_KEY = "67b9ba0cd45b94339f48b8c3"
 }

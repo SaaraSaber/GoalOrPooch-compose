@@ -1,5 +1,6 @@
 package ir.developer.goalorpooch_compose.navigation
 
+import android.app.Activity
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
@@ -27,7 +28,7 @@ import ir.developer.goalorpooch_compose.util.Utils.STARTER_SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navigation(sharedViewModel: SharedViewModel, viewModelMusic: MusicPlayerViewModel) {
+fun Navigation(sharedViewModel: SharedViewModel, viewModelMusic: MusicPlayerViewModel,activity: Activity) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = HOME_SCREEN, builder = {
         composable(
@@ -66,6 +67,7 @@ fun Navigation(sharedViewModel: SharedViewModel, viewModelMusic: MusicPlayerView
             SettingScreen(
                 navController = navController,
                 sharedViewModel = sharedViewModel
+                , activity = activity
             )
         }
 

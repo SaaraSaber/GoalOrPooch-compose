@@ -1,6 +1,7 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.SettingModel
+import ir.developer.goalorpooch_compose.tapsell.Tapsell
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
@@ -62,9 +64,14 @@ import ir.kaaveh.sdpcompose.sdp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel, activity: Activity) {
     val itemSetting by sharedViewModel.itemSetting.collectAsState()
+//    val activity = LocalContext.current as? Activity
+
     LaunchedEffect(Unit) {
+        val tapsell = Tapsell(activity)
+        tapsell.connectToTapsell()
+        tapsell.requestAdVideo()
         sharedViewModel.getAllCards()
         sharedViewModel.updateTeam(teamId = 0) {
             copy(
@@ -120,6 +127,7 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
                         contentScale = ContentScale.Crop
                     )
             ) {
+
                 AppBar(
                     title = stringResource(R.string.setting),
                     showBackButton = true,
@@ -170,7 +178,6 @@ fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel
         }
     }
 }
-
 
 @SuppressLint("StateFlowValueCalledInComposition", "UnrememberedMutableState")
 @Composable
