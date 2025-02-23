@@ -14,10 +14,11 @@ import ir.tapsell.plus.model.AdNetworks
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import ir.tapsell.plus.model.TapsellPlusErrorModel
 
+
 class Tapsell(val context: Activity) {
     fun connectToTapsell() {
         try {
-            TapsellPlus.initialize(context, Utils.KEY_TAPSELL, object : TapsellPlusInitListener {
+            TapsellPlus.initialize(context as Activity?, Utils.KEY_TAPSELL, object : TapsellPlusInitListener {
                 override fun onInitializeSuccess(adNetworks: AdNetworks) {
                     Log.d("onInitializeSuccess", adNetworks.name)
                 }
@@ -38,7 +39,7 @@ class Tapsell(val context: Activity) {
 
     }
 
-    fun requestAdVideo() {
+    fun requestVideoAd() {
         try {
             TapsellPlus.requestInterstitialAd(
                 context as Activity?,
@@ -50,10 +51,11 @@ class Tapsell(val context: Activity) {
                         // آگهی آماده نمایش است
                         // مقدار responseId آگهی را در متغیر خود ذخیره کنید
                         val rewardedResponseId = tapsellPlusAdModel.responseId
-                        showAdGift(context, rewardedResponseId)
+                        showVideoAd(context, rewardedResponseId)
                     }
 
-                    override fun error(message: String) {
+                    override fun error(message: String?) {
+                        Log.e("TapsellError", message ?: "Unknown error")
                     }
                 }
             )
@@ -62,7 +64,7 @@ class Tapsell(val context: Activity) {
         }
     }
 
-    private fun showAdGift(context1: Context, responseId: String) {
+    private fun showVideoAd(context1: Context, responseId: String) {
         try {
             TapsellPlus.showInterstitialAd(
                 context1 as Activity?, responseId,
@@ -88,4 +90,37 @@ class Tapsell(val context: Activity) {
         }
     }
 
+//    fun requestStandardBannerAd() {
+//        TapsellPlus.requestStandardBannerAd(
+//            context as Activity?, Utils.ZONE_ID_STANDARD_BANNER,
+//            TapsellPlusBannerType.BANNER_320x50,
+//            object : AdRequestCallback() {
+//                override fun response(tapsellPlusAdModel: TapsellPlusAdModel) {
+//                    super.response(tapsellPlusAdModel)
+//
+//
+//                    //Ad is ready to show
+//                    //Put the ad's responseId to your responseId variable
+//                    val standardBannerResponseId = tapsellPlusAdModel.responseId
+////                    showStandardBannerAd(standardBannerResponseId)
+//                }
+//
+//                override fun error(message: String) {
+//                }
+//            })
+//    }
+
+//    private fun showStandardBannerAd(standardBannerResponseId: String) {
+//        TapsellPlus.showStandardBannerAd(context, standardBannerResponseId,
+//            findViewById(R.id.standardBanner),
+//            object : AdShowListener() {
+//                override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel) {
+//                    super.onOpened(tapsellPlusAdModel)
+//                }
+//
+//                override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel) {
+//                    super.onError(tapsellPlusErrorModel)
+//                }
+//            })
+//    }
 }

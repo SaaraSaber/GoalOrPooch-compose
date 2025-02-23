@@ -30,4 +30,5 @@ object Utils {
     //...........................tapsell
     const val KEY_TAPSELL = "abjlmfqhakieikggdnoqfholsqcqsfhlhqleferpadlfrrqbljpjaisbrctkdntmjcmtlh"
     const val TAPSELL_GIFT_VIDEO_KEY = "67b9ba0cd45b94339f48b8c3"
+    const val ZONE_ID_STANDARD_BANNER = "67b9b958d45b94339f48b8c1"
 }

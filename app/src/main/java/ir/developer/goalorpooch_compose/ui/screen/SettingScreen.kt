@@ -1,7 +1,6 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.SettingModel
+import ir.developer.goalorpooch_compose.network.CheckNetwork
 import ir.developer.goalorpooch_compose.tapsell.Tapsell
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaBold
@@ -64,14 +65,19 @@ import ir.kaaveh.sdpcompose.sdp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingScreen(navController: NavController, sharedViewModel: SharedViewModel, activity: Activity) {
+fun SettingScreen(
+    navController: NavController,
+    sharedViewModel: SharedViewModel,
+    tapsell: Tapsell
+) {
     val itemSetting by sharedViewModel.itemSetting.collectAsState()
-//    val activity = LocalContext.current as? Activity
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        val tapsell = Tapsell(activity)
-        tapsell.connectToTapsell()
-        tapsell.requestAdVideo()
+        if (CheckNetwork.isInternetAvailable(context = context)) {
+            tapsell.requestVideoAd()
+        }
+
         sharedViewModel.getAllCards()
         sharedViewModel.updateTeam(teamId = 0) {
             copy(

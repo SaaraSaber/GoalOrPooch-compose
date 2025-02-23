@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ir.developer.goalorpooch_compose.navigation.Navigation
+import ir.developer.goalorpooch_compose.tapsell.Tapsell
 import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 
@@ -20,11 +21,15 @@ import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 class MainActivity : ComponentActivity() {
     private val sharedViewModel: SharedViewModel by viewModels()
     private val musicPlayerViewModel: MusicPlayerViewModel by viewModels()
+    private lateinit var tapsell: Tapsell
 
     @SuppressLint("ResourceAsColor", "SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        tapsell = Tapsell(this)
+        tapsell.connectToTapsell()
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.hihadaBrown)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.hihadaBrown)
@@ -36,7 +41,11 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             (context as? Activity)?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-            Navigation(sharedViewModel = sharedViewModel, viewModelMusic = musicPlayerViewModel, activity = this)
+            Navigation(
+                sharedViewModel = sharedViewModel,
+                viewModelMusic = musicPlayerViewModel,
+                tapsell = tapsell
+            )
         }
     }
 
