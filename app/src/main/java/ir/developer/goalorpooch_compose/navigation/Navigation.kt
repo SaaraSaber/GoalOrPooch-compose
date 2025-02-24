@@ -46,7 +46,8 @@ fun Navigation(
         ) {
             HomeScreen(
                 navController = navController,
-                viewModelMusic = viewModelMusic
+                viewModelMusic = viewModelMusic,
+                tapsell = tapsell
             )
         }
 

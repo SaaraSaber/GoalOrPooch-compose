@@ -1502,6 +1502,8 @@ fun BottomSheetContactApps(
                 )
                 listApps.forEach { item ->
                     ItemApps(item = item, onClickItem = {
+                        onShowToast()
+
                         try {
                             val intent = Intent(Intent.ACTION_VIEW).apply {
                                 data = when (item.id) {
