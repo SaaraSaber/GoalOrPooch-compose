@@ -4,6 +4,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.sentry)
 }
 
 android {
@@ -14,7 +15,7 @@ android {
         applicationId = "ir.developer.goalorpooch_compose"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
+        versionCode = 4
         versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

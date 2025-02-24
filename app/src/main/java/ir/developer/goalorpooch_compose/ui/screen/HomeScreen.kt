@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -30,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,6 +67,10 @@ import ir.developer.goalorpooch_compose.ui.theme.widthButton
 import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
+import ir.tapsell.plus.AdRequestCallback
+import ir.tapsell.plus.TapsellPlus
+import ir.tapsell.plus.TapsellPlusBannerType
+import ir.tapsell.plus.model.TapsellPlusAdModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,6 +85,28 @@ fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewMode
     val context = LocalContext.current
     val activity = context as? Activity
     var showToast by remember { mutableStateOf(false) }
+
+    // وضعیت دریافت تبلیغ
+    var bannerResponseId by remember { mutableStateOf<String?>(null) }
+
+    // درخواست تبلیغ از تپسل
+    LaunchedEffect(Unit) {
+        TapsellPlus.requestStandardBannerAd(
+            context as Activity,
+            Utils.ZONE_ID_STANDARD_BANNER,
+            TapsellPlusBannerType.BANNER_320x50,
+            object : AdRequestCallback() {
+                override fun response(tapsellPlusAdModel: TapsellPlusAdModel) {
+                    super.response(tapsellPlusAdModel)
+                    bannerResponseId = tapsellPlusAdModel.responseId
+                }
+                override fun error(message: String) {
+                    Log.e("TapsellBanner", "Ad Request Error: $message")
+                }
+            }
+        )
+    }
+
 
     // هندل کردن بک وقتی شیت بسته است
     BackHandler(enabled = !showBottomSheetExit) {

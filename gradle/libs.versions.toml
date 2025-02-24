@@ -15,6 +15,7 @@ roomRuntime = "2.6.1"
 sdpCompose = "1.1.0"
 lifecycleProcess = "2.8.7"
 tapsellPlusSdkAndroid = "2.3.0"
+sentry = "3.12.0"
 
 
 
@@ -51,4 +52,5 @@ androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-p
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 

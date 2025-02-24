@@ -3,7 +3,11 @@ package ir.developer.goalorpooch_compose.tapsell
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.view.Gravity
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.viewinterop.AndroidView
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -90,6 +94,45 @@ class Tapsell(val context: Activity) {
         }
     }
 
+    @Composable
+    fun TapsellBannerAd(
+        context: Context,
+        standardBannerResponseId: String
+    ) {
+        AndroidView(
+            factory = { ctx ->
+                FrameLayout(ctx).apply {
+                    val bannerContainer = FrameLayout(ctx).apply {
+                        layoutParams = FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT
+                        ).apply {
+                            gravity = Gravity.CENTER
+                        }
+                    }
+                    addView(bannerContainer)
+
+                    // نمایش تبلیغ در این View
+                    TapsellPlus.showStandardBannerAd(
+                        ctx as Activity,
+                        standardBannerResponseId,
+                        bannerContainer,
+                        object : AdShowListener() {
+                            override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel) {
+                                super.onOpened(tapsellPlusAdModel)
+                                Log.d("TapsellBanner", "Ad Opened")
+                            }
+
+                            override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel) {
+                                super.onError(tapsellPlusErrorModel)
+                                Log.e("TapsellBanner", "Ad Error: ${tapsellPlusErrorModel.errorMessage}")
+                            }
+                        })
+                }
+            }
+        )
+    }
+
 //    fun requestStandardBannerAd() {
 //        TapsellPlus.requestStandardBannerAd(
 //            context as Activity?, Utils.ZONE_ID_STANDARD_BANNER,
@@ -102,14 +145,14 @@ class Tapsell(val context: Activity) {
 //                    //Ad is ready to show
 //                    //Put the ad's responseId to your responseId variable
 //                    val standardBannerResponseId = tapsellPlusAdModel.responseId
-////                    showStandardBannerAd(standardBannerResponseId)
+//                    showStandardBannerAd(standardBannerResponseId)
 //                }
 //
 //                override fun error(message: String) {
 //                }
 //            })
 //    }
-
+//
 //    private fun showStandardBannerAd(standardBannerResponseId: String) {
 //        TapsellPlus.showStandardBannerAd(context, standardBannerResponseId,
 //            findViewById(R.id.standardBanner),
