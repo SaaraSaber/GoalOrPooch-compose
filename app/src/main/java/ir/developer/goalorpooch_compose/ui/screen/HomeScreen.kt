@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -78,7 +79,11 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "QueryPermissionsNeeded")
 @Composable
-fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewModel,tapsell: Tapsell) {
+fun HomeScreen(
+    navController: NavController,
+    viewModelMusic: MusicPlayerViewModel,
+    tapsell: Tapsell
+) {
     var showBottomSheetExit by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
@@ -87,20 +92,25 @@ fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewMode
 
     // درخواست تبلیغ از تپسل
     LaunchedEffect(Unit) {
-        TapsellPlus.requestStandardBannerAd(
-            context as Activity,
-            Utils.TAPSELL_BANNER_KEY,
-            TapsellPlusBannerType.BANNER_320x50,
-            object : AdRequestCallback() {
-                override fun response(tapsellPlusAdModel: TapsellPlusAdModel) {
-                    super.response(tapsellPlusAdModel)
-                    bannerResponseId = tapsellPlusAdModel.responseId
+        try {
+            TapsellPlus.requestStandardBannerAd(
+                context as Activity,
+                Utils.TAPSELL_BANNER_KEY,
+                TapsellPlusBannerType.BANNER_320x50,
+                object : AdRequestCallback() {
+                    override fun response(tapsellPlusAdModel: TapsellPlusAdModel) {
+                        super.response(tapsellPlusAdModel)
+                        bannerResponseId = tapsellPlusAdModel.responseId
+                    }
+
+                    override fun error(message: String?) {
+                        Log.e("TapsellBanner", "Ad Request Error: $message")
+                    }
                 }
-                override fun error(message: String?) {
-                    Log.e("TapsellBanner", "Ad Request Error: $message")
-                }
-            }
-        )
+            )
+        } catch (t: Throwable) {
+            Toast.makeText(context, "خطایی رخ داده است", Toast.LENGTH_LONG).show()
+        }
     }
 
     // مدیریت دکمه برگشت
@@ -134,7 +144,7 @@ fun HomeScreen(navController: NavController, viewModelMusic: MusicPlayerViewMode
                             .align(Alignment.BottomCenter)
                             .padding(paddingRound())
                     ) {
-                        TapsellBannerAd(it,tapsell)
+                        TapsellBannerAd(it, tapsell)
                     }
                 }
             }
@@ -382,27 +392,31 @@ fun HomeScreenContent(navController: NavController, viewModelMusic: MusicPlayerV
     }
 
 //  نمایش Toast به‌صورت جداگانه
-if (showToast) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 16.sdp),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        CustomToast(
-            message = stringResource(R.string.message_catch),
-            isVisible = true,
-            color = R.color.yellow,
-            icon = R.drawable.danger_circle,
-            onDismiss = { showToast = false }
-        )
+    if (showToast) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 16.sdp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            CustomToast(
+                message = stringResource(R.string.message_catch),
+                isVisible = true,
+                color = R.color.yellow,
+                icon = R.drawable.danger_circle,
+                onDismiss = { showToast = false }
+            )
+        }
     }
-}
 }
 
 @Composable
-fun TapsellBannerAd(standardBannerResponseId: String,tapsell: Tapsell) {
-    Column (modifier = Modifier.fillMaxWidth(),Arrangement.SpaceAround,Alignment.CenterHorizontally) {
+fun TapsellBannerAd(standardBannerResponseId: String, tapsell: Tapsell) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        Arrangement.SpaceAround,
+        Alignment.CenterHorizontally
+    ) {
         AndroidView(
             factory = { ctx ->
                 FrameLayout(ctx).apply {
@@ -410,7 +424,7 @@ fun TapsellBannerAd(standardBannerResponseId: String,tapsell: Tapsell) {
                     addView(bannerView)
 
                     // نمایش تبلیغ در View
-                    tapsell.showStandardBannerAd(standardBannerResponseId,bannerView)
+                    tapsell.showStandardBannerAd(standardBannerResponseId, bannerView)
                 }
             },
             modifier = Modifier

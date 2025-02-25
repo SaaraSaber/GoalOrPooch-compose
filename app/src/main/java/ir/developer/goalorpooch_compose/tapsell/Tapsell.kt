@@ -95,16 +95,20 @@ class Tapsell(val context: Activity) {
     }
 
     fun showStandardBannerAd(standardBannerResponseId: String, view: FrameLayout) {
-        TapsellPlus.showStandardBannerAd(context, standardBannerResponseId,
-            view,
-            object : AdShowListener() {
-                override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel) {
-                    super.onOpened(tapsellPlusAdModel)
-                }
+        try {
+            TapsellPlus.showStandardBannerAd(context, standardBannerResponseId,
+                view,
+                object : AdShowListener() {
+                    override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel) {
+                        super.onOpened(tapsellPlusAdModel)
+                    }
 
-                override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel) {
-                    super.onError(tapsellPlusErrorModel)
-                }
-            })
+                    override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel) {
+                        super.onError(tapsellPlusErrorModel)
+                    }
+                })
+        } catch (t: Throwable) {
+            Toast.makeText(context, "خطایی رخ داده است", Toast.LENGTH_LONG).show()
+        }
     }
 }
