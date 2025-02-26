@@ -1,12 +1,16 @@
 package ir.developer.goalorpooch_compose.ui.screen
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,16 +41,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.model.ItemStarterModel
+import ir.developer.goalorpooch_compose.network.CheckNetwork
+import ir.developer.goalorpooch_compose.tapsell.Tapsell
 import ir.developer.goalorpooch_compose.ui.theme.FenceGreen
 import ir.developer.goalorpooch_compose.ui.theme.FontPeydaMedium
 import ir.developer.goalorpooch_compose.ui.theme.descriptionSize
@@ -61,50 +67,99 @@ import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
+import ir.tapsell.plus.AdRequestCallback
+import ir.tapsell.plus.TapsellPlus
+import ir.tapsell.plus.TapsellPlusBannerType
+import ir.tapsell.plus.model.TapsellPlusAdModel
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DeterminingGameStarter(navController: NavController) {
+fun DeterminingGameStarter(navController: NavController,tapsell: Tapsell) {
     val items = listOf(
         ItemStarterModel(0, R.drawable.pic_team_one, stringResource(R.string.start_team_one)),
         ItemStarterModel(1, R.drawable.pic_team_two, stringResource(R.string.start_team_two)),
         ItemStarterModel(2, R.drawable.pic_random_box, stringResource(R.string.start_random))
     )
+    val context = LocalContext.current
+    // وضعیت دریافت تبلیغ
+    var bannerResponseId by remember { mutableStateOf<String?>(null) }
+
+    // درخواست تبلیغ از تپسل
+    LaunchedEffect(Unit) {
+        if (CheckNetwork.isInternetAvailable(context = context)) {
+            try {
+                TapsellPlus.requestStandardBannerAd(
+                    context as Activity,
+                    Utils.TAPSELL_BANNER_KEY,
+                    TapsellPlusBannerType.BANNER_320x50,
+                    object : AdRequestCallback() {
+                        override fun response(tapsellPlusAdModel: TapsellPlusAdModel) {
+                            super.response(tapsellPlusAdModel)
+                            bannerResponseId = tapsellPlusAdModel.responseId
+                        }
+
+                        override fun error(message: String?) {
+                            Log.e("TapsellBanner", "Ad Request Error: $message")
+                        }
+                    }
+                )
+            } catch (t: Throwable) {
+                Toast.makeText(context, "خطایی رخ داده است", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .paint(
-                        painterResource(id = R.drawable.main_background),
-                        contentScale = ContentScale.Crop
+            Box (modifier = Modifier.fillMaxSize()){
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .paint(
+                            painterResource(id = R.drawable.main_background),
+                            contentScale = ContentScale.Crop
+                        )
+                ) {
+                    AppBar(
+                        title = stringResource(R.string.determining_the_initiator),
+                        showBackButton = true,
+                        navController = navController
                     )
-            ) {
-                AppBar(
-                    title = stringResource(R.string.determining_the_initiator),
-                    showBackButton = true,
-                    navController = navController
-                )
 
-                Text(
-                    modifier = Modifier.padding(
-                        end = paddingRound(),
-                        start = paddingRound(),
-                        top = paddingTop(),
-                        bottom = 30.sdp
-                    ),
-                    text = stringResource(R.string.starter_description),
-                    fontSize = descriptionSize(),
-                    fontFamily = FontPeydaMedium,
-                    color = Color.White,
-                    textAlign = TextAlign.Justify
-                )
+                    Text(
+                        modifier = Modifier.padding(
+                            end = paddingRound(),
+                            start = paddingRound(),
+                            top = paddingTop(),
+                            bottom = 30.sdp
+                        ),
+                        text = stringResource(R.string.starter_description),
+                        fontSize = descriptionSize(),
+                        fontFamily = FontPeydaMedium,
+                        color = Color.White,
+                        textAlign = TextAlign.Justify
+                    )
 
-                items.forEach { item ->
-                    ItemGameStarter(item, navController)
+                    items.forEach { item ->
+                        ItemGameStarter(item, navController)
+                    }
+                }
+
+                if (CheckNetwork.isInternetAvailable(context = context)) {
+                    // تبلیغ در پایین صفحه
+                    bannerResponseId?.let {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.BottomCenter)
+                                .padding(paddingRound())
+                        ) {
+                            TapsellBannerAd(it, tapsell)
+                        }
+                    }
                 }
             }
         }
@@ -244,9 +299,9 @@ fun BottomSheetContent(
     }
 }
 
-@Preview
-@Composable
-private fun DeterminingGameStarterPreview() {
-    val navController = rememberNavController()
-    DeterminingGameStarter(navController)
-}
+//@Preview
+//@Composable
+//private fun DeterminingGameStarterPreview() {
+//    val navController = rememberNavController()
+//    DeterminingGameStarter(navController)
+//}

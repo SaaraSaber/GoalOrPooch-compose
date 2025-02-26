@@ -93,7 +93,7 @@ fun Navigation(
             }
         )
         {
-            DeterminingGameStarter(navController = navController)
+            DeterminingGameStarter(navController = navController, tapsell = tapsell)
         }
 
         composable(route = Utils.SELECT_CARD_SCREEN + "/{idItem}",
