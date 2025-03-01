@@ -87,7 +87,6 @@ fun HomeScreen(
     viewModelMusic: MusicPlayerViewModel,
     tapsell: Tapsell
 ) {
-    var showBottomSheetExit by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     // وضعیت دریافت تبلیغ
@@ -116,11 +115,6 @@ fun HomeScreen(
                 Toast.makeText(context, "خطایی رخ داده است", Toast.LENGTH_LONG).show()
             }
         }
-    }
-
-    // مدیریت دکمه برگشت
-    BackHandler(enabled = !showBottomSheetExit) {
-        showBottomSheetExit = true
     }
 
     Scaffold(
@@ -170,6 +164,11 @@ fun HomeScreenContent(navController: NavController, viewModelMusic: MusicPlayerV
     val activity = context as? Activity
     var showToast by remember { mutableStateOf(false) }
     val versionName = getVersionName(context)
+
+    // مدیریت دکمه برگشت
+    BackHandler(enabled = !showBottomSheetExit) {
+        showBottomSheetExit = true
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
