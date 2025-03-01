@@ -10,6 +10,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import dagger.hilt.android.AndroidEntryPoint
 import ir.developer.goalorpooch_compose.navigation.Navigation
 import ir.developer.goalorpooch_compose.tapsell.Tapsell
@@ -28,7 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        tapsell = Tapsell(this)
+        tapsell = Tapsell(context = this, viewModelMusic = musicPlayerViewModel)
         tapsell.connectToTapsell()
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.hihadaBrown)
@@ -47,6 +50,16 @@ class MainActivity : ComponentActivity() {
                 tapsell = tapsell
             )
         }
+        // **تشخیص بک‌گراند و فورگراند شدن اپلیکیشن**
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStop(owner: LifecycleOwner) {
+                musicPlayerViewModel.handleAppBackground(true) // وقتی اپ رفت بک‌گراند، موزیک متوقف شه
+            }
+
+            override fun onStart(owner: LifecycleOwner) {
+                musicPlayerViewModel.handleAppBackground(false) // وقتی اپ برگشت، موزیک از همونجا ادامه پیدا کنه
+            }
+        })
     }
 
     private fun insertCards() {
