@@ -1457,6 +1457,12 @@ fun BottomSheetContactApps(
             name = stringResource(R.string.check_list),
             description = stringResource(R.string.description_check_list),
             image = R.drawable.pic_check_list
+        ),
+        AppModel(
+            id = 4,
+            name = stringResource(R.string.dare_or_truth),
+            description = stringResource(R.string.description_dare_or_truth),
+            image = R.drawable.pic_dare_or_truth
         )
     )
     val context = LocalContext.current
@@ -1509,6 +1515,7 @@ fun BottomSheetContactApps(
                                     1 -> Uri.parse("https://cafebazaar.ir/app/ir.forrtestt.wall1")
                                     2 -> Uri.parse("https://cafebazaar.ir/app/com.example.challenginquestions")
                                     3 -> Uri.parse("https://cafebazaar.ir/app/ir.developer.todolist")
+                                    4 -> Uri.parse("https://cafebazaar.ir/app/ir.codesphere.truthordare")
                                     else -> null
                                 }
                             }

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,7 +70,6 @@ import ir.developer.goalorpooch_compose.ui.theme.paddingTopLarge
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundMax
 import ir.developer.goalorpooch_compose.ui.theme.widthButton
-import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
 import ir.tapsell.plus.AdRequestCallback
@@ -84,7 +82,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModelMusic: MusicPlayerViewModel,
+//    viewModelMusic: MusicPlayerViewModel,
     tapsell: Tapsell
 ) {
     val context = LocalContext.current
@@ -132,7 +130,9 @@ fun HomeScreen(
                         )
                 ) {
                     // محتوای صفحه
-                    HomeScreenContent(navController, viewModelMusic)
+                    HomeScreenContent(navController
+//                        , viewModelMusic
+                    )
                 }
                 if (CheckNetwork.isInternetAvailable(context = context)) {
                     // تبلیغ در پایین صفحه
@@ -154,7 +154,9 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenContent(navController: NavController, viewModelMusic: MusicPlayerViewModel) {
+fun HomeScreenContent(navController: NavController
+//                      , viewModelMusic: MusicPlayerViewModel
+) {
     var showBottomSheetAboutUs by remember { mutableStateOf(false) }
     var showBottomSheetApps by remember { mutableStateOf(false) }
     var showBottomSheetExit by remember { mutableStateOf(false) }
@@ -175,13 +177,13 @@ fun HomeScreenContent(navController: NavController, viewModelMusic: MusicPlayerV
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(paddingRound())
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) { MusicControlButton(viewModel = viewModelMusic) }
+//            Row(
+//                modifier = Modifier
+//                    .padding(paddingRound())
+//                    .fillMaxWidth(),
+//                verticalAlignment = Alignment.CenterVertically,
+//                horizontalArrangement = Arrangement.End
+//            ) { MusicControlButton(viewModel = viewModelMusic) }
 
             Image(
                 modifier = Modifier

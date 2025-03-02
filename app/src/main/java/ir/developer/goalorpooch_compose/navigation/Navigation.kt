@@ -19,7 +19,6 @@ import ir.developer.goalorpooch_compose.ui.screen.SelectCardScreen
 import ir.developer.goalorpooch_compose.ui.screen.SettingScreen
 import ir.developer.goalorpooch_compose.ui.screen.ShowCardsScreen
 import ir.developer.goalorpooch_compose.ui.screen.StartGameScreen
-import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.developer.goalorpooch_compose.util.Utils.HOME_SCREEN
@@ -30,7 +29,7 @@ import ir.developer.goalorpooch_compose.util.Utils.STARTER_SCREEN
 @Composable
 fun Navigation(
     sharedViewModel: SharedViewModel,
-    viewModelMusic: MusicPlayerViewModel,
+//    viewModelMusic: MusicPlayerViewModel,
     tapsell: Tapsell
 ) {
     val navController = rememberNavController()
@@ -46,7 +45,7 @@ fun Navigation(
         ) {
             HomeScreen(
                 navController = navController,
-                viewModelMusic = viewModelMusic,
+//                viewModelMusic = viewModelMusic,
                 tapsell = tapsell
             )
         }
@@ -134,7 +133,7 @@ fun Navigation(
             StartGameScreen(
                 navController = navController,
                 sharedViewModel = sharedViewModel,
-                viewModelMusic = viewModelMusic
+//                viewModelMusic = viewModelMusic
             )
         }
     })

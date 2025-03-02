@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.Log
 import android.widget.FrameLayout
 import android.widget.Toast
-import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -17,7 +16,9 @@ import ir.tapsell.plus.model.TapsellPlusAdModel
 import ir.tapsell.plus.model.TapsellPlusErrorModel
 
 
-class Tapsell(val context: Activity, val viewModelMusic: MusicPlayerViewModel) {
+class Tapsell(val context: Activity
+//, val viewModelMusic: MusicPlayerViewModel
+) {
     fun connectToTapsell() {
         try {
             TapsellPlus.initialize(
@@ -57,7 +58,7 @@ class Tapsell(val context: Activity, val viewModelMusic: MusicPlayerViewModel) {
                         // مقدار responseId آگهی را در متغیر خود ذخیره کنید
                         val rewardedResponseId = tapsellPlusAdModel.responseId
                         showVideoAd(context, rewardedResponseId)
-                        viewModelMusic.setAdPlaying(true)
+//                        viewModelMusic.setAdPlaying(true)
                     }
 
                     override fun error(message: String?) {
@@ -82,19 +83,19 @@ class Tapsell(val context: Activity, val viewModelMusic: MusicPlayerViewModel) {
 
                     override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel) {
                         super.onClosed(tapsellPlusAdModel)
-                        viewModelMusic.setAdPlaying(false)
+//                        viewModelMusic.setAdPlaying(false)
                         Log.i("showAd", "onClosed: ")
                     }
 
                     override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel) {
                         super.onError(tapsellPlusErrorModel)
-                        viewModelMusic.setAdPlaying(false)
+//                        viewModelMusic.setAdPlaying(false)
                         Log.i("showAd", "onError: ")
                     }
                 }
             )
         } catch (t: Throwable) {
-            viewModelMusic.setAdPlaying(false)
+//            viewModelMusic.setAdPlaying(false)
             Toast.makeText(context, "خطایی رخ داده است", Toast.LENGTH_LONG).show()
         }
     }

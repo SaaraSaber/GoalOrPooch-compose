@@ -72,7 +72,6 @@ import ir.developer.goalorpooch_compose.ui.theme.sizePicVerySmall
 import ir.developer.goalorpooch_compose.ui.theme.sizeRound
 import ir.developer.goalorpooch_compose.ui.theme.sizeRoundBottomSheet
 import ir.developer.goalorpooch_compose.ui.theme.titleSize
-import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
 import ir.developer.goalorpooch_compose.util.Utils
 import ir.kaaveh.sdpcompose.sdp
@@ -87,7 +86,7 @@ fun StartGameScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     sharedViewModel: SharedViewModel,
-    viewModelMusic: MusicPlayerViewModel
+//    viewModelMusic: MusicPlayerViewModel
 ) {
     var showBottomSheetExitGame by remember { mutableStateOf(false) }
     var showBottomSheetShahGoal by remember { mutableStateOf(false) }
@@ -251,11 +250,11 @@ fun StartGameScreen(
                     }
 
 //...............MusicButton
-                    Row(
-                        modifier = modifier.padding(end = paddingRound()).fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) { MusicControlButton(viewModel = viewModelMusic) }
+//                    Row(
+//                        modifier = modifier.padding(end = paddingRound()).fillMaxWidth(),
+//                        verticalAlignment = Alignment.CenterVertically,
+//                        horizontalArrangement = Arrangement.End
+//                    ) { MusicControlButton(viewModel = viewModelMusic) }
 
 //...............table
                     if (itemSetting.duel) {

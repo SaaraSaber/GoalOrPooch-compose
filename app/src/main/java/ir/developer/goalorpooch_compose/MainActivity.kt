@@ -10,26 +10,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.AndroidEntryPoint
-import ir.developer.goalorpooch_compose.database.dataStore
 import ir.developer.goalorpooch_compose.navigation.Navigation
 import ir.developer.goalorpooch_compose.tapsell.Tapsell
-import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 @SuppressLint("RestrictedApi")
 class MainActivity : ComponentActivity() {
     private val sharedViewModel: SharedViewModel by viewModels()
-    private val musicPlayerViewModel: MusicPlayerViewModel by viewModels()
+//    private val musicPlayerViewModel: MusicPlayerViewModel by viewModels()
     private lateinit var tapsell: Tapsell
 
     @SuppressLint("ResourceAsColor", "SourceLockedOrientationActivity")
@@ -37,7 +27,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        tapsell = Tapsell(context = this, viewModelMusic = musicPlayerViewModel)
+        tapsell = Tapsell(context = this
+//            , viewModelMusic = musicPlayerViewModel
+        )
         tapsell.connectToTapsell()
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.hihadaBrown)
@@ -52,27 +44,15 @@ class MainActivity : ComponentActivity() {
 
             Navigation(
                 sharedViewModel = sharedViewModel,
-                viewModelMusic = musicPlayerViewModel,
+//                viewModelMusic = musicPlayerViewModel,
                 tapsell = tapsell
             )
         }
 
-        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onStop(owner: LifecycleOwner) {
-                musicPlayerViewModel.handleAppBackground(true) // وقتی اپ رفت بک‌گراند، موزیک متوقف بشه
-            }
-
-            override fun onStart(owner: LifecycleOwner) {
-                musicPlayerViewModel.handleAppBackground(false) // وقتی اپ برگشت، موزیک از همونجا ادامه پیدا کنه
-            }
-        })
-
-
-
         // **تشخیص بک‌گراند و فورگراند شدن اپلیکیشن**
 //        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
 //            override fun onStop(owner: LifecycleOwner) {
-//                musicPlayerViewModel.handleAppBackground(true) // وقتی اپ رفت بک‌گراند، موزیک متوقف شه
+//                musicPlayerViewModel.handleAppBackground(true) // وقتی اپ رفت بک‌گراند، موزیک متوقف بشه
 //            }
 //
 //            override fun onStart(owner: LifecycleOwner) {
@@ -80,7 +60,6 @@ class MainActivity : ComponentActivity() {
 //            }
 //        })
     }
-
 
     private fun insertCards() {
         sharedViewModel.addCard(

@@ -141,13 +141,15 @@
 
     <!--    apps-->
     <string name="open_chest">چیستان باز</string>
-    <string name="description_open_chest">آیا برای چالش های فکری آماده اید؟</string>
-    <string name="pro_wallpaper">تصویر زمینه حرفه ای</string>
-    <string name="description_pro_wallpaper">تصویر زمینه خود را به روز و حرفه ای کنید !</string>
+    <string name="description_open_chest">آیا برای چالش‌های فکری آماده‌اید؟</string>
+    <string name="pro_wallpaper">تصویر زمینه حرفه‌ای</string>
+    <string name="description_pro_wallpaper">تصویر زمینه خود را به روز و حرفه‌ای کنید!</string>
     <string name="intelligence_test">تست هوش ریاضی</string>
-    <string name="description_intelligence_test">آیا آماده اید ذهن خود را به چالش بکشید؟</string>
+    <string name="description_intelligence_test">آیا آماده‌اید ذهن خود را به چالش بکشید؟</string>
     <string name="check_list">چک لیست</string>
     <string name="description_check_list">به راحتی روزهایتان را مدیریت کنید!</string>
+    <string name="dare_or_truth">جرات یا حقیقت</string>
+    <string name="description_dare_or_truth">بازی‌ای مناسب برای شبنشینی‌های دوستانه</string>
 
 
 <!--    toast-->

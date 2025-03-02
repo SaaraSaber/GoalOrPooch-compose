@@ -15,8 +15,8 @@ android {
         applicationId = "ir.developer.goalorpooch_compose"
         minSdk = 26
         targetSdk = 35
-        versionCode = 8
-        versionName = "1.0.6"
+        versionCode = 9
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -63,8 +63,8 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-    implementation(libs.androidx.lifecycle.process)
-    implementation(libs.androidx.media3.exoplayer)
+//    implementation(libs.androidx.lifecycle.process)
+//    implementation(libs.androidx.media3.exoplayer)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
