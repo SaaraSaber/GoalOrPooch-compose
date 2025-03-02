@@ -1,21 +1,23 @@
 package ir.developer.goalorpooch_compose.ui.viewmodel
 
 import android.content.Context
-import android.media.MediaPlayer
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.database.dataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -115,74 +117,178 @@ import javax.inject.Inject
 //        mediaPlayer = null
 //    }
 //}
+//@HiltViewModel
+//class MusicPlayerViewModel @Inject constructor(
+//    @ApplicationContext private val context: Context
+//) : ViewModel(), DefaultLifecycleObserver {
+//
+//    private var mediaPlayer: MediaPlayer? = null
+//    private val _isPlaying = MutableStateFlow(false)
+//    val isPlaying = _isPlaying.asStateFlow()
+//
+//    private var lastPosition = 0
+//    private var shouldResumeMusic = false
+//    private var isAdPlaying = false
+//
+//    private val IS_PLAYING_KEY = booleanPreferencesKey("is_playing_key")
+//    private val LAST_POSITION_KEY = intPreferencesKey("last_position_key")
+//
+//    private suspend fun saveMusicState(isPlaying: Boolean, position: Int) {
+//        context.dataStore.edit { preferences ->
+//            preferences[IS_PLAYING_KEY] = isPlaying
+//            preferences[LAST_POSITION_KEY] = position
+//        }
+//    }
+//
+//    init {
+//        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+//
+//        // مقداردهی اولیه از DataStore برای ادامه‌ی پخش
+//        viewModelScope.launch {
+//            val preferences = context.dataStore.data.first()
+//            val isPlayingStored = preferences[IS_PLAYING_KEY] ?: false
+//            lastPosition = preferences[LAST_POSITION_KEY] ?: 0
+//
+//            _isPlaying.value = isPlayingStored
+//            if (isPlayingStored) {
+//                playMusic(lastPosition)
+//            }
+//        }
+//    }
+//
+//    private fun createMediaPlayer() {
+//        if (mediaPlayer == null) {
+//            mediaPlayer = MediaPlayer.create(context, R.raw.music).apply {
+//                isLooping = true
+//            }
+//        }
+//    }
+//
+//    fun playMusic(startPosition: Int = 0) {
+//        createMediaPlayer()
+//        mediaPlayer?.seekTo(startPosition)
+//        mediaPlayer?.start()
+//        _isPlaying.value = true
+//        lastPosition = startPosition
+//
+//        viewModelScope.launch {
+//            saveMusicState(true, startPosition)  // ذخیره‌ی وضعیت پخش
+//        }
+//    }
+//
+//    fun stopMusic() {
+//        mediaPlayer?.let {
+//            if (it.isPlaying) {
+//                it.pause()
+//                lastPosition = it.currentPosition
+//            }
+//        }
+//        _isPlaying.value = false
+//
+//        viewModelScope.launch {
+//            saveMusicState(false, lastPosition)
+//        }
+//    }
+//
+//    fun setAdPlaying(isPlaying: Boolean) {
+//        isAdPlaying = isPlaying
+//        if (isAdPlaying) {
+//            shouldResumeMusic = _isPlaying.value
+//            stopMusic()
+//        } else {
+//            if (shouldResumeMusic) {
+//                playMusic(lastPosition)
+//            }
+//        }
+//    }
+//
+//    fun handleAppBackground(isInBackground: Boolean) {
+//        if (isInBackground) {
+//            shouldResumeMusic = _isPlaying.value
+//            mediaPlayer?.pause()
+//            _isPlaying.value = false
+//
+//            viewModelScope.launch {
+//                saveMusicState(false, mediaPlayer?.currentPosition ?: 0)
+//            }
+//        } else {
+//            viewModelScope.launch {
+//                val preferences = context.dataStore.data.first()
+//                val isPlayingStored = preferences[IS_PLAYING_KEY] ?: false
+//                val savedPosition = preferences[LAST_POSITION_KEY] ?: 0
+//
+//                lastPosition = savedPosition
+//                if (isPlayingStored) {
+//                    playMusic(savedPosition)
+//                }
+//            }
+//        }
+//    }
+//
+//    override fun onCleared() {
+//        super.onCleared()
+//        mediaPlayer?.release()
+//        mediaPlayer = null
+//    }
+//}
+
 @HiltViewModel
 class MusicPlayerViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel(), DefaultLifecycleObserver {
 
-    private var mediaPlayer: MediaPlayer? = null
+    private val player: ExoPlayer = ExoPlayer.Builder(context).build()
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying = _isPlaying.asStateFlow()
 
-    private var lastPosition = 0
+    private var lastPosition = 0L
     private var shouldResumeMusic = false
     private var isAdPlaying = false
 
+    // DataStore برای ذخیره وضعیت پخش موزیک
     private val IS_PLAYING_KEY = booleanPreferencesKey("is_playing_key")
-    private val LAST_POSITION_KEY = intPreferencesKey("last_position_key")
-
-    private suspend fun saveMusicState(isPlaying: Boolean, position: Int) {
-        context.dataStore.edit { preferences ->
-            preferences[IS_PLAYING_KEY] = isPlaying
-            preferences[LAST_POSITION_KEY] = position
-        }
-    }
+    private val LAST_POSITION_KEY = longPreferencesKey("last_position_key")
 
     init {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-        // مقداردهی اولیه از DataStore برای ادامه‌ی پخش
+        // تنظیم فایل موزیک
+        player.setMediaItem(MediaItem.fromUri("android.resource://${context.packageName}/${R.raw.music}"))
+        player.repeatMode = Player.REPEAT_MODE_ONE
+        player.prepare()
+
+        // بازیابی وضعیت موزیک از DataStore
         viewModelScope.launch {
-            val preferences = context.dataStore.data.first()
-            val isPlayingStored = preferences[IS_PLAYING_KEY] ?: false
-            lastPosition = preferences[LAST_POSITION_KEY] ?: 0
+            context.dataStore.data.firstOrNull()?.let { preferences ->
+                val isPlayingStored = preferences[IS_PLAYING_KEY] ?: false
+                lastPosition = preferences[LAST_POSITION_KEY] ?: 0L
 
-            _isPlaying.value = isPlayingStored
-            if (isPlayingStored) {
-                playMusic(lastPosition)
+                _isPlaying.value = isPlayingStored
+                if (isPlayingStored) {
+                    playMusic(lastPosition)  // ادامه از موقعیت قبلی
+                }
             }
         }
     }
 
-    private fun createMediaPlayer() {
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(context, R.raw.music).apply {
-                isLooping = true
-            }
-        }
-    }
-
-    fun playMusic(startPosition: Int = 0) {
-        createMediaPlayer()
-        mediaPlayer?.seekTo(startPosition)
-        mediaPlayer?.start()
+    fun playMusic(startPosition: Long = lastPosition) {
+        player.seekTo(startPosition)
+        player.play()
         _isPlaying.value = true
         lastPosition = startPosition
 
+        // ذخیره وضعیت پخش موزیک
         viewModelScope.launch {
-            saveMusicState(true, startPosition)  // ذخیره‌ی وضعیت پخش
+            saveMusicState(true, startPosition)
         }
     }
 
     fun stopMusic() {
-        mediaPlayer?.let {
-            if (it.isPlaying) {
-                it.pause()
-                lastPosition = it.currentPosition
-            }
-        }
+        player.pause()
+        lastPosition = player.currentPosition
         _isPlaying.value = false
 
+        // ذخیره وضعیت توقف موزیک
         viewModelScope.launch {
             saveMusicState(false, lastPosition)
         }
@@ -200,32 +306,32 @@ class MusicPlayerViewModel @Inject constructor(
         }
     }
 
-    fun handleAppBackground(isInBackground: Boolean) {
-        if (isInBackground) {
-            shouldResumeMusic = _isPlaying.value
-            mediaPlayer?.pause()
-            _isPlaying.value = false
-
-            viewModelScope.launch {
-                saveMusicState(false, mediaPlayer?.currentPosition ?: 0)
-            }
-        } else {
-            viewModelScope.launch {
-                val preferences = context.dataStore.data.first()
-                val isPlayingStored = preferences[IS_PLAYING_KEY] ?: false
-                val savedPosition = preferences[LAST_POSITION_KEY] ?: 0
-
-                lastPosition = savedPosition
-                if (isPlayingStored) {
-                    playMusic(savedPosition)
-                }
-            }
+    private suspend fun saveMusicState(isPlaying: Boolean, position: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[IS_PLAYING_KEY] = isPlaying
+            preferences[LAST_POSITION_KEY] = position
         }
     }
 
     override fun onCleared() {
+        viewModelScope.launch {
+            saveMusicState(_isPlaying.value, player.currentPosition)
+        }
+        player.release()
         super.onCleared()
-        mediaPlayer?.release()
-        mediaPlayer = null
+    }
+
+    //این قسمت جدید اضافه شد: مدیریت بک‌گراند و فورگراند شدن اپلیکیشن
+    fun handleAppBackground(isInBackground: Boolean) {
+        if (isInBackground) {
+            shouldResumeMusic = _isPlaying.value  // ذخیره کنیم که موزیک در حال پخش بوده یا نه
+            player.pause()
+            _isPlaying.value = false
+        } else {
+            if (shouldResumeMusic) {
+                player.play()
+                _isPlaying.value = true
+            }
+        }
     }
 }

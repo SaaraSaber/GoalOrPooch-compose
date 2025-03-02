@@ -10,14 +10,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.AndroidEntryPoint
+import ir.developer.goalorpooch_compose.database.dataStore
 import ir.developer.goalorpooch_compose.navigation.Navigation
 import ir.developer.goalorpooch_compose.tapsell.Tapsell
 import ir.developer.goalorpooch_compose.ui.viewmodel.MusicPlayerViewModel
 import ir.developer.goalorpooch_compose.ui.viewmodel.SharedViewModel
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 @SuppressLint("RestrictedApi")
@@ -50,17 +56,31 @@ class MainActivity : ComponentActivity() {
                 tapsell = tapsell
             )
         }
-        // **تشخیص بک‌گراند و فورگراند شدن اپلیکیشن**
+
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStop(owner: LifecycleOwner) {
-                musicPlayerViewModel.handleAppBackground(true) // وقتی اپ رفت بک‌گراند، موزیک متوقف شه
+                musicPlayerViewModel.handleAppBackground(true) // وقتی اپ رفت بک‌گراند، موزیک متوقف بشه
             }
 
             override fun onStart(owner: LifecycleOwner) {
                 musicPlayerViewModel.handleAppBackground(false) // وقتی اپ برگشت، موزیک از همونجا ادامه پیدا کنه
             }
         })
+
+
+
+        // **تشخیص بک‌گراند و فورگراند شدن اپلیکیشن**
+//        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+//            override fun onStop(owner: LifecycleOwner) {
+//                musicPlayerViewModel.handleAppBackground(true) // وقتی اپ رفت بک‌گراند، موزیک متوقف شه
+//            }
+//
+//            override fun onStart(owner: LifecycleOwner) {
+//                musicPlayerViewModel.handleAppBackground(false) // وقتی اپ برگشت، موزیک از همونجا ادامه پیدا کنه
+//            }
+//        })
     }
+
 
     private fun insertCards() {
         sharedViewModel.addCard(
