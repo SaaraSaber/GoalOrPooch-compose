@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.navigation.NavController
+import ir.developer.goalorpooch_compose.BuildConfig
 import ir.developer.goalorpooch_compose.R
 import ir.developer.goalorpooch_compose.network.CheckNetwork
 import ir.developer.goalorpooch_compose.tapsell.Tapsell
@@ -130,7 +131,8 @@ fun HomeScreen(
                         )
                 ) {
                     // محتوای صفحه
-                    HomeScreenContent(navController
+                    HomeScreenContent(
+                        navController
 //                        , viewModelMusic
                     )
                 }
@@ -154,7 +156,8 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenContent(navController: NavController
+fun HomeScreenContent(
+    navController: NavController
 //                      , viewModelMusic: MusicPlayerViewModel
 ) {
     var showBottomSheetAboutUs by remember { mutableStateOf(false) }
@@ -261,29 +264,30 @@ fun HomeScreenContent(navController: NavController
                     fontFamily = FontPeydaBold
                 )
             }
-            Button(
-                modifier = Modifier
-                    .padding(top = paddingTop())
-                    .width(widthButton())
-                    .height(heightButton())
-                    .align(Alignment.CenterHorizontally),
-                colors = ButtonColors(
-                    containerColor = FenceGreen,
-                    contentColor = Color.White,
-                    disabledContainerColor = HihadaBrown,
-                    disabledContentColor = HihadaBrown
-                ),
-                border = BorderStroke(1.dp, Color.White),
-                shape = RoundedCornerShape(sizeRoundMax()),
-                contentPadding = PaddingValues(0.dp),
-                onClick = { showBottomSheetApps = true }) {
-                Text(
-                    text = stringResource(R.string.apps),
-                    fontSize = fontSizeButton(),
-                    fontFamily = FontPeydaBold
-                )
+            if (BuildConfig.FLAVOR == "bazar") {
+                Button(
+                    modifier = Modifier
+                        .padding(top = paddingTop())
+                        .width(widthButton())
+                        .height(heightButton())
+                        .align(Alignment.CenterHorizontally),
+                    colors = ButtonColors(
+                        containerColor = FenceGreen,
+                        contentColor = Color.White,
+                        disabledContainerColor = HihadaBrown,
+                        disabledContentColor = HihadaBrown
+                    ),
+                    border = BorderStroke(1.dp, Color.White),
+                    shape = RoundedCornerShape(sizeRoundMax()),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { showBottomSheetApps = true }) {
+                    Text(
+                        text = stringResource(R.string.apps),
+                        fontSize = fontSizeButton(),
+                        fontFamily = FontPeydaBold
+                    )
+                }
             }
-
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
@@ -373,10 +377,32 @@ fun HomeScreenContent(navController: NavController
                             }.invokeOnCompletion { showBottomSheetExit = false }
                         },
                         onClickStar = {
-                            val intent = Intent(Intent.ACTION_EDIT)
-                            intent.setData(Uri.parse("bazaar://details?id=" + Utils.PACKAGE_NAME))
-                            intent.setPackage("com.farsitel.bazaar")
-                            context.startActivity(intent)
+                            if (BuildConfig.FLAVOR == "bazar") {
+                                try {
+                                    val intent = Intent(Intent.ACTION_EDIT)
+                                    intent.setData(Uri.parse("bazaar://details?id=" + Utils.PACKAGE_NAME))
+                                    intent.setPackage("com.farsitel.bazaar")
+                                    context.startActivity(intent)
+                                } catch (t: Throwable) {
+                                    Toast.makeText(
+                                        context,
+                                        "از نصب برنامه بازار مطمئن شوید",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            } else {
+                                try {
+                                    val intent = Intent(Intent.ACTION_VIEW)
+                                    intent.setData(Uri.parse("myket://comment?id=" + Utils.PACKAGE_NAME))
+                                    context.startActivity(intent)
+                                } catch (t: Throwable) {
+                                    Toast.makeText(
+                                        context,
+                                        "از نصب برنامه مایکت مطمئن شوید",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
                         },
                         onClickExit = { activity?.finishAffinity() }
                     )

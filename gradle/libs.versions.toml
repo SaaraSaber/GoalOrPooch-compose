@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.3"
+agp = "8.10.1"
 datastorePreferences = "1.1.2"
 kotlin = "2.0.20"
 core-ktx = "1.15.0"
@@ -13,10 +13,10 @@ navigation = "2.8.5"
 daggerHilt = "2.51.1"
 roomRuntime = "2.6.1"
 sdpCompose = "1.1.0"
-lifecycleProcess = "2.8.7"
+#lifecycleProcess = "2.8.7"
 tapsellPlusSdkAndroid = "2.3.0"
 sentry = "3.12.0"
-media3Exoplayer = "1.5.1"
+#media3Exoplayer = "1.5.1"
 
 
 
@@ -47,8 +47,6 @@ dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref 
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerHilt" }
 #sdp
 sdp-compose = { module = "com.github.Kaaveh:sdp-compose", version.ref = "sdpCompose" }
-#androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
-#androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3Exoplayer" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

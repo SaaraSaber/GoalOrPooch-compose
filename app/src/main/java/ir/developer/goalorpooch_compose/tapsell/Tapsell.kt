@@ -16,9 +16,9 @@ import ir.tapsell.plus.model.TapsellPlusAdModel
 import ir.tapsell.plus.model.TapsellPlusErrorModel
 
 
-class Tapsell(val context: Activity
-//, val viewModelMusic: MusicPlayerViewModel
-) {
+class Tapsell(val context: Activity) {
+    private var currentAdResponseId: String? = null
+
     fun connectToTapsell() {
         try {
             TapsellPlus.initialize(
@@ -54,15 +54,13 @@ class Tapsell(val context: Activity
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel) {
                         super.response(tapsellPlusAdModel)
 
-                        // آگهی آماده نمایش است
-                        // مقدار responseId آگهی را در متغیر خود ذخیره کنید
-                        val rewardedResponseId = tapsellPlusAdModel.responseId
-                        showVideoAd(context, rewardedResponseId)
-//                        viewModelMusic.setAdPlaying(true)
+                        currentAdResponseId  = tapsellPlusAdModel.responseId
+                        showVideoAd(context, currentAdResponseId!!)
                     }
 
                     override fun error(message: String?) {
                         Log.e("TapsellError", message ?: "Unknown error")
+                        currentAdResponseId = null
                     }
                 }
             )
@@ -71,7 +69,12 @@ class Tapsell(val context: Activity
         }
     }
 
-    private fun showVideoAd(context1: Context, responseId: String) {
+   private fun showVideoAd(context1: Context, responseId: String) {
+        val responseId = currentAdResponseId
+        if (responseId == null) {
+            Log.w("Tapsell", "No ad available to show")
+            return
+        }
         try {
             TapsellPlus.showInterstitialAd(
                 context1 as Activity?, responseId,
@@ -83,19 +86,18 @@ class Tapsell(val context: Activity
 
                     override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel) {
                         super.onClosed(tapsellPlusAdModel)
-//                        viewModelMusic.setAdPlaying(false)
                         Log.i("showAd", "onClosed: ")
+                        currentAdResponseId = null
                     }
 
                     override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel) {
                         super.onError(tapsellPlusErrorModel)
-//                        viewModelMusic.setAdPlaying(false)
                         Log.i("showAd", "onError: ")
+                        currentAdResponseId = null
                     }
                 }
             )
         } catch (t: Throwable) {
-//            viewModelMusic.setAdPlaying(false)
             Toast.makeText(context, "خطایی رخ داده است", Toast.LENGTH_LONG).show()
         }
     }
@@ -117,4 +119,5 @@ class Tapsell(val context: Activity
             Toast.makeText(context, "خطایی رخ داده است", Toast.LENGTH_LONG).show()
         }
     }
+
 }

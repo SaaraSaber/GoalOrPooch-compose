@@ -15,7 +15,7 @@ android {
         applicationId = "ir.developer.goalorpooch_compose"
         minSdk = 26
         targetSdk = 35
-        versionCode = 9
+        versionCode = 11
         versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -23,7 +23,17 @@ android {
             useSupportLibrary = true
         }
     }
-
+    flavorDimensions += "mode"
+    productFlavors {
+        create("myket") {
+            dimension = "mode"
+            buildConfigField("String", "MARKET", "\"myket\"")
+        }
+        create("bazar") {
+            dimension = "mode"
+            buildConfigField("String", "MARKET", "\"bazar\"")
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -42,6 +52,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -51,6 +62,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
@@ -76,7 +88,7 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.navigation.compose)
-    implementation (libs.sdp.compose)
+    implementation(libs.sdp.compose)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
