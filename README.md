@@ -1,4 +1,4 @@
-# 🎮 Gol Ya Pooch (Flower or Empty)
+# 🎮 Gol Ya Pooch
 <p align="center">
 <img width="auto" height="300" alt="iPhone 14   15 Pro Max - 2" src="https://github.com/user-attachments/assets/689858ec-ddcc-42ed-9794-d5f734507941" />
 </p>
