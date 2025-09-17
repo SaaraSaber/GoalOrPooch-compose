@@ -1,5 +1,7 @@
 # 🎮 Gol Ya Pooch (Flower or Empty)
-
+<p align="center">
+<img width="1833" height="1524" alt="iPhone 14   15 Pro Max - 2" src="https://github.com/user-attachments/assets/689858ec-ddcc-42ed-9794-d5f734507941" />
+</p>
 An original Iranian traditional game, now reimagined in digital form ✨  
 This application manages all game stages intelligently, providing a smooth and enjoyable experience.  
 Just play and enjoy the excitement of competition — we’ll take care of the rest! 🚀
